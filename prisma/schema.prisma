@@ -1,0 +1,269 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  firstName         String
+  lastName          String
+  yearOfBirth       Int
+  gender            Boolean
+  hasAccount        Boolean  @default(false)
+  password          String?
+  roleId            String
+  isPZAMember       Boolean  @default(false)
+  isClubMember      Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  role              Role     @relation(fields: [roleId], references: [id])
+  userCompetitions  User_Competition[]
+  taskStaffs        TaskStaff[]
+  verificationStaff VerificationStaff[]
+}
+
+model Category {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  minAge            Int?
+  maxAge            Int?
+  userCompetitions  User_Competition[]
+  taskCategories    Task_Category[]
+}
+
+model Competition {
+  id                  String              @id @default(cuid())
+  name                String              @unique
+  description         String?
+  lockResults         Boolean             @default(false)
+  lockEnroll          Boolean             @default(false)
+  allowFamilyRanking  Boolean             @default(false)
+  // Family settings stored as JSON string
+  /*
+    {
+      include: 'all' | 'topN',
+      topN?: number,
+      includePZAMembers: boolean,
+      pzaFilterCategories: string[] | null, // array of Category IDs
+      aggregation: 'sum' | 'best' | 'avg',
+    }
+  */
+  familySettings      String?
+  // PZA settings stored as JSON string
+  /*
+    {
+      pzaTakesPlaces: boolean,
+      pzaFilterCategories: string[] | null, // array of Category IDs
+    }
+  */
+  pzaSettings         String?
+  // Self scoring settings stored as JSON string
+  /*
+    {
+      allowSelfScoring: boolean,
+      selfScoringFilterCategories: string[] | null, // array of Category IDs
+      selfScoringFrom?: number,
+      selfScoringTo?: number,
+    }
+  */
+  selfScoringSettings String?
+  clubMembersPay      Boolean             @default(false) 
+  startDate           DateTime
+  endDate             DateTime
+  enrollStart         DateTime
+  enrollEnd           DateTime
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  userCompetitions    User_Competition[]
+  tasks               Task[]
+  verificationStaff   VerificationStaff[]
+}
+
+model User_Competition {
+  id                    String      @id @default(cuid())
+  startNumber           Int         @default(0)
+  userId                String
+  competitionId         String
+  categoryId            String
+  isPZAMember           Boolean     @default(false)
+  isClubMember          Boolean     @default(false)
+  requestsFamilyRanking Boolean     @default(false)
+  hasPaid               Boolean     @default(false)
+  underageConsent       Boolean     @default(false)
+  verified              Boolean     @default(false)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  user                  User        @relation(fields: [userId], references: [id])
+  competition           Competition @relation(fields: [competitionId], references: [id])
+  category              Category    @relation(fields: [categoryId], references: [id])
+  taskUsers             Task_User[]
+  userFamilies          User_Family[]
+
+  @@unique([userId, competitionId])
+}
+
+model Family {
+  id            String   @id @default(cuid())
+  name          String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userFamilies  User_Family[]
+}
+
+model User_Family {
+  id          String   @id @default(cuid())
+  userCompId  String
+  familyId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userComp    User_Competition @relation(fields: [userCompId], references: [id])
+  family      Family           @relation(fields: [familyId], references: [id])
+
+  @@unique([userCompId, familyId])
+}
+
+model TaskScoringTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  settings  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id            String   @id @default(cuid())
+  type          String
+  name          String
+  shortName     String
+  // Settings stored as JSON string
+  /*
+    {
+      maxAttempts: number | null,
+      timeLimit: number | null,
+      scoringSystem: 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear',
+      zones?: {
+        name: string,
+        shortName: string,
+        score: number,
+      }[],
+      ranges?: {
+        data: { min: number, max: number, score: number }[],
+        outOfMin: number,
+        outOfMax: number,
+      },
+      linear?: { a: number, b: number },
+      multilinear?: {
+        b: number,
+        data: { min: number, max: number, coeff: number }[],
+        outOfMin: number,
+        outOfMax: number,
+      },
+      time?: {
+        method: 'best' | 'worst' | 'sum' | 'avg',
+        transform: 'linear' | 'hyperbolic' | 'ranges',
+        ranges?: {
+          data: { min: number, max: number, score: number }[],
+          outOfMin: number,
+          outOfMax: number
+        },
+        coeffs?: { a: number, b: number },
+      },
+    }
+  */
+  settings       String
+  competitionId  String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  competition    Competition       @relation(fields: [competitionId], references: [id])
+  categories     Task_Category[]
+  userTasks      Task_User[]
+  taskStaffs     TaskStaff[]
+}
+
+model Task_Category {
+  id         String   @id @default(cuid())
+  taskId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  task       Task     @relation(fields: [taskId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([taskId, categoryId])
+}
+
+model Task_User {
+  id          String           @id @default(cuid())
+  taskId      String
+  userCompId  String
+  // Result stored as JSON string
+  /*
+    {
+      attempts: [
+        {
+          value?: number,
+          zone?: { name: string, shortName: string, score: number }
+        }
+      ],
+    }
+  */
+  data        String
+  score       Float             @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  task        Task              @relation(fields: [taskId], references: [id])
+  userComp    User_Competition  @relation(fields: [userCompId], references: [id])
+
+  @@unique([taskId, userCompId])
+}
+
+model TaskStaff {
+  id        String   @id @default(cuid())
+  userId    String
+  taskId    String
+  fromTime  DateTime
+  toTime    DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  task      Task     @relation(fields: [taskId], references: [id])
+}
+
+model VerificationStaff {
+  id          String      @id @default(cuid())
+  userId      String
+  compId      String
+  fromTime    DateTime
+  toTime      DateTime
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id])
+  competition Competition @relation(fields: [compId], references: [id])
+
+  @@unique([userId, compId])
+}
