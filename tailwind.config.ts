@@ -1,12 +1,14 @@
-import withMT from '@material-tailwind/react/utils/withMT';
+import { mtConfig } from '@material-tailwind/react';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/lib/**/*.{js,ts,jsx,tsx,mdx}',
     './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx}',
   ],
+  plugins: [mtConfig],
   theme: {
     extend: {
       backgroundImage: {
@@ -27,4 +29,4 @@ const config: Config = {
     },
   },
 };
-export default withMT(config);
+export default config;

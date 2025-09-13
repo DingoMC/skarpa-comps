@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@material-tailwind/react": "^2.1.10",
+    "@material-tailwind/react": "^3.0.0-beta.24",
     "@prisma/client": "^6.10.0",
+    "@reduxjs/toolkit": "^2.9.0",
     "@tanstack/react-table": "^8.21.3",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -27,7 +28,9 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@stylistic/eslint-plugin": "^5.3.1",
     "@tailwindcss/postcss": "^4",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
