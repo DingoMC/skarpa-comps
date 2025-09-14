@@ -1,4 +1,4 @@
-import { User } from "../../../generated/prisma";
+import { User } from '@prisma/client';
 
 export const EMPTY_USER: User = {
   id: '',
@@ -15,3 +15,5 @@ export const EMPTY_USER: User = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
+export const SALT_ROUNDS = 10;

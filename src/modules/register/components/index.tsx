@@ -7,8 +7,8 @@ import InputEmail from '@/modules/inputs/components/Email';
 import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import InputPassword from '@/modules/inputs/components/Password';
+import { User } from '@prisma/client';
 import { useMemo, useState } from 'react';
-import { User } from '../../../../generated/prisma';
 
 type Props = {
   loading: boolean;
@@ -60,8 +60,12 @@ const Register = ({ loading, handleRegister }: Props) => {
           error={firstNameError !== null}
           value={user.firstName}
           onChange={(v, e) => {
-            setUser((prev) => ({ ...prev, firstName: v }));
             setFirstNameError(e);
+            if (e === null && v.trim().length) {
+              setUser((prev) => ({ ...prev, firstName: v, gender: !v.trim().endsWith('a') }));
+            } else {
+              setUser((prev) => ({ ...prev, firstName: v }));
+            }
           }}
         />
         {firstNameError !== null && <Typography className="text-xs text-red-600">{firstNameError}</Typography>}
@@ -143,7 +147,7 @@ const Register = ({ loading, handleRegister }: Props) => {
           onChange={() => setUser((prev) => ({ ...prev, isClubMember: !prev.isClubMember }))}
         />
         <Typography className="text-sm">
-          Jestem członkiem klubu Skarpa Lublin i/lub jestem uczniem Szkoły Podstawowej nr 28 w Lublinie.
+          Jestem członkiem klubu Skarpa Lublin. / Jestem uczniem Szkoły Podstawowej nr 28 w Lublinie.
         </Typography>
       </div>
       <div className="md:col-span-2 grid grid-cols-[40px_1fr] items-center gap-2 md:gap-4">
@@ -161,6 +165,7 @@ const Register = ({ loading, handleRegister }: Props) => {
         <Button
           color="info"
           disabled={loading || saveDisabled}
+          onClick={() => handleRegister(user)}
           className={`${loading || saveDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {loading ? 'Rejestracja...' : 'Zarejestruj się'}

@@ -1,29 +1,33 @@
+import { User } from '@prisma/client';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import { User } from '../../../generated/prisma';
 
 interface AuthState {
   token: string | null;
+  authLevel: number;
   user: Omit<User, 'password'> | null;
 }
 
 const initialState: AuthState = {
   token: Cookies.get('token') || null,
   user: null,
+  authLevel: 0,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ user: Omit<User, 'password'>; token: string }>) => {
+    login: (state, action: PayloadAction<{ user: Omit<User, 'password'>, authLevel: number, token: string }>) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
-      Cookies.set('token', action.payload.token, { expires: 7 });
+      state.authLevel = action.payload.authLevel;
+      Cookies.set('token', action.payload.token, { expires: 1 });
     },
     logout: (state) => {
       state.token = null;
       state.user = null;
+      state.authLevel = 0;
       Cookies.remove('token');
     },
   },

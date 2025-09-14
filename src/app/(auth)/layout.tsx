@@ -6,7 +6,9 @@ import { particleOptions, particleOptionsMobile } from '@/lib/particles';
 import { cardBodyTheme, cardFooterTheme, cardHeaderTheme, cardTheme, inputTheme } from '@/lib/themes';
 import { StoreProvider } from '@/lib/wrappers/StoreProvider';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { loadFull } from 'tsparticles';
 
 const customTheme = {
@@ -46,7 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="h-full flex flex-col m-0 bg-main-gradient">
         <StoreProvider>
           <ThemeProvider value={customTheme}>
-            <div className="h-full flex flex-col items-center md:justify-center m-4 relative z-10 bg-transparent">{children}</div>
+            <div className="h-full flex flex-col items-center md:justify-center m-4 relative z-10 bg-transparent">
+              <Image src="/skarpa-logo-h-white.png" alt="Skarpa Logo" width={200} height={55} />
+              {children}
+            </div>
+            <ToastContainer position="bottom-right" />
           </ThemeProvider>
           {init && <Particles id="tsparticles" options={options} />}
         </StoreProvider>

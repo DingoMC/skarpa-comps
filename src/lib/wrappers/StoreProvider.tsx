@@ -2,8 +2,7 @@
 
 import { AppStore, makeStore } from '@/store/store';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import type { ReactNode } from 'react';
-import { useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { type Persistor, persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';

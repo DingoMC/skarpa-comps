@@ -1,9 +1,9 @@
 'use client';
 
+import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { User } from '../../../../generated/prisma';
 import Register from '../components';
 import { registerUser } from '../requests';
 

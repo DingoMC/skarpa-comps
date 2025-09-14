@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Category" ADD COLUMN     "seq" INTEGER NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "Role" ADD COLUMN     "authLevel" INTEGER NOT NULL DEFAULT 0;

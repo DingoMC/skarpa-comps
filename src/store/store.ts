@@ -1,5 +1,4 @@
-import type { Action, ThunkAction } from '@reduxjs/toolkit';
-import { combineSlices, configureStore } from '@reduxjs/toolkit';
+import { Action, ThunkAction, combineSlices, configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 import authSlice from './slices/auth';
 import storage from './ssrSafeStorage';
