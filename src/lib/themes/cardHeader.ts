@@ -36,11 +36,6 @@ export const cardHeaderTheme = {
           color: 'text-white',
           shadow: 'shadow-main-500/40',
         },
-        test: {
-          background: 'bg-test',
-          color: 'text-white',
-          shadow: 'shadow-test-500/40',
-        },
       },
     },
   },

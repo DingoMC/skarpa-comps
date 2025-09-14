@@ -4,7 +4,7 @@ import { User } from '../../../generated/prisma';
 
 interface AuthState {
   token: string | null;
-  user: User | null;
+  user: Omit<User, 'password'> | null;
 }
 
 const initialState: AuthState = {
@@ -16,7 +16,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ user: User; token: string }>) => {
+    login: (state, action: PayloadAction<{ user: Omit<User, 'password'>; token: string }>) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
       Cookies.set('token', action.payload.token, { expires: 7 });
