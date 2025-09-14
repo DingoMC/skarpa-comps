@@ -43,7 +43,7 @@ const getBorderColors = (color: Color) => {
 
 /**
  * Skarpa Loader component
- * @param props Wiline Loader props
+ * @param props Skarpa Loader props
  */
 const SkarpaLoader = (props: Props) => {
   const { color = 'white', size = 'md' } = props;

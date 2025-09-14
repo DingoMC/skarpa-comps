@@ -61,7 +61,17 @@ const eslintConfig = [
       '@stylistic/brace-style': 'error',
       '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/no-extra-semi': 'error',
-      '@stylistic/no-mixed-operators': 'error',
+      '@stylistic/no-mixed-operators': [
+        'error',
+        {
+          groups: [
+            ['&', '|', '^', '~', '<<', '>>', '>>>'],
+            ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
+            ['&&', '||'],
+            ['in', 'instanceof'],
+          ],
+        },
+      ],
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/linebreak-style': 'off',
@@ -73,6 +83,7 @@ const eslintConfig = [
           objects: 'always-multiline',
           imports: 'always-multiline',
           exports: 'always-multiline',
+          enums: 'always-multiline',
           functions: 'only-multiline',
         },
       ],

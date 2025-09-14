@@ -1,6 +1,6 @@
 import { StylesConfig } from 'react-select';
 
-export function defaultStyle<T>({ width, minWidth }: { width?: string, minWidth?: string }): StylesConfig<T> {
+export function defaultStyle<T>({ width, minWidth }: { width?: string; minWidth?: string }): StylesConfig<T> {
   return {
     control: (styles, props) => ({
       ...styles,
@@ -68,9 +68,19 @@ export function defaultStyle<T>({ width, minWidth }: { width?: string, minWidth?
   };
 }
 
-export function defaultStyleOutlined<T>({ width, minWidth, maxWidth, height }:
-{ width?: string, minWidth?: string, maxWidth?: string, height?: string }
-): StylesConfig<T> {
+export function defaultStyleOutlined<T>({
+  width,
+  minWidth,
+  maxWidth,
+  height,
+  menuHeight,
+}: {
+  width?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  height?: string;
+  menuHeight?: string;
+}): StylesConfig<T> {
   return {
     control: (styles, props) => ({
       ...styles,
@@ -116,8 +126,13 @@ export function defaultStyleOutlined<T>({ width, minWidth, maxWidth, height }:
       borderColor: 'rgb(236,239,241)',
       zIndex: 30,
       width,
+      height: menuHeight,
       minWidth,
       maxWidth,
+    }),
+    menuList: (styles) => ({
+      ...styles,
+      height: menuHeight !== undefined ? '100%' : undefined,
     }),
     option: (styles, props) => ({
       ...styles,

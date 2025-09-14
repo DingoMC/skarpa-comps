@@ -1,4 +1,5 @@
 import { siteMap } from '@/lib/siteMap';
+import RegisterWrapper from '@/modules/register/wrappers';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -6,6 +7,6 @@ export const metadata: Metadata = {
   description: 'Witamy na stronie - Zawody Skarpa Lublin',
 };
 
-const Page = () => <div>Rejestracja</div>;
+const Page = () => <RegisterWrapper />;
 
 export default Page;

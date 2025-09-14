@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="h-full flex flex-col m-0 bg-main-gradient">
         <StoreProvider>
           <ThemeProvider value={customTheme}>
-            <div className="h-full flex flex-col m-0 relative z-10 bg-transparent">{children}</div>
+            <div className="h-full flex flex-col items-center md:justify-center m-4 relative z-10 bg-transparent">{children}</div>
           </ThemeProvider>
           {init && <Particles id="tsparticles" options={options} />}
         </StoreProvider>
