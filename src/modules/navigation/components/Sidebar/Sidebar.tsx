@@ -2,21 +2,25 @@
 
 import { IconButton } from '@/lib/mui';
 import { sectionByPath } from '@/lib/siteMap';
+import { RootState } from '@/store/store';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { BsChevronDoubleLeft } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 import SidebarList from './SidebarList';
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
+  const authLevel = useSelector((state: RootState) => state.auth.authLevel);
   const path = usePathname();
   const section = sectionByPath.get(path);
   const links = useMemo(() => {
     return Object.values(section.pages)
       .filter((page) => !page.hidden)
+      .filter((page) => page.authLevel === undefined || page.authLevel(authLevel))
       .sort((a, b) => a.id - b.id);
-  }, [section]);
+  }, [section, authLevel]);
 
   return (
     <div

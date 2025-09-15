@@ -2,18 +2,22 @@
 
 import { List, ListItem } from '@/lib/mui';
 import { sectionByPath, siteMap } from '@/lib/siteMap';
-import { SiteMapPage } from '@/lib/types/siteMap';
+import { Section, SiteMapPage } from '@/lib/types/siteMap';
+import { RootState } from '@/store/store';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const SubNavbar = () => {
   const pathname = usePathname();
+  const authLevel = useSelector((state: RootState) => state.auth.authLevel);
 
   const subnav = Object.values(siteMap)
     .filter((section) => {
       const pages: SiteMapPage[] = Object.values(section.pages);
-      return pages.some((page) => !page.hidden);
+      return pages.some((page) => !page.hidden && (page.authLevel === undefined || page.authLevel(authLevel)));
     })
+    .filter((section: Section) => section.authLevel === undefined || section.authLevel(authLevel))
     .sort((a, b) => a.id - b.id);
 
   const getLinkClass = (href: string) => {
