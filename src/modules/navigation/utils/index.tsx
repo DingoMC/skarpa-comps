@@ -5,7 +5,7 @@ export const getProfileMenuItems = (handleLogout: () => void) => {
   const items: MenuItemType[] = [];
   items.push({
     type: 'action',
-    label: 'Sign Out',
+    label: 'Wyloguj się',
     icon: <FaPowerOff className="w-4 h-4 text-red-500" />,
     action: () => handleLogout(),
   });
