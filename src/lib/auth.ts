@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
+import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { TokenPayload } from './types/auth';
 
@@ -6,6 +7,14 @@ interface TokenData extends TokenPayload {
   exp: number;
   iat: number;
 }
+
+export const setToken = (token: string) => {
+  Cookies.set('token', token, { expires: 1 });
+};
+
+export const removeToken = () => {
+  Cookies.remove('token');
+};
 
 export const decodeToken = (token?: string | null) => {
   if (token === undefined || token === null || !token.length) return null;
@@ -20,7 +29,8 @@ export const decodeToken = (token?: string | null) => {
 export const verifyToken = async (token?: string | null) => {
   if (token === undefined || token === null || !token.length) return false;
   try {
-    jwt.verify(token, process.env.JWT_SECRET as string, { complete: true });
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
+    await jwtVerify(token, secret);
     const decoded = decodeToken(token);
     if (decoded === null) return false;
     // Check expiry
@@ -28,9 +38,13 @@ export const verifyToken = async (token?: string | null) => {
     const iatMin = now - 86400;
     if (decoded.iat < iatMin || decoded.exp < now) return false;
     // Check user id
-    await fetch(`/api/internal/validate-user?userId=${decoded.user.id}`, { headers: { 'Next-Internal-API': '1' } });
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_APPLICATION_URL ?? ''}/api/internal/validate-user?userId=${decoded.user.id}`, {
+      headers: { 'Next-Internal-API': '1' },
+    });
+    if (resp.status !== 200) return false;
     return true;
-  } catch {
+  } catch (error) {
+    console.error(error);
     return false;
   }
 };

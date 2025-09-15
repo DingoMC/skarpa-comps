@@ -16,7 +16,6 @@ const RegisterWrapper = () => {
     const { success, error } = await registerUser(userData);
     if (success && error === null) {
       toast.success('Rejestracja zakończona sukcesem. Nastąpi przekierowanie do logowania.');
-      setLoading(false);
       router.push('/login');
       return;
     }

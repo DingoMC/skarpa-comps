@@ -24,11 +24,9 @@ const ProfileMenu = () => {
 
   return (
     <Menu open={isMenuOpen} onOpenChange={setIsMenuOpen} placement="bottom-end">
-      <MenuTrigger>
-        <Button variant="ghost" className="flex items-center gap-1 rounded-full py-0.5 pr-0 pl-0.5">
-          <Avatar size={25} colors={avatarColors} name={`${user.firstName} ${user.lastName}`} variant="pixel" />
-          <FaChevronDown strokeWidth={2.5} color="gray" className={`h-3 w-3 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
-        </Button>
+      <MenuTrigger as={Button} variant="ghost" className="flex items-center gap-1 rounded-full py-0.5 pr-0 pl-0.5">
+        <Avatar size={25} colors={avatarColors} name={`${user.firstName} ${user.lastName}`} variant="pixel" />
+        <FaChevronDown strokeWidth={2.5} color="gray" className={`h-3 w-3 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
       </MenuTrigger>
       <MenuContent className="p-1">
         {profileMenuItems.map((item, key) => {

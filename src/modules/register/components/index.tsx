@@ -8,6 +8,7 @@ import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import InputPassword from '@/modules/inputs/components/Password';
 import { User } from '@prisma/client';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 type Props = {
@@ -170,6 +171,17 @@ const Register = ({ loading, handleRegister }: Props) => {
         >
           {loading ? 'Rejestracja...' : 'Zarejestruj się'}
         </Button>
+      </div>
+      <div className="md:col-span-2 flex flex-col gap-2 md:gap-0 md:flex-row md:items-center md:justify-between">
+        <Link href="/" className="underline text-blue-950 text-xs">
+          {`< Powrót do strony głównej`}
+        </Link>
+        <Typography className="text-xs text-center">
+          Posiadasz już konto?{' '}
+          <Link href="/login" className="underline text-blue-950">
+            Zaloguj się
+          </Link>
+        </Typography>
       </div>
     </div>
   );

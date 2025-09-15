@@ -19,6 +19,7 @@
     "boring-avatars": "^2.0.1",
     "classnames": "^2.5.1",
     "cookies-next": "^6.1.0",
+    "jose": "^6.1.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

@@ -12,7 +12,7 @@ export const clearDynamicRoute = (pathname: string) => pathname.replaceAll(/\/[0
 
 export const getMiddlewareActions = async (request: NextRequest) => {
   const token = request.cookies.get('token')?.value;
-  const hasToken = token !== undefined
+  const hasToken = token !== undefined;
   const tokenValid = await verifyToken(token);
   const decodedToken = decodeToken(token);
   const userLevel = decodedToken?.authLevel ?? null;

@@ -1,9 +1,9 @@
-import { getCookie } from 'cookies-next';
-import { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { TokenPayload } from '@/lib/types/auth';
+import bcrypt from 'bcrypt';
+import { getCookie } from 'cookies-next';
+import jwt from 'jsonwebtoken';
+import { NextRequest } from 'next/server';
 
 const JWT_SECRET = process.env.JWT_SECRET ?? '';
 
@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
   if (!passOk) {
     return Response.json({ message: 'Nieprawidłowy email lub hasło' }, { status: 401 });
   }
-  const tokenPayload: TokenPayload = { user: foundUser, authLevel: foundUser.role.authLevel };
+  const { password: _p, role: _r, ...strippedUser } = foundUser;
+  const tokenPayload: TokenPayload = { user: strippedUser, authLevel: foundUser.role.authLevel };
   const newToken = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1d' });
   return Response.json({ user: tokenPayload.user, token: newToken, authLevel: tokenPayload.authLevel }, { status: 200 });
 }

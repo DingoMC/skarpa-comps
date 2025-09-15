@@ -7,6 +7,7 @@ import { cardBodyTheme, cardFooterTheme, cardHeaderTheme, cardTheme, inputTheme 
 import { StoreProvider } from '@/lib/wrappers/StoreProvider';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { loadFull } from 'tsparticles';
@@ -22,6 +23,7 @@ const customTheme = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [init, setInit] = useState(false);
   const [windowSize, setWindowSize] = useState([-1, -1]);
+  const path = usePathname();
   const options = useMemo(() => (windowSize[0] >= 720 ? particleOptions : particleOptionsMobile), [windowSize]);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StoreProvider>
           <ThemeProvider value={customTheme}>
             <div className="h-full flex flex-col items-center md:justify-center m-4 relative z-10 bg-transparent">
-              <Image src="/images/skarpa-logo-h-white.png" alt="Skarpa Logo" width={200} height={55} />
+              {!path.includes('logout') && <Image src="/images/skarpa-logo-h-white.png" alt="Skarpa Logo" width={200} height={55} />}
               {children}
             </div>
             <ToastContainer position="bottom-right" />

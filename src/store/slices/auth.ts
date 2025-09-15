@@ -1,11 +1,11 @@
-import { User } from '@prisma/client';
+import { UserUI } from '@/lib/types/auth';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 
 interface AuthState {
   token: string | null;
   authLevel: number;
-  user: Omit<User, 'password'> | null;
+  user: UserUI | null;
 }
 
 const initialState: AuthState = {
@@ -18,7 +18,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ user: Omit<User, 'password'>, authLevel: number, token: string }>) => {
+    login: (state, action: PayloadAction<{ user: UserUI; authLevel: number; token: string }>) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
       state.authLevel = action.payload.authLevel;
