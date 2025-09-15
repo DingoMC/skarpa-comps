@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StoreProvider>
           <ThemeProvider value={customTheme}>
             <div className="h-full flex flex-col items-center md:justify-center m-4 relative z-10 bg-transparent">
-              <Image src="/skarpa-logo-h-white.png" alt="Skarpa Logo" width={200} height={55} />
+              <Image src="/images/skarpa-logo-h-white.png" alt="Skarpa Logo" width={200} height={55} />
               {children}
             </div>
             <ToastContainer position="bottom-right" />

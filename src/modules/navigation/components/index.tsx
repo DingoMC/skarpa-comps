@@ -25,7 +25,14 @@ const ComplexNavbar = () => {
     <div className="lg:flex items-center relative bg-main">
       <div className="hidden lg:flex items-center justify-center py-1 h-full md:w-[10rem] lg:w-[14rem]">
         <Link href="/">
-          <Image priority width={150} height={55} src="/skarpa-logo-h-white.png" alt="Skarpa logo" className="h-[58px] max-w-[100%]" />
+          <Image
+            priority
+            width={150}
+            height={55}
+            src="/images/skarpa-logo-h-white.png"
+            alt="Skarpa logo"
+            className="h-[58px] max-w-[100%]"
+          />
         </Link>
       </div>
       <div className="flex flex-col flex-1 max-w-full self-start">

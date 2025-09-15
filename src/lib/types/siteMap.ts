@@ -5,13 +5,13 @@ export interface SiteMapPage {
   name: string;
   tabName: string;
   href: string;
-  authLevel?: number | ((userAuthLevel: number) => boolean);
+  authLevel?: (userAuthLevel: number | null) => boolean;
   icon: React.JSX.Element;
 }
 
 export interface Section {
   id: number;
   title: string;
-  authLevel?: number | ((userAuthLevel: number) => boolean);
+  authLevel?: (userAuthLevel: number | null) => boolean;
   pages: { [key: string]: SiteMapPage };
 }

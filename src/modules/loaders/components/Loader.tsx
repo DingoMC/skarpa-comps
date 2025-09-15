@@ -58,7 +58,7 @@ const SkarpaLoader = (props: Props) => {
         priority
         width={getLogoSize(size)}
         height={getLogoSize(size)}
-        src={`/skarpa-logo-v${color === 'white' ? '-white' : ''}.png`}
+        src={`/images/skarpa-logo-v${color === 'white' ? '-white' : ''}.png`}
         alt="Skarpa logo"
       />
       <div className={`${classes.spinner} ${getBorderSize(size)} ${getBorderColors(color)} ${getSpinnerSize(size)}`} />

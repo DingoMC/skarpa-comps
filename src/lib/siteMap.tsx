@@ -42,6 +42,7 @@ export const siteMap = {
   login: {
     id: 1,
     title: 'Logowanie',
+    authLevel: (ual: number | null) => ual === null || ual === 0,
     pages: {
       login: {
         id: 0,
@@ -55,6 +56,7 @@ export const siteMap = {
   register: {
     id: 2,
     title: 'Rejestracja',
+    authLevel: (ual: number | null) => ual === null || ual === 0,
     pages: {
       register: {
         id: 0,
