@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import SidebarList from './SidebarList';
 
 const SidebarMobile = () => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const authLevel = useSelector((state: RootState) => state.auth.authLevel);
   const path = usePathname();
   const section = sectionByPath.get(path);
