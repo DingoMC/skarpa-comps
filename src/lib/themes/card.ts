@@ -1,16 +1,4 @@
 export const cardTheme = {
-  defaultProps: {
-    variant: 'filled',
-    color: 'white',
-    shadow: true,
-    className: '',
-  },
-  valid: {
-    variants: ['filled'],
-    colors: [
-      'white',
-    ],
-  },
   styles: {
     base: {
       initial: {
@@ -22,14 +10,6 @@ export const cardTheme = {
       },
       shadow: {
         boxShadow: 'shadow-md',
-      },
-    },
-    variants: {
-      filled: {
-        white: {
-          backgroud: 'bg-white',
-          color: 'text-gray-700',
-        },
       },
     },
   },

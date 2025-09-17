@@ -92,18 +92,18 @@ const DashboardFrame = ({
   divider = false,
   refreshing = false,
 }: Props & PropsWithChildren) => (
-  <Card className={cardClassName ?? 'h-full'}>
+  <Card className={`${cardClassName ?? 'h-full'} overflow-visible`}>
     {title && (
-      <CardHeader className="rounded-b-none overflow-visible">
-        <div className={`flex flex-col gap-4 px-2 py-[5px] md:px-4 md:py-[10px] ${cardHeaderClassName ?? ''}`}>
+      <CardHeader className="rounded-b-none overflow-visible h-10 bg-gray-700 !m-0 !w-full !px-2 flex items-center">
+        <div className={`flex flex-col w-full gap-4 ${cardHeaderClassName ?? ''}`}>
           <div className={`grid grid-flow-col gap-x-2 items-center w-full ${cardSubheaderClassName ?? ''}`}>
             <div className="flex gap-x-2 items-center">
-              <div className="text-sm font-normal flex flex-wrap items-center">
+              <div className="text-sm text-white font-normal flex flex-wrap items-center">
                 {title}
                 {tooltip && (
                   <Tooltip>
-                    <Tooltip.Trigger as={IconButton} variant="ghost">
-                      <FaInfoCircle className="ml-1 w-5 h-5"/>
+                    <Tooltip.Trigger>
+                      <FaInfoCircle className="ml-1 w-5 h-5 text-white" />
                     </Tooltip.Trigger>
                     <Tooltip.Content>
                       {tooltip}

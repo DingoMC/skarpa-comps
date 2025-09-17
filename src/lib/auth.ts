@@ -26,13 +26,14 @@ export const decodeToken = (token?: string | null) => {
   return { exp, iat, user, authLevel };
 };
 
-export const verifyToken = async (token?: string | null) => {
+export const verifyToken = async (token?: string | null, requiredAuthLevel?: number) => {
   if (token === undefined || token === null || !token.length) return false;
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
     await jwtVerify(token, secret);
     const decoded = decodeToken(token);
     if (decoded === null) return false;
+    if (requiredAuthLevel !== undefined && decoded.authLevel < requiredAuthLevel) return false;
     // Check expiry
     const now = Date.now() / 1000;
     const iatMin = now - 86400;

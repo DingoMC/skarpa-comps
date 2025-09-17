@@ -17,3 +17,8 @@ export const EMPTY_USER: User = {
 };
 
 export const SALT_ROUNDS = 10;
+
+export const SUPER_ADMIN_AUTH_LEVEL = 100;
+export const ADMIN_AUTH_LEVEL = 10;
+export const USER_AUTH_LEVEL = 1;
+export const GUEST_AUTH_LEVEL = 0;

@@ -1,8 +1,9 @@
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaUsers } from 'react-icons/fa';
 import { FaRegAddressBook } from 'react-icons/fa6';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
+import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL } from './constants';
 import { objectValues } from './object';
 import ObjectWithFallback from './types/objectWithFallback';
 import { Section, SiteMapPage } from './types/siteMap';
@@ -42,7 +43,7 @@ export const siteMap = {
   login: {
     id: 1,
     title: 'Logowanie',
-    authLevel: (ual: number | null) => ual === null || ual === 0,
+    authLevel: (ual: number | null) => ual === null || ual === GUEST_AUTH_LEVEL,
     pages: {
       login: {
         id: 0,
@@ -56,7 +57,7 @@ export const siteMap = {
   register: {
     id: 2,
     title: 'Rejestracja',
-    authLevel: (ual: number | null) => ual === null || ual === 0,
+    authLevel: (ual: number | null) => ual === null || ual === GUEST_AUTH_LEVEL,
     pages: {
       register: {
         id: 0,
@@ -64,6 +65,20 @@ export const siteMap = {
         tabName: tabName('Rejestracja'),
         href: '/register',
         icon: <FaRegAddressBook className={icon} />,
+      },
+    },
+  },
+  admin: {
+    id: 10,
+    title: 'Admin',
+    authLevel: (ual: number | null) => ual !== null && ual >= ADMIN_AUTH_LEVEL,
+    pages: {
+      users: {
+        id: 0,
+        name: 'Użytkownicy',
+        tabName: tabName('Użytkownicy'),
+        href: '/admin/users',
+        icon: <FaUsers className={icon} />,
       },
     },
   },

@@ -1,6 +1,5 @@
 import axiosRequest from '@/lib/axios';
 import { UserUI } from '@/lib/types/auth';
-import { User } from '@prisma/client';
 
 export const loginUser = async (email: string, password: string) => {
   const { data, error } = await axiosRequest({
