@@ -51,7 +51,7 @@ const Pagination = ({
   }, [itemCount, noAllItems]);
 
   return (
-    <div className="bg-gray-700 text-white flex justify-between items-center rounded-b-md w-full h-10">
+    <div className="bg-gray-600 text-white flex justify-between items-center rounded-b-md w-full h-10">
       <div className="flex items-center gap-2">
         <Tooltip>
           <Tooltip.Trigger as={IconButton} onClick={onFirstPage} color="secondary" variant="ghost" size="sm" disabled={prevDisabled}>

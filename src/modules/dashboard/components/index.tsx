@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardBody, CardFooter, CardHeader, IconButton, Tooltip, Typography } from '@/lib/mui';
+import { Card, CardBody, CardFooter, CardHeader, Tooltip, Typography } from '@/lib/mui';
 import { PropsWithChildren, ReactNode } from 'react';
 import { FaCog, FaInfoCircle } from 'react-icons/fa';
 
@@ -94,7 +94,7 @@ const DashboardFrame = ({
 }: Props & PropsWithChildren) => (
   <Card className={`${cardClassName ?? 'h-full'} overflow-visible`}>
     {title && (
-      <CardHeader className="rounded-b-none overflow-visible h-10 bg-gray-700 !m-0 !w-full !px-2 flex items-center">
+      <CardHeader className="rounded-b-none overflow-visible h-10 bg-gray-600 !m-0 !w-full !px-2 flex items-center">
         <div className={`flex flex-col w-full gap-4 ${cardHeaderClassName ?? ''}`}>
           <div className={`grid grid-flow-col gap-x-2 items-center w-full ${cardSubheaderClassName ?? ''}`}>
             <div className="flex gap-x-2 items-center">

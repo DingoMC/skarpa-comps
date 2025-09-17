@@ -1,8 +1,8 @@
 'use client';
 
+import SkarpaSpinner from '@/modules/loaders/components/Spinner';
 import { ReactNode } from 'react';
 import DashboardFrame from '.';
-import SkarpaSpinner from '@/modules/loaders/components/Spinner';
 
 type Props = {
   /**
@@ -29,7 +29,7 @@ const DashboardSpinner = ({ title, refreshing, cardBodyClassName }: Props) => (
   <DashboardFrame
     title={title}
     refreshing={refreshing}
-    cardBodyClassName={`flex flex-col justify-center items-center ${cardBodyClassName ?? 'min-h-[388px]'}`}
+    cardBodyClassName={`flex flex-col justify-center items-center ${cardBodyClassName ?? 'min-h-[388px] max-h-[388px]'}`}
   >
     <SkarpaSpinner className="h-20 w-20" />
   </DashboardFrame>
