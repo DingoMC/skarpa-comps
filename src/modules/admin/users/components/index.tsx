@@ -12,13 +12,13 @@ type Props = {
   onRefresh: () => Promise<void>;
 };
 
-const AdminUsers = ({ data, loading, onRefresh }: Props) => (
+const AdminUsers = ({ data, roles, loading, onRefresh }: Props) => (
   <DashboardTable
     title="Użytkownicy"
     noDataMessage="Nie znaleziono uzytkowników."
     data={data}
     refetching={loading}
-    columns={columns()}
+    columns={columns(roles)}
     onRefresh={onRefresh}
   />
 );

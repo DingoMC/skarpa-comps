@@ -2,7 +2,6 @@
 
 import { IconButton, Tooltip, Typography } from '@/lib/mui';
 import { styleWhite } from '@/lib/themes/react-select/select';
-import { useMemo } from 'react';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Select from 'react-select';
 
@@ -10,6 +9,12 @@ type OptionType = {
   label: string;
   value: number;
 };
+
+const ippOptions: OptionType[] = [
+  { label: '10', value: 10 },
+  { label: '20', value: 20 },
+  { label: '50', value: 50 },
+];
 
 type Props = {
   page: number;
@@ -31,25 +36,13 @@ const Pagination = ({
   total,
   prevDisabled,
   nextDisabled,
-  itemCount,
   itemsPerPage,
-  noAllItems,
   onItemsPerPage,
   onFirstPage,
   onLastPage,
   onPrevPage,
   onNextPage,
 }: Props) => {
-  const ippOptions: OptionType[] = useMemo(() => {
-    const tempOptions = [
-      { label: '10', value: 10 },
-      { label: '20', value: 20 },
-      { label: '50', value: 50 },
-    ];
-    if (!noAllItems) tempOptions.push({ label: `Pełny (${itemCount})`, value: itemCount });
-    return tempOptions;
-  }, [itemCount, noAllItems]);
-
   return (
     <div className="bg-gray-600 text-white flex justify-between items-center rounded-b-md w-full h-10">
       <div className="flex items-center gap-2">
@@ -88,7 +81,7 @@ const Pagination = ({
               options={ippOptions}
               value={ippOptions.find((o) => o.value === itemsPerPage)}
               onChange={onItemsPerPage}
-              className="w-28"
+              className="w-18"
             />
           </div>
         )}

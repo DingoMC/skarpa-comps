@@ -1,6 +1,8 @@
 import { columnNamesPL } from '@/lib/constants/lang_pl';
 import { transformName } from '@/lib/text';
 import { UserUI } from '@/lib/types/auth';
+import RoleBadge from '@/modules/roles/components/Badge';
+import { Role } from '@prisma/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { FaTimes } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa6';
@@ -8,7 +10,7 @@ import { IoMdFemale, IoMdMale } from 'react-icons/io';
 
 const columnHelper = createColumnHelper<UserUI>();
 
-export const columns = () => [
+export const columns = (roles: Role[]) => [
   columnHelper.accessor((row) => row.email, {
     id: 'email',
     header: () => <div className="text-left">{columnNamesPL.get('email')}</div>,
@@ -40,13 +42,31 @@ export const columns = () => [
   columnHelper.accessor((row) => row.gender, {
     id: 'gender',
     header: () => <div className="text-left">{columnNamesPL.get('gender')}</div>,
-    cell: (info) => (info.getValue() ? <IoMdMale className="w-5 h-5 text-blue-700" /> : <IoMdFemale className="w-5 h-5 text-pink-700" />),
+    cell: (info) => (info.getValue() ? <IoMdMale className="w-4 h-4 text-blue-700" /> : <IoMdFemale className="w-4 h-4 text-pink-700" />),
     enableSorting: true,
   }),
   columnHelper.accessor((row) => row.hasAccount, {
     id: 'hasAccount',
     header: () => <div className="text-left">{columnNamesPL.get('hasAccount')}</div>,
-    cell: (info) => (info.getValue() ? <FaCheck className="w-5 h-5 text-green-800" /> : <FaTimes className="w-5 h-5 text-red-800" />),
+    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
+    enableSorting: true,
+  }),
+  columnHelper.accessor((row) => row.isClubMember, {
+    id: 'isClubMember',
+    header: () => <div className="text-left">{columnNamesPL.get('isClubMember')}</div>,
+    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
+    enableSorting: true,
+  }),
+  columnHelper.accessor((row) => row.isPZAMember, {
+    id: 'isPZAMember',
+    header: () => <div className="text-left">{columnNamesPL.get('isPZAMember')}</div>,
+    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
+    enableSorting: true,
+  }),
+  columnHelper.accessor((row) => row.roleId, {
+    id: 'roleId',
+    header: () => <div className="text-left">{columnNamesPL.get('roleId')}</div>,
+    cell: (info) => <RoleBadge roles={roles} roleId={info.getValue()} />,
     enableSorting: true,
   }),
 ];

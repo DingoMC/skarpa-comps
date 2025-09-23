@@ -36,7 +36,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     score: 'Punkty',
     fromTime: 'Od',
     toTime: 'Do',
-    role: 'Rola',
+    roleId: 'Rola',
     user: 'Użytkownik',
     category: 'Kategoria',
     taskStaff: 'Sędzia',
