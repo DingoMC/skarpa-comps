@@ -89,7 +89,17 @@ export const C_ACC = '&2-ACC->';
 export const C_MDFWD = '&7-FWD->';
 
 export class CConsole {
-  public static formatted(formattedText: string) {
+  private static instance: CConsole;
+  private constructor() {}
+
+  public static getInstance() {
+    if (!CConsole.instance) {
+      CConsole.instance = new CConsole();
+    }
+    return CConsole.instance;
+  }
+
+  public formatted(formattedText: string) {
     let t = formattedText;
     if (!t.endsWith(`${FG_FORMATTER}r`) && !t.endsWith(`${BG_FORMATTER}r`)) t += '&r';
     for (const [k, v] of Object.entries(BG_COLOR_MAP)) {
@@ -106,11 +116,11 @@ export class CConsole {
     return t;
   }
 
-  public static formatText(plainText: string, color: CColor = CColor.White, background: CColor = CColor.Black) {
+  public formatText(plainText: string, color: CColor = CColor.White, background: CColor = CColor.Black) {
     return `${BG_COLOR_MAP[background]}${FG_COLOR_MAP[color]}${plainText}${FG_COLOR_MAP[CColor.Reset]}`;
   }
 
-  public static timestamp() {
+  public timestamp() {
     const date = new Date();
     const y = date.getUTCFullYear();
     const mo = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -123,11 +133,11 @@ export class CConsole {
     return `&8[&7${timeStr}&8]`;
   }
 
-  public static displayF(formattedText: string) {
-    console.log(CConsole.formatted(formattedText));
+  public displayF(formattedText: string) {
+    console.log(CConsole.instance.formatted(formattedText));
   }
 
-  public static display(plainText: string, color: CColor = CColor.White, background: CColor = CColor.Black) {
-    console.log(CConsole.formatText(plainText, color, background));
+  public display(plainText: string, color: CColor = CColor.White, background: CColor = CColor.Black) {
+    console.log(CConsole.instance.formatText(plainText, color, background));
   }
 }

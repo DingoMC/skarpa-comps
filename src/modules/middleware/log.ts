@@ -12,20 +12,24 @@ const shouldIgnoreLog = (headers: Headers) => {
 
 export const logCallRequest = (url: string, headers: Headers) => {
   if (shouldIgnoreLog(headers)) return;
-  CConsole.displayF(`${CConsole.timestamp()}${C_MIDWR}${C_CALL} &2${getIP(headers)} ${C_REQ} &3${url}`);
+  const logger = CConsole.getInstance();
+  logger.displayF(`${logger.timestamp()}${C_MIDWR}${C_CALL} &2${getIP(headers)} ${C_REQ} &3${url}`);
 };
 
 export const logACKRedirect = (url: string, headers: Headers, redirect: string) => {
   if (shouldIgnoreLog(headers)) return;
-  CConsole.displayF(`${CConsole.timestamp()}${C_MIDWR}${C_ACK} &2${getIP(headers)} ${C_BLK} &9${url} ${C_RDR} &3${redirect}`);
+  const logger = CConsole.getInstance();
+  logger.displayF(`${logger.timestamp()}${C_MIDWR}${C_ACK} &2${getIP(headers)} ${C_BLK} &9${url} ${C_RDR} &3${redirect}`);
 };
 
 export const logACKAccess = (url: string, headers: Headers) => {
   if (shouldIgnoreLog(headers)) return;
-  CConsole.displayF(`${CConsole.timestamp()}${C_MIDWR}${C_ACK} &2${getIP(headers)} ${C_ACC} &3${url}`);
+  const logger = CConsole.getInstance();
+  logger.displayF(`${logger.timestamp()}${C_MIDWR}${C_ACK} &2${getIP(headers)} ${C_ACC} &3${url}`);
 };
 
 export const logACKForward = (url: string, headers: Headers) => {
   if (shouldIgnoreLog(headers)) return;
-  CConsole.displayF(`${CConsole.timestamp()}${C_MIDWR}${C_FWD} &2${getIP(headers)} ${C_MDFWD} &3${url}`);
+  const logger = CConsole.getInstance();
+  logger.displayF(`${logger.timestamp()}${C_MIDWR}${C_FWD} &2${getIP(headers)} ${C_MDFWD} &3${url}`);
 };
