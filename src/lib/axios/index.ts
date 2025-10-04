@@ -1,7 +1,8 @@
 import axios, { AxiosError, ResponseType } from 'axios';
 import { calculateDataSize, calculateRxHeaderSize, calculateTxHeaderSize } from './bytes';
-import { parseFullUrl, parsePathParams } from './parser';
 import { LoggerObject, ParamAcceptable } from './types';
+import URLQueryParser from './parser/queryParser';
+import URLPathParser from './parser/pathParser';
 
 const callLoggerAPI = async (data: LoggerObject) => {
   const { url, method, startTime, statusCode, rxHeaderBytes, txHeaderBytes, rxBytes, txBytes } = data;
@@ -114,6 +115,8 @@ export default async function axiosRequest({
   const startTime = new Date().getTime();
   const headers: { [key: string]: string } = {};
   const rMethod = method || 'GET';
+  const queryParser = new URLQueryParser();
+  const pathParser = new URLPathParser();
   if (authorization && authorization.length) headers.Authorization = authorization;
   if (customHeaders) {
     Object.entries(customHeaders).forEach(([k, v]) => {
@@ -121,18 +124,18 @@ export default async function axiosRequest({
     });
   }
   const loggerObject: LoggerObject = {
-    url: parseFullUrl(parsePathParams(url, pathParams), params),
+    url: queryParser.parse(pathParser.parse(url, pathParams), params),
     method: rMethod,
     statusCode: 0,
     startTime,
     txBytes: data ? calculateDataSize(data) : 0,
     rxBytes: 0,
-    txHeaderBytes: calculateTxHeaderSize(headers, parseFullUrl(parsePathParams(url, pathParams), params), rMethod),
+    txHeaderBytes: calculateTxHeaderSize(headers, queryParser.parse(pathParser.parse(url, pathParams), params), rMethod),
     rxHeaderBytes: 0,
   };
   try {
     const response = await axios({
-      url: parsePathParams(url, pathParams),
+      url: pathParser.parse(url, pathParams),
       method: rMethod,
       data,
       timeout: requestTimeout ?? 60000,
