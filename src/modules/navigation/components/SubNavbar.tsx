@@ -3,6 +3,7 @@
 import { List, ListItem } from '@/lib/mui';
 import { sectionByPath, siteMap } from '@/lib/siteMap';
 import { Section, SiteMapPage } from '@/lib/types/siteMap';
+import { clearDynamicRoute } from '@/modules/middleware/access';
 import { RootState } from '@/store/store';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,7 +22,7 @@ const SubNavbar = () => {
     .sort((a, b) => a.id - b.id);
 
   const getLinkClass = (href: string) => {
-    const sameSection = sectionByPath.get(href).id === sectionByPath.get(pathname).id;
+    const sameSection = sectionByPath.get(href).id === sectionByPath.get(clearDynamicRoute(pathname)).id;
     if (sameSection) {
       return `px-2 py-1 rounded-md hover:bg-opacity-100 hover:text-white text-white focus:outline-none focus:text-white
         focus:bg-opacity-100 bg-opacity-100 !bg-main focus:bg-main`;

@@ -1,16 +1,57 @@
+import { SUPER_ADMIN_AUTH_LEVEL } from '@/lib/constants';
 import { columnNamesPL } from '@/lib/constants/lang_pl';
 import { transformName } from '@/lib/text';
 import { UserUI } from '@/lib/types/auth';
+import TemplateButton from '@/modules/buttons/TemplateButton';
+import ConfirmDialog from '@/modules/dialogs/ConfirmDialog';
 import RoleBadge from '@/modules/roles/components/Badge';
 import { Role } from '@prisma/client';
 import { createColumnHelper } from '@tanstack/react-table';
-import { FaTimes } from 'react-icons/fa';
-import { FaCheck } from 'react-icons/fa6';
+import { FaCog, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaTrash } from 'react-icons/fa6';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
 
 const columnHelper = createColumnHelper<UserUI>();
 
-export const columns = (roles: Role[]) => [
+export const columns = (
+  roles: Role[],
+  currentEmail: string,
+  authLevel: number,
+  loading: boolean,
+  onEdit: (_: string) => void,
+  onDelete: (_: string) => void
+) => [
+  columnHelper.accessor((row) => row, {
+    id: 'actions',
+    header: () => (
+      <div className="text-left">
+        <FaCog className="w-4 h-4" />
+      </div>
+    ),
+    cell: (info) => {
+      const { email, roleId } = info.getValue();
+      const userAuthLevel = roles.find((r) => r.id === roleId)?.authLevel ?? 0;
+      return (
+        <div className="flex items-center gap-1">
+          {email !== currentEmail && (authLevel >= SUPER_ADMIN_AUTH_LEVEL || authLevel > userAuthLevel) && (
+            <>
+              <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue().id)} />
+              <ConfirmDialog
+                triggerAs="icon"
+                trigger={<FaTrash className="w-4 h-4 text-red-600" />}
+                loading={loading}
+                header="Potwierdź usunięcie użytkownika"
+                content={`Czy na pewno chcesz usunąć użytkownika ${info.getValue().email} wraz z jego wszystkimi statystykami?
+                Ta operacja jest nieodwracalna!`}
+                onConfirm={() => onDelete(info.getValue().id)}
+              />
+            </>
+          )}
+        </div>
+      );
+    },
+    enableHiding: false,
+  }),
   columnHelper.accessor((row) => row.email, {
     id: 'email',
     header: () => <div className="text-left">{columnNamesPL.get('email')}</div>,
