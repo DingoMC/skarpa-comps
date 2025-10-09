@@ -26,6 +26,7 @@ model User {
   gender            Boolean
   hasAccount        Boolean  @default(false)
   password          String?
+  clubName          String?
   roleId            String
   isPZAMember       Boolean  @default(false)
   isClubMember      Boolean  @default(false)
@@ -83,6 +84,7 @@ model Competition {
     }
   */
   selfScoringSettings String?
+  isInternal          Boolean             @default(false)
   clubMembersPay      Boolean             @default(false) 
   startDate           DateTime
   endDate             DateTime
@@ -101,6 +103,7 @@ model User_Competition {
   userId                String
   competitionId         String
   categoryId            String
+  clubName              String?
   isPZAMember           Boolean     @default(false)
   isClubMember          Boolean     @default(false)
   requestsFamilyRanking Boolean     @default(false)
