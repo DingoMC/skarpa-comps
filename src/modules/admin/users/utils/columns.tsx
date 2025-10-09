@@ -117,4 +117,16 @@ export const columns = (
     cell: (info) => <RoleBadge roles={roles} roleId={info.getValue()} />,
     enableSorting: true,
   }),
+  columnHelper.accessor((row) => row.createdAt, {
+    id: 'createdAt',
+    header: () => <div className="text-left">{columnNamesPL.get('createdAt')}</div>,
+    cell: (info) => new Date(info.getValue()).toLocaleString(),
+    enableSorting: true,
+  }),
+  columnHelper.accessor((row) => row.updatedAt, {
+    id: 'updatedAt',
+    header: () => <div className="text-left">{columnNamesPL.get('updatedAt')}</div>,
+    cell: (info) => new Date(info.getValue()).toLocaleString(),
+    enableSorting: true,
+  }),
 ];
