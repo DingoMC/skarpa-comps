@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   if (!ok) {
     return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
   }
-  const { firstName, lastName, email, password, gender, isClubMember, isPZAMember, yearOfBirth, roleId } = await req.json();
+  const { firstName, lastName, email, password, gender, isClubMember, isPZAMember, yearOfBirth, roleId, clubName } = await req.json();
   const firstNameCorr = typeof firstName === 'string' ? firstName.trim().toLowerCase() : '';
   const lastNameCorr = typeof lastName === 'string' ? lastName.trim().toLowerCase() : '';
   const emailCorr = typeof email === 'string' ? email.trim().toLowerCase() : '';
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
   const clubCorr = typeof isClubMember === 'boolean' ? isClubMember : false;
   const pzaCorr = typeof isPZAMember === 'boolean' ? isPZAMember : false;
   const roleIdCorr = typeof roleId === 'string' ? roleId : '';
+  const clubNameCorr = typeof clubName === 'string' && clubName.length > 0 ? clubName : null;
   if (!firstNameCorr.length || !lastNameCorr.length || !emailCorr.length || yearCorr === 0) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe.' }, { status: 400 });
   }
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
         email: emailCorr,
         firstName: firstNameCorr,
         lastName: lastNameCorr,
+        clubName: clubNameCorr,
         password: role.authLevel >= USER_AUTH_LEVEL ? hashedPass : null,
         hasAccount: role.authLevel >= USER_AUTH_LEVEL,
         yearOfBirth: yearCorr,
@@ -91,7 +93,7 @@ export async function PUT(req: NextRequest) {
   if (!ok) {
     return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
   }
-  const { id, firstName, lastName, gender, isClubMember, isPZAMember, yearOfBirth, roleId } = await req.json();
+  const { id, firstName, lastName, gender, isClubMember, isPZAMember, yearOfBirth, roleId, clubName } = await req.json();
   const firstNameCorr = typeof firstName === 'string' ? firstName.trim().toLowerCase() : '';
   const lastNameCorr = typeof lastName === 'string' ? lastName.trim().toLowerCase() : '';
   const idCorr = typeof id === 'string' ? id.trim() : '';
@@ -100,6 +102,7 @@ export async function PUT(req: NextRequest) {
   const clubCorr = typeof isClubMember === 'boolean' ? isClubMember : false;
   const pzaCorr = typeof isPZAMember === 'boolean' ? isPZAMember : false;
   const roleIdCorr = typeof roleId === 'string' ? roleId : '';
+  const clubNameCorr = typeof clubName === 'string' && clubName.length > 0 ? clubName : null;
   if (!firstNameCorr.length || !lastNameCorr.length || !idCorr.length || yearCorr === 0) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe.' }, { status: 400 });
   }
@@ -139,6 +142,7 @@ export async function PUT(req: NextRequest) {
         gender: genderCorr,
         isClubMember: clubCorr,
         isPZAMember: pzaCorr,
+        clubName: clubNameCorr,
         password: role.authLevel === GUEST_AUTH_LEVEL ? null : undefined,
         hasAccount: role.authLevel >= USER_AUTH_LEVEL,
         roleId: role.id,

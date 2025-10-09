@@ -73,6 +73,13 @@ export const columns = (
     enableColumnFilter: true,
     enableSorting: true,
   }),
+  columnHelper.accessor((row) => row.clubName, {
+    id: 'clubName',
+    header: () => <div className="text-left">{columnNamesPL.get('clubName')}</div>,
+    cell: (info) => info.getValue() ?? '-',
+    enableColumnFilter: true,
+    enableSorting: true,
+  }),
   columnHelper.accessor((row) => row.yearOfBirth, {
     id: 'yearOfBirth',
     header: () => <div className="text-left">{columnNamesPL.get('yearOfBirth')}</div>,

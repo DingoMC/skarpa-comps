@@ -8,6 +8,7 @@ import SelectBirthYear from '@/modules/inputs/components/BirthYear';
 import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import SelectRole from '@/modules/inputs/components/Role';
+import InputString from '@/modules/inputs/components/String';
 import { Role, User } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
@@ -89,6 +90,15 @@ const AdminEditUser = ({ initUser, loading, roles, handleEdit, onRefresh, handle
         </div>
         <Typography type="p">E-Mail:</Typography>
         <Typography className="text-xs">{user.email}</Typography>
+        <Typography type="p">Klub:</Typography>
+        <InputString
+          placeholder="Skarpa Lublin"
+          disabled={loading}
+          value={user.clubName ?? ''}
+          onChange={(v) => {
+            setUser((prev) => ({ ...prev, clubName: v.trim().length > 0 ? v : null }));
+          }}
+        />
         <Typography type="p">Rok urodzenia:</Typography>
         <div className="mb-2 md:mb-0">
           <SelectBirthYear value={user.yearOfBirth} onChange={(v) => setUser((prev) => ({ ...prev, yearOfBirth: v }))} />

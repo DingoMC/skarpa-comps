@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   if (token !== undefined && token !== null) {
     return Response.json({ message: 'Jesteś już zalogowany' }, { status: 400 });
   }
-  const { firstName, lastName, email, password, gender, isClubMember, isPZAMember, yearOfBirth } = await req.json();
+  const { firstName, lastName, email, password, gender, clubName, isClubMember, isPZAMember, yearOfBirth } = await req.json();
   const firstNameCorr = typeof firstName === 'string' ? firstName.trim().toLowerCase() : '';
   const lastNameCorr = typeof lastName === 'string' ? lastName.trim().toLowerCase() : '';
   const emailCorr = typeof email === 'string' ? email.trim().toLowerCase() : '';
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
   const genderCorr = typeof gender === 'boolean' ? gender : false;
   const clubCorr = typeof isClubMember === 'boolean' ? isClubMember : false;
   const pzaCorr = typeof isPZAMember === 'boolean' ? isPZAMember : false;
+  const clubNameCorr = typeof clubName === 'string' && clubName.length > 0 ? clubName : null;
   if (!firstNameCorr.length || !lastNameCorr.length || !emailCorr.length || !passwordCorr.length || yearCorr === 0) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe' }, { status: 400 });
   }
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
           hasAccount: true,
           yearOfBirth: yearCorr,
           gender: genderCorr,
+          clubName: clubNameCorr,
           isClubMember: clubCorr,
           isPZAMember: pzaCorr,
           roleId: userRole.id,
@@ -59,6 +61,7 @@ export async function POST(req: NextRequest) {
           lastName: lastNameCorr,
           password: hashedPass,
           hasAccount: true,
+          clubName: clubNameCorr,
           yearOfBirth: yearCorr,
           gender: genderCorr,
           isClubMember: clubCorr,

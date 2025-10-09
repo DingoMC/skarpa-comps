@@ -7,6 +7,7 @@ import InputEmail from '@/modules/inputs/components/Email';
 import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import InputPassword from '@/modules/inputs/components/Password';
+import InputString from '@/modules/inputs/components/String';
 import { User } from '@prisma/client';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -132,6 +133,15 @@ const Register = ({ loading, handleRegister }: Props) => {
         />
         {repeatPasswordError !== null && <Typography className="text-xs text-red-600">{repeatPasswordError}</Typography>}
       </div>
+      <Typography type="p">Klub:</Typography>
+      <InputString
+        placeholder="Skarpa Lublin"
+        disabled={loading}
+        value={user.clubName ?? ''}
+        onChange={(v) => {
+          setUser((prev) => ({ ...prev, clubName: v.trim().length > 0 ? v : null }));
+        }}
+      />
       <Typography type="p">Rok urodzenia:</Typography>
       <div className="mb-2 md:mb-0">
         <SelectBirthYear value={user.yearOfBirth} onChange={(v) => setUser((prev) => ({ ...prev, yearOfBirth: v }))} />

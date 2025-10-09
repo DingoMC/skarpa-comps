@@ -3,6 +3,7 @@
 import { IconButton, Input, Tooltip } from '@/lib/mui';
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { MAX_INPUT_LENGTH } from '../constants';
 
 type Props = {
   value: string;
@@ -21,7 +22,7 @@ const InputPassword = ({ value, error, disabled, repeatAfter, className, placeho
   const handleChange = (value: string) => {
     let v = value.trim();
     const allowedChars = /^[A-Za-z0-9!@#$%^&*()_\-+=\[{\]};:'",.<>/?\\|`~]*$/g;
-    while (v.length > 0 && (!allowedChars.test(v) || v.length > 64)) {
+    while (v.length > 0 && (!allowedChars.test(v) || v.length > MAX_INPUT_LENGTH)) {
       v = v.substring(0, v.length - 1);
     }
     if (repeatAfter !== undefined && repeatAfter !== v) {
@@ -50,6 +51,7 @@ const InputPassword = ({ value, error, disabled, repeatAfter, className, placeho
         value={value}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        maxLength={MAX_INPUT_LENGTH}
         onChange={(e) => handleChange(e.target.value)}
         className={`${className ?? ''}${disabled ? ' cursor-not-allowed' : ''} border-gray-300 bg-white`}
       />

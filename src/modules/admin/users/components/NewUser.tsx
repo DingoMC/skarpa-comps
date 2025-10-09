@@ -10,6 +10,7 @@ import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import InputPassword from '@/modules/inputs/components/Password';
 import SelectRole from '@/modules/inputs/components/Role';
+import InputString from '@/modules/inputs/components/String';
 import { Role, User } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
@@ -144,6 +145,15 @@ const AdminNewUser = ({ loading, roles, handleAdd, handleBack }: Props) => {
             </div>
           </>
         )}
+        <Typography type="p">Klub:</Typography>
+        <InputString
+          placeholder="Skarpa Lublin"
+          disabled={loading}
+          value={user.clubName ?? ''}
+          onChange={(v) => {
+            setUser((prev) => ({ ...prev, clubName: v.trim().length > 0 ? v : null }));
+          }}
+        />
         <Typography type="p">Rok urodzenia:</Typography>
         <div className="mb-2 md:mb-0">
           <SelectBirthYear value={user.yearOfBirth} onChange={(v) => setUser((prev) => ({ ...prev, yearOfBirth: v }))} />
