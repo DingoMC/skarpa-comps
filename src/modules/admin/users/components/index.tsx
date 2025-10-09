@@ -3,11 +3,11 @@
 import { UserUI } from '@/lib/types/auth';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardTable from '@/modules/table/components';
+import { RootState } from '@/store/store';
 import { Role } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { columns } from '../utils/columns';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { columns } from '../utils/columns';
 
 type Props = {
   data: UserUI[];
@@ -31,7 +31,7 @@ const AdminUsers = ({ data, roles, loading, onRefresh, onDelete }: Props) => {
   };
 
   return (
-    <div className="max-w-screen md:max-w-[calc(100vw-232px)] overflow-y-scroll">
+    <div className="max-w-screen md:max-w-[calc(100vw-232px)] overflow-y-visible">
       <DashboardTable
         title="Użytkownicy"
         noDataMessage="Nie znaleziono uzytkowników."
@@ -39,6 +39,7 @@ const AdminUsers = ({ data, roles, loading, onRefresh, onDelete }: Props) => {
         refetching={loading}
         columns={columns(roles, user?.email ?? '', authLevel, loading, handleEditClick, onDelete)}
         onRefresh={onRefresh}
+        cardBodyClassName="overflow-x-visible"
         cardHeaderRight={<TemplateButton template="add" disabled={loading} onClick={handleAddClick} message="Nowy użytkownik" />}
       />
     </div>
