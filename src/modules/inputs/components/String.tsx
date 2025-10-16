@@ -34,7 +34,6 @@ const InputString = ({ value, error, className, disabled, required, placeholder,
       disabled={disabled}
       placeholder={placeholder}
       maxLength={MAX_INPUT_LENGTH}
-      autoComplete="email"
       onChange={(e) => handleChange(e.target.value)}
       className={`${className ?? ''}${disabled ? ' cursor-not-allowed' : ''} border-gray-300 bg-white`}
     />

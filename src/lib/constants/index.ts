@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Category, User } from '@prisma/client';
 
 export const EMPTY_USER: User = {
   id: '',
@@ -14,6 +14,15 @@ export const EMPTY_USER: User = {
   isClubMember: false,
   createdAt: new Date(),
   updatedAt: new Date(),
+  clubName: null,
+};
+
+export const EMPTY_CATGEORY: Category = {
+  name: '',
+  id: '',
+  seq: 0,
+  minAge: null,
+  maxAge: null,
 };
 
 export const SALT_ROUNDS = 10;

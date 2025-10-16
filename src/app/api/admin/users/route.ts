@@ -148,7 +148,7 @@ export async function PUT(req: NextRequest) {
         roleId: role.id,
       },
     });
-    return Response.json({ message: 'Uzytkownik utworzony pomyślnie.' }, { status: 200 });
+    return Response.json({ message: 'Uzytkownik zaktualizowany pomyślnie.' }, { status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({ message: 'Wystąpił nieoczekiwany błąd.' }, { status: 500 });
