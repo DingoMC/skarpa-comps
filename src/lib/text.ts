@@ -1,32 +1,28 @@
-export const capitalizeFirstLetter = (val: string) => {
-  if (!val.length) return '';
-  return `${val[0].toUpperCase()}${val.substring(1)}`;
-};
-
-export const transformName = (name: string) => {
-  if (name.includes(' ')) {
-    return name
-      .split(' ')
-      .map((v) => capitalizeFirstLetter(v))
-      .join(' ');
+export default class TextFormatter {
+  private capitalizeFirstLetter(val: string): string {
+    if (!val.length) return '';
+    return `${val[0].toUpperCase()}${val.substring(1)}`;
   }
-  if (name.includes('-')) {
-    return name
-      .split('-')
-      .map((v) => capitalizeFirstLetter(v))
-      .join('-');
-  }
-  return capitalizeFirstLetter(name);
-};
 
-export const displayFullName = (firstName: string, lastName: string) => `${transformName(firstName)} ${transformName(lastName)}`;
-
-export const transformRoleName = (name: string) => {
-  if (name.includes('_')) {
-    return name
-      .split('_')
-      .map((v) => capitalizeFirstLetter(v))
-      .join(' ');
+  private transformWithDelimiter(val: string, delimiter: string): string {
+    return val
+      .split(delimiter)
+      .map((v) => this.capitalizeFirstLetter(v))
+      .join(delimiter === '_' ? ' ' : delimiter);
   }
-  return capitalizeFirstLetter(name);
-};
+
+  transformName(name: string): string {
+    if (name.includes(' ')) return this.transformWithDelimiter(name, ' ');
+    if (name.includes('-')) return this.transformWithDelimiter(name, '-');
+    return this.capitalizeFirstLetter(name);
+  }
+
+  displayFullName(firstName: string, lastName: string): string {
+    return `${this.transformName(firstName)} ${this.transformName(lastName)}`;
+  }
+
+  transformRoleName(role: string): string {
+    if (role.includes('_')) return this.transformWithDelimiter(role, '_');
+    return this.capitalizeFirstLetter(role);
+  }
+}
