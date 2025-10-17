@@ -2,6 +2,7 @@
 
 import { Input } from '@/lib/mui';
 import { HTMLInputAutoCompleteAttribute } from 'react';
+import { MAX_INPUT_LENGTH } from '../constants';
 
 type Props = {
   value: string;
@@ -18,7 +19,7 @@ const InputName = ({ value, error, disabled, className, placeholder, allowMultip
   const handleChange = (value: string) => {
     let v = value;
     const allowedChars = /^[a-zA-ZżźćńłśąęóŻŹĆŃŁĄŚĘÓ\s\-]*$/g;
-    while (v.length > 0 && (!allowedChars.test(v) || v.length > 64)) {
+    while (v.length > 0 && (!allowedChars.test(v) || v.length > MAX_INPUT_LENGTH)) {
       v = v.substring(0, v.length - 1);
     }
     if (!v.trim().length) {
@@ -45,6 +46,7 @@ const InputName = ({ value, error, disabled, className, placeholder, allowMultip
       value={value}
       placeholder={placeholder}
       autoComplete={autoComplete}
+      maxLength={MAX_INPUT_LENGTH}
       onChange={(e) => handleChange(e.target.value)}
       disabled={disabled}
       className={`${className ?? ''}${disabled ? ' cursor-not-allowed' : ''} border-gray-300 bg-white`}

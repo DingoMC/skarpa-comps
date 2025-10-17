@@ -20,3 +20,13 @@ export const transformName = (name: string) => {
 };
 
 export const displayFullName = (firstName: string, lastName: string) => `${transformName(firstName)} ${transformName(lastName)}`;
+
+export const transformRoleName = (name: string) => {
+  if (name.includes('_')) {
+    return name
+      .split('_')
+      .map((v) => capitalizeFirstLetter(v))
+      .join(' ');
+  }
+  return capitalizeFirstLetter(name);
+};

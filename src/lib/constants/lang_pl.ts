@@ -11,6 +11,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     hasAccount: 'Konto',
     isPZAMember: 'PZA',
     isClubMember: 'Skarpa/SP28',
+    clubName: 'Klub',
     createdAt: 'Data dodania',
     updatedAt: 'Data modyfikacji',
     name: 'Nazwa',

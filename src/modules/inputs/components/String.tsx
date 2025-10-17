@@ -9,40 +9,35 @@ type Props = {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  required?: boolean;
   onChange: (_: string, _e: string | null) => void;
 };
 
-const InputEmail = ({ value, error, className, disabled, placeholder, onChange }: Props) => {
+const InputString = ({ value, error, className, disabled, required, placeholder, onChange }: Props) => {
   const handleChange = (value: string) => {
-    let v = value.trim();
-    const allowedChars = /^[\w\-\.@]*$/g;
-    while (v.length > 0 && (!allowedChars.test(v) || v.length > MAX_INPUT_LENGTH)) {
-      v = v.substring(0, v.length - 1);
-    }
-    if (!v.length) {
-      onChange(v, 'Adres Email jest wymagany.');
+    let v = value;
+    if (v.length > MAX_INPUT_LENGTH) v = v.substring(0, MAX_INPUT_LENGTH);
+    if (required && !v.trim().length) {
+      onChange(v, 'To pole jest wymagane.');
       return;
     }
-    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (emailRegex.test(v)) onChange(v, null);
-    else onChange(v, 'Nieprawidłowy adres email.');
+    onChange(v, null);
   };
 
   return (
     <Input
-      type="email"
+      type="text"
       color="primary"
-      required
+      required={required}
       isError={error}
       value={value}
       disabled={disabled}
       placeholder={placeholder}
       maxLength={MAX_INPUT_LENGTH}
-      autoComplete="email"
       onChange={(e) => handleChange(e.target.value)}
       className={`${className ?? ''}${disabled ? ' cursor-not-allowed' : ''} border-gray-300 bg-white`}
     />
   );
 };
 
-export default InputEmail;
+export default InputString;

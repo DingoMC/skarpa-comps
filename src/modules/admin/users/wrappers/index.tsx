@@ -6,7 +6,7 @@ import { Role } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import AdminUsers from '../components';
-import { getAllRolesAdmin, getAllUsersAdmin } from '../requests';
+import { deleteUserAdmin, getAllRolesAdmin, getAllUsersAdmin } from '../requests';
 
 const AdminUsersWrapper = () => {
   const [data, setData] = useState<UserUI[]>([]);
@@ -38,15 +38,27 @@ const AdminUsersWrapper = () => {
     setRefetching(false);
   };
 
+  const handleDelete = async (id: string) => {
+    setRefetching(true);
+    const resp = await deleteUserAdmin(id);
+    if (resp.error !== null) {
+      toast.error(resp.error);
+    } else {
+      toast.success('Użytkownik został usunięty pomyślnie.');
+      await loadData(true);
+    }
+    setRefetching(false);
+  };
+
   useEffect(() => {
     loadData();
   }, []);
 
   if (loading) {
-    return <DashboardSpinner title="Users" refreshing={loading} />;
+    return <DashboardSpinner title="Użytkownicy" refreshing={loading} />;
   }
 
-  return <AdminUsers data={data} roles={roles} loading={refetching} onRefresh={handleRefresh} />;
+  return <AdminUsers data={data} roles={roles} loading={refetching} onRefresh={handleRefresh} onDelete={handleDelete} />;
 };
 
 export default AdminUsersWrapper;

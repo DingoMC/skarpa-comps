@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton, Tooltip, Typography } from '@/lib/mui';
+import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardFrame from '@/modules/dashboard/components';
 import SkarpaProgress from '@/modules/loaders/components/Progress';
 import NoData from '@/modules/lottie/NoData';
@@ -17,8 +17,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import React, { useEffect, useState } from 'react';
-import { IoMdDownload } from 'react-icons/io';
-import { TbRefresh } from 'react-icons/tb';
 import { TableHeaderInput } from '../types';
 import ColumnVisibilityControl from './ColumnVisibilityControl';
 import TableHeader from './Header';
@@ -195,38 +193,10 @@ function DashboardTable<T>({
   };
 
   const cardHeader = () => (
-    <div className="flex items-center gap-x-5">
-      {onRefresh && (
-        <Tooltip>
-          <Tooltip.Trigger
-            as={IconButton}
-            onClick={() => onRefresh()}
-            size="sm"
-            variant="ghost"
-            color="secondary"
-            className="cursor-pointer"
-            disabled={refetching}
-          >
-            <TbRefresh className="w-5 h-5 text-white" />
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <Typography type="small">Odśwież</Typography>
-            <Tooltip.Arrow />
-          </Tooltip.Content>
-        </Tooltip>
-      )}
-      {onDownloadCSV && (
-        <Tooltip>
-          <Tooltip.Trigger as={IconButton} variant="ghost" color="secondary" size="sm" className="cursor-pointer" disabled={refetching}>
-            <IoMdDownload className="w-5 h-5" />
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <Typography type="small">Pobierz CSV</Typography>
-            <Tooltip.Arrow />
-          </Tooltip.Content>
-        </Tooltip>
-      )}
+    <div className="flex items-center gap-x-1">
       {cardHeaderRight}
+      {onRefresh && <TemplateButton template="refresh" onClick={onRefresh} disabled={refetching} />}
+      {onDownloadCSV && <TemplateButton template="downloadCSV" onClick={onDownloadCSV} disabled={refetching} />}
       <ColumnVisibilityControl table={table} />
     </div>
   );

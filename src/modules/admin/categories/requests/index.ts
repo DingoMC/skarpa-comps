@@ -1,15 +1,14 @@
 import axiosRequest from '@/lib/axios';
-import { UserUI } from '@/lib/types/auth';
-import { Role, User } from '@prisma/client';
+import { Category } from '@prisma/client';
 
-export const getUserByIdAdmin = async (id: string) => {
+export const getCategoryByIdAdmin = async (id: string) => {
   const { data, error } = await axiosRequest({
-    url: '/api/admin/users',
+    url: '/api/admin/categories',
     method: 'GET',
     params: { id },
   });
   if (error === null && data) {
-    return { success: true, error, data: data as UserUI };
+    return { success: true, error, data: data as Category };
   }
   if (error === null && data && data.message) {
     return { success: false, error: data.message as string, data: null };
@@ -17,13 +16,13 @@ export const getUserByIdAdmin = async (id: string) => {
   return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
 };
 
-export const getAllUsersAdmin = async () => {
+export const getAllCategoriesAdmin = async () => {
   const { data, error } = await axiosRequest({
-    url: '/api/admin/users',
+    url: '/api/admin/categories',
     method: 'GET',
   });
   if (error === null && data && Array.isArray(data)) {
-    return { success: true, error, data: data as UserUI[] };
+    return { success: true, error, data: data as Category[] };
   }
   if (error === null && data && data.message) {
     return { success: false, error: data.message as string, data: null };
@@ -31,25 +30,11 @@ export const getAllUsersAdmin = async () => {
   return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
 };
 
-export const getAllRolesAdmin = async () => {
+export const createCategoryAdmin = async (categoryData: Category) => {
   const { data, error } = await axiosRequest({
-    url: '/api/admin/roles',
-    method: 'GET',
-  });
-  if (error === null && data && Array.isArray(data)) {
-    return { success: true, error, data: data as Role[] };
-  }
-  if (error === null && data && data.message) {
-    return { success: false, error: data.message as string, data: null };
-  }
-  return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
-};
-
-export const createUserAdmin = async (userData: User) => {
-  const { data, error } = await axiosRequest({
-    url: '/api/admin/users',
+    url: '/api/admin/categories',
     method: 'POST',
-    data: { ...userData },
+    data: { ...categoryData },
   });
   if (error === null) {
     return { success: true, error };
@@ -60,11 +45,11 @@ export const createUserAdmin = async (userData: User) => {
   return { success: false, error: error.message };
 };
 
-export const updateUserAdmin = async (userData: User) => {
+export const updateCategoryAdmin = async (categoryData: Category) => {
   const { data, error } = await axiosRequest({
-    url: '/api/admin/users',
+    url: '/api/admin/categories',
     method: 'PUT',
-    data: { ...userData },
+    data: { ...categoryData },
   });
   if (error === null) {
     return { success: true, error };
@@ -75,9 +60,9 @@ export const updateUserAdmin = async (userData: User) => {
   return { success: false, error: error.message };
 };
 
-export const deleteUserAdmin = async (id: string) => {
+export const deleteCategoryAdmin = async (id: string) => {
   const { data, error } = await axiosRequest({
-    url: '/api/admin/users',
+    url: '/api/admin/categories',
     method: 'DELETE',
     params: { id },
   });

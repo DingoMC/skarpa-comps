@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -32,12 +26,13 @@ model User {
   gender            Boolean
   hasAccount        Boolean  @default(false)
   password          String?
+  clubName          String?
   roleId            String
   isPZAMember       Boolean  @default(false)
   isClubMember      Boolean  @default(false)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  role              Role     @relation(fields: [roleId], references: [id])
+  role              Role     @relation(fields: [roleId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userCompetitions  User_Competition[]
   taskStaffs        TaskStaff[]
   verificationStaff VerificationStaff[]
@@ -89,6 +84,7 @@ model Competition {
     }
   */
   selfScoringSettings String?
+  isInternal          Boolean             @default(false)
   clubMembersPay      Boolean             @default(false) 
   startDate           DateTime
   endDate             DateTime
@@ -107,6 +103,7 @@ model User_Competition {
   userId                String
   competitionId         String
   categoryId            String
+  clubName              String?
   isPZAMember           Boolean     @default(false)
   isClubMember          Boolean     @default(false)
   requestsFamilyRanking Boolean     @default(false)
@@ -115,9 +112,9 @@ model User_Competition {
   verified              Boolean     @default(false)
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
-  user                  User        @relation(fields: [userId], references: [id])
-  competition           Competition @relation(fields: [competitionId], references: [id])
-  category              Category    @relation(fields: [categoryId], references: [id])
+  user                  User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  competition           Competition @relation(fields: [competitionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  category              Category    @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   taskUsers             Task_User[]
   userFamilies          User_Family[]
 
@@ -139,8 +136,8 @@ model User_Family {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  userComp    User_Competition @relation(fields: [userCompId], references: [id])
-  family      Family           @relation(fields: [familyId], references: [id])
+  userComp    User_Competition @relation(fields: [userCompId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  family      Family           @relation(fields: [familyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@unique([userCompId, familyId])
 }
@@ -197,7 +194,7 @@ model Task {
   competitionId  String
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
-  competition    Competition       @relation(fields: [competitionId], references: [id])
+  competition    Competition       @relation(fields: [competitionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categories     Task_Category[]
   userTasks      Task_User[]
   taskStaffs     TaskStaff[]
@@ -210,8 +207,8 @@ model Task_Category {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  task       Task     @relation(fields: [taskId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
+  task       Task     @relation(fields: [taskId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@unique([taskId, categoryId])
 }
@@ -235,8 +232,8 @@ model Task_User {
   score       Float             @default(0)
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
-  task        Task              @relation(fields: [taskId], references: [id])
-  userComp    User_Competition  @relation(fields: [userCompId], references: [id])
+  task        Task              @relation(fields: [taskId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userComp    User_Competition  @relation(fields: [userCompId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@unique([taskId, userCompId])
 }
@@ -250,8 +247,8 @@ model TaskStaff {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id])
-  task      Task     @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  task      Task     @relation(fields: [taskId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model VerificationStaff {
@@ -263,8 +260,8 @@ model VerificationStaff {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  user        User        @relation(fields: [userId], references: [id])
-  competition Competition @relation(fields: [compId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  competition Competition @relation(fields: [compId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@unique([userId, compId])
 }

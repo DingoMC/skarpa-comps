@@ -2,6 +2,7 @@
 
 import { IconButton } from '@/lib/mui';
 import { sectionByPath } from '@/lib/siteMap';
+import { clearDynamicRoute } from '@/modules/middleware/access';
 import { RootState } from '@/store/store';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
@@ -14,7 +15,7 @@ const SidebarMobile = () => {
   const [expanded, setExpanded] = useState(false);
   const authLevel = useSelector((state: RootState) => state.auth.authLevel);
   const path = usePathname();
-  const section = sectionByPath.get(path);
+  const section = sectionByPath.get(clearDynamicRoute(path));
   const links = useMemo(() => {
     return Object.values(section.pages)
       .filter((page) => !page.hidden)
@@ -41,7 +42,7 @@ const SidebarMobile = () => {
           />
         </IconButton>
       </div>
-      <SidebarList links={links} path={path} expanded={expanded} />
+      <SidebarList links={links} path={clearDynamicRoute(path)} expanded={expanded} />
     </div>
   );
 };

@@ -122,6 +122,8 @@ const hrefSectionKeyPair = () => {
 export const siteMapByPath = new ObjectWithFallback<SiteMapPage>(
   {
     ...hrefPageKeyPair(),
+    '/admin/users/new': siteMap.admin.pages.users,
+    '/admin/users/[id]': siteMap.admin.pages.users,
   },
   siteMap.home.pages.home
 );
@@ -134,6 +136,8 @@ export const siteMapByPath = new ObjectWithFallback<SiteMapPage>(
 export const sectionByPath = new ObjectWithFallback<Section>(
   {
     ...hrefSectionKeyPair(),
+    '/admin/users/new': siteMap.admin,
+    '/admin/users/[id]': siteMap.admin,
   },
   siteMap.home
 );

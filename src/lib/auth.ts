@@ -1,6 +1,8 @@
+import { Role } from '@prisma/client';
 import { jwtVerify } from 'jose';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
+import { SUPER_ADMIN_AUTH_LEVEL, USER_AUTH_LEVEL } from './constants';
 import { TokenPayload } from './types/auth';
 
 interface TokenData extends TokenPayload {
@@ -26,6 +28,22 @@ export const decodeToken = (token?: string | null) => {
   return { exp, iat, user, authLevel };
 };
 
+export const verifyTokenAuthLevel = async (targetAuthLevel: number, token?: string | null) => {
+  if (token === undefined || token === null || !token.length) return false;
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
+    await jwtVerify(token, secret);
+    const decoded = decodeToken(token);
+    if (decoded === null) return false;
+    if (targetAuthLevel >= SUPER_ADMIN_AUTH_LEVEL) return true;
+    if (decoded.authLevel < targetAuthLevel) return false;
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 export const verifyToken = async (token?: string | null, requiredAuthLevel?: number) => {
   if (token === undefined || token === null || !token.length) return false;
   try {
@@ -48,4 +66,10 @@ export const verifyToken = async (token?: string | null, requiredAuthLevel?: num
     console.error(error);
     return false;
   }
+};
+
+export const filterRoles = (roles: Role[], targetAuthLevel?: number) => {
+  if (!targetAuthLevel || targetAuthLevel < USER_AUTH_LEVEL) return [];
+  if (targetAuthLevel >= SUPER_ADMIN_AUTH_LEVEL) return roles;
+  return roles.filter((r) => r.authLevel < targetAuthLevel);
 };
