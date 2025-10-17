@@ -1,6 +1,5 @@
 'use client';
 
-import Color, { interpolateColor } from '@/lib/color';
 import { UserUI } from '@/lib/types/auth';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import Counter from '@/modules/counter/components';
@@ -13,6 +12,8 @@ import { FaFilter } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 import { columns } from '../utils/columns';
 import AddModal from './AddModal';
+import ColorFactory from '@/lib/color/factory';
+import { interpolateColor } from '@/lib/color/utils';
 
 type Props = {
   data: Category[];
@@ -30,9 +31,9 @@ const AdminCategories = ({ data, loading, onAdd, onEdit, onRefresh, onDelete }: 
     () =>
       interpolateColor(
         [
-          { value: 0, color: new Color('aaaaaa') },
-          { value: 1, color: new Color('ffffff') },
-          { value: totalCount, color: new Color('55ff55') },
+          { value: 0, color: ColorFactory.getColor('aaaaaa') },
+          { value: 1, color: ColorFactory.getColor('ffffff') },
+          { value: totalCount, color: ColorFactory.getColor('55ff55') },
         ],
         filteredTotalCount
       ).toHexString(),
