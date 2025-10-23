@@ -22,7 +22,10 @@ export interface PZASettings {
 
 export interface SelfScoringSettings {
   allowSelfScoring: boolean;
-  selfScoringFilterCategories: string[] | null; // array of Category IDs
-  selfScoringFrom?: number;
-  selfScoringTo?: number;
+  settings: {
+    categoryId: string;
+    modifyAfterSent: boolean;
+    selfScoringFrom?: number;
+    selfScoringTo?: number;
+  }[];
 }
