@@ -1,16 +1,10 @@
 'use client';
 
 import Color, { interpolateColor } from '@/lib/color';
-import { UserUI } from '@/lib/types/auth';
-import TemplateButton from '@/modules/buttons/TemplateButton';
 import Counter from '@/modules/counter/components';
 import DashboardTable from '@/modules/table/components';
-import { RootState } from '@/store/store';
-import { Category, Role } from '@prisma/client';
-import { useRouter } from 'next/navigation';
+import { Category } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
-import { FaFilter } from 'react-icons/fa6';
-import { useSelector } from 'react-redux';
 import { columns } from '../utils/columns';
 import AddModal from './AddModal';
 

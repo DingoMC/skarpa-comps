@@ -1,18 +1,14 @@
 import { columnNamesPL } from '@/lib/constants/lang_pl';
-import TemplateButton from '@/modules/buttons/TemplateButton';
 import ConfirmDialog from '@/modules/dialogs/ConfirmDialog';
 import { Category } from '@prisma/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { FaCog } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa6';
+import EditModal from '../components/EditModal';
 
 const columnHelper = createColumnHelper<Category>();
 
-export const columns = (
-  loading: boolean,
-  onEdit: (_: Category) => void,
-  onDelete: (_: string) => void
-) => [
+export const columns = (loading: boolean, onEdit: (_: Category) => Promise<void>, onDelete: (_: string) => void) => [
   columnHelper.accessor((row) => row, {
     id: 'actions',
     header: () => (
@@ -23,13 +19,13 @@ export const columns = (
     cell: (info) => {
       return (
         <div className="flex items-center gap-1">
-          <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue())} />
+          <EditModal data={info.getValue()} loading={loading} onConfirm={onEdit} />
           <ConfirmDialog
             triggerAs="icon"
             trigger={<FaTrash className="w-4 h-4 text-red-600" />}
             loading={loading}
             header="Potwierdź usunięcie kategorii"
-            content={`Czy na pewno chcesz usunąć kategorię ${info.getValue().name} wraz z przypisanymi do niej zawodnikami?
+            content={`Czy na pewno chcesz usunąć kategorię '${info.getValue().name}' wraz z przypisanymi do niej zawodnikami?
                 Ta operacja jest nieodwracalna!`}
             onConfirm={() => onDelete(info.getValue().id)}
           />

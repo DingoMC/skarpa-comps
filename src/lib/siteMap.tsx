@@ -1,5 +1,5 @@
 import { FaHome, FaUsers } from 'react-icons/fa';
-import { FaRegAddressBook } from 'react-icons/fa6';
+import { FaRegAddressBook, FaTableList } from 'react-icons/fa6';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
@@ -79,6 +79,13 @@ export const siteMap = {
         tabName: tabName('Użytkownicy'),
         href: '/admin/users',
         icon: <FaUsers className={icon} />,
+      },
+      categories: {
+        id: 0,
+        name: 'Kategorie',
+        tabName: tabName('Kategorie'),
+        href: '/admin/categories',
+        icon: <FaTableList className={icon} />,
       },
     },
   },

@@ -1,22 +1,22 @@
 'use client';
 
-import { EMPTY_CATGEORY } from '@/lib/constants';
 import { Button, Dialog, IconButton, Typography } from '@/lib/mui';
 import InputNumber from '@/modules/inputs/components/Number';
 import InputString from '@/modules/inputs/components/String';
 import { Category } from '@prisma/client';
-import { useMemo, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { useEffect, useMemo, useState } from 'react';
+import { FaEdit } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 
 type Props = {
   loading: boolean;
+  data: Category;
   onConfirm: (_: Category) => Promise<void>;
 };
 
-const AddModal = ({ loading, onConfirm }: Props) => {
+const EditModal = ({ loading, data, onConfirm }: Props) => {
   const [open, setOpen] = useState(false);
-  const [newData, setNewData] = useState(EMPTY_CATGEORY);
+  const [newData, setNewData] = useState(data);
   const [nameError, setNameError] = useState<string | null>(null);
   const [seqError, setSeqError] = useState<string | null>(null);
   const [minError, setMinError] = useState<string | null>(null);
@@ -27,6 +27,10 @@ const AddModal = ({ loading, onConfirm }: Props) => {
     [minError, maxError, nameError, seqError, newData]
   );
 
+  useEffect(() => {
+    setNewData({ ...data });
+  }, [data]);
+
   const handleSave = async () => {
     await onConfirm(newData);
     setOpen(false);
@@ -34,13 +38,13 @@ const AddModal = ({ loading, onConfirm }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger as={IconButton} variant="ghost" size="sm" color="secondary" onClick={() => setOpen(!open)}>
-        <FaPlus className="w-4 h-4 text-white" />
+      <Dialog.Trigger as={IconButton} variant="ghost" size="sm" color="primary" onClick={() => setOpen(!open)}>
+        <FaEdit className="w-4 h-4" />
       </Dialog.Trigger>
       <Dialog.Overlay>
         <Dialog.Content>
           <div className="flex items-center justify-between gap-4">
-            <Typography type="h6">Nowa kategoria</Typography>
+            <Typography type="h6">Edytuj Kategorię</Typography>
             <Dialog.DismissTrigger
               as={IconButton}
               size="sm"
@@ -120,7 +124,7 @@ const AddModal = ({ loading, onConfirm }: Props) => {
               Anuluj
             </Dialog.DismissTrigger>
             <Button onClick={() => handleSave()} disabled={loading || saveDisabled}>
-              Dodaj
+              Zapisz
             </Button>
           </div>
         </Dialog.Content>
@@ -129,4 +133,4 @@ const AddModal = ({ loading, onConfirm }: Props) => {
   );
 };
 
-export default AddModal;
+export default EditModal;

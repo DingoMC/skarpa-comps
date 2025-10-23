@@ -1,8 +1,7 @@
 'use client';
 
 import { IconButton, Tooltip, Typography } from '@/lib/mui';
-import { FaEdit } from 'react-icons/fa';
-import { FaPlus } from 'react-icons/fa6';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 import { IoMdDownload } from 'react-icons/io';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
 import { TbRefresh } from 'react-icons/tb';
@@ -19,7 +18,7 @@ const templates = {
     color: 'secondary',
   },
   add: {
-    icon: <FaPlus className="w-5 h-5 text-white" />,
+    icon: <FaPlus className="w-4 h-4 text-white" />,
     tooltip: 'Nowy...',
     color: 'secondary',
   },
