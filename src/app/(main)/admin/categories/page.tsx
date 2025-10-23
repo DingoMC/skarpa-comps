@@ -3,7 +3,7 @@ import AdminCategoriesWrapper from '@/modules/admin/categories/wrappers';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: siteMap.admin.pages.users.tabName,
+  title: siteMap.admin.pages.categories.tabName,
   description: 'Witamy na stronie - Zawody Skarpa Lublin',
 };
 

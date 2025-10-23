@@ -66,7 +66,7 @@ const TemplateButton = ({ template, onClick, disabled, size, message, variant, c
       {templates[template].icon}
     </Tooltip.Trigger>
     <Tooltip.Content>
-      <Typography type="small">{message ?? templates[template].tooltip}</Typography>
+      <Typography className="text-xs">{message ?? templates[template].tooltip}</Typography>
       <Tooltip.Arrow />
     </Tooltip.Content>
   </Tooltip>

@@ -26,7 +26,7 @@ function ColumnVisibilityControl<T>({ table }: Props<T>) {
           <FaRegEye className="w-5 h-5 text-white" />
         </Tooltip.Trigger>
         <Tooltip.Content>
-          <Typography type="small">Pokaż kolumny</Typography>
+          <Typography className="text-xs">Pokaż kolumny</Typography>
           <Tooltip.Arrow />
         </Tooltip.Content>
       </Tooltip>

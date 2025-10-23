@@ -45,7 +45,7 @@ function TableHeader<T>({ header, searchToggle, filterInput, handleSearchToggle,
             variant="ghost"
             size="sm"
             onClick={() => handleSearchToggle(id)}
-            color={((getFilterValue() || '') as string).length ? 'info' : 'secondary'}
+            color={((getFilterValue() || '') as string).length ? 'info' : 'primary'}
             className="ml-1 !w-5 !h-5 !min-w-5 !min-h-5 cursor-pointer"
           >
             <FaSearch className="w-3 h-3" />
