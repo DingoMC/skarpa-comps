@@ -55,3 +55,17 @@ Nazwy klas: `ColorFactory` `<>->` `Color`
 Cel wykrozystania: Przechowywanie listy kolorów w obiekcie klasy `ColorFactory` aby zapobiec powtarzającemu tworzeniu obiektów tego samego koloru. Wywołując konstruktor klasy `Color` dla tego samego koloru tworzymy takie same obiekty klas które zachowują się identycznie. W przypadku korzystania z `ColorFactory` obiekty tego samego koloru są wykorzystywane ponownie.
 
 Przykład wykorzystania: [./src/modules/admin/users/components/index.tsx](./src/modules/admin/users/components/index.tsx)
+
+## Lab 2
+
+### Wzorce behawioralne
+
+#### Strategy
+
+Stworzony w: [./src/modules/loaders/types/index.ts](./src/modules/loaders/types/index.ts), [./src/modules/loaders/types/defaultStyle.ts](./src/modules/loaders/types/defaultStyle.ts), [./src/modules/loaders/types/highContrastStyle.ts](./src/modules/loaders/types/highContrastStyle.ts)
+
+Nazwy klas/interfejsów: `LoaderStyleStrategy <- DefaultLoaderStyle, HighContrastLoaderStyle`
+
+Cel wykorzystania: Możliwość tworzenia wielu różnych komponentów animacji ładowania używających klas stylizujących, które implementują ten sam interfejs. Dzięki temu metody stylizujące danego komponentu można modyfikować w zależności od potrzeb nie naruszając innego komponentu.
+
+Przykład wykorzystania: [./src/modules/loaders/components/Loader.tsx](./src/modules/loaders/components/Loader.tsx), [./src/modules/loaders/components/HCLoader.tsx](./src/modules/loaders/components/HCLoader.tsx)

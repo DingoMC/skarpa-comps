@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { LoaderColor, LoaderSize } from '../types';
-import DefaultLoaderStyle from '../types/defaultStyle';
+import HighContrastLoaderStyle from '../types/highContrastStyle';
 
 type Props = {
   /**
@@ -18,12 +18,12 @@ type Props = {
 };
 
 /**
- * Skarpa Loader component
+ * Skarpa High-Contrast Loader component
  * @param props Skarpa Loader props
  */
-const SkarpaLoader = (props: Props) => {
+const SkarpaHCLoader = (props: Props) => {
   const { color = 'white', size = 'md' } = props;
-  const styleStrategy = new DefaultLoaderStyle();
+  const styleStrategy = new HighContrastLoaderStyle();
 
   const classes = {
     spinner: 'border-solid animate-spinner absolute rounded-[50%]',
@@ -48,4 +48,4 @@ const SkarpaLoader = (props: Props) => {
   );
 };
 
-export default SkarpaLoader;
+export default SkarpaHCLoader;
