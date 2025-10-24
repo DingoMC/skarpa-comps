@@ -79,3 +79,15 @@ Nazwy klas/interfejsów: `SidebarState <- ExpandedState, CollapsedState`
 Cel wykorzystania: Przechowywanie i zmiana stanu panelu bocznego w zależności od jego ukrycia/pokazania. Stan przechowuje niezbędne metody do prawidłowego wyrenderowania tego komponentu.
 
 Przykład wykorzystania: [./src/modules/navigation/components/Sidebar/Sidebar.tsx](./src/modules/navigation/components/Sidebar/Sidebar.tsx)
+
+#### Mediator + Observer
+
+Stworzony w: [./src/modules/navigation/types/navbar/index.ts](./src/modules/navigation/types/navbar/index.ts), [./src/modules/navigation/types/navbar/mediator.ts](./src/modules/navigation/types/navbar/mediator.ts), [./src/modules/navigation/components/Navbar/NavbarMediatorProvider.tsx](./src/modules/navigation/components/Navbar/NavbarMediatorProvider.tsx)
+
+Nazwy klas/interfejsów: `NavbarMediator <- NavbarMediatorImpl`
+
+Cel wykorzystania: Przechowywanie stanu paska nawigacji oraz współdzielenie go z innymi podzrędnymi komponentami. Podrzędne komponenty mają możliwość subskrypcji (obserwowania) zmiany stanu, gdy ten zostanie zmieniony przez inny komponent.
+
+Przykład wykorzystania: [./src/modules/navigation/components/index.tsx](./src/modules/navigation/components/index.tsx), [./src/modules/navigation/components/TopNavbar.tsx](./src/modules/navigation/components/TopNavbar.tsx), [./src/modules/navigation/components/NavList.tsx](./src/modules/navigation/components/NavList.tsx)
+
+Observer: [./src/modules/navigation/components/BottomNavbar.tsx](./src/modules/navigation/components/BottomNavbar.tsx)
