@@ -69,3 +69,13 @@ Nazwy klas/interfejsów: `LoaderStyleStrategy <- DefaultLoaderStyle, HighContras
 Cel wykorzystania: Możliwość tworzenia wielu różnych komponentów animacji ładowania używających klas stylizujących, które implementują ten sam interfejs. Dzięki temu metody stylizujące danego komponentu można modyfikować w zależności od potrzeb nie naruszając innego komponentu.
 
 Przykład wykorzystania: [./src/modules/loaders/components/Loader.tsx](./src/modules/loaders/components/Loader.tsx), [./src/modules/loaders/components/HCLoader.tsx](./src/modules/loaders/components/HCLoader.tsx)
+
+#### State
+
+Stworzony w: [./src/modules/navigation/types/sidebar/index.tsx](./src/modules/navigation/types/sidebar/index.tsx), [./src/modules/navigation/types/sidebar/expanded.tsx](./src/modules/navigation/types/sidebar/expanded.tsx), [./src/modules/navigation/types/sidebar/collapsed.tsx](./src/modules/navigation/types/sidebar/collapsed.tsx)
+
+Nazwy klas/interfejsów: `SidebarState <- ExpandedState, CollapsedState`
+
+Cel wykorzystania: Przechowywanie i zmiana stanu panelu bocznego w zależności od jego ukrycia/pokazania. Stan przechowuje niezbędne metody do prawidłowego wyrenderowania tego komponentu.
+
+Przykład wykorzystania: [./src/modules/navigation/components/Sidebar/Sidebar.tsx](./src/modules/navigation/components/Sidebar/Sidebar.tsx)
