@@ -1,5 +1,4 @@
 import { Button, Menu, MenuContent, MenuItem, MenuTrigger, Typography } from '@/lib/mui';
-import { displayFullName } from '@/lib/text';
 import { RootState } from '@/store/store';
 import Avatar from 'boring-avatars';
 import { useRouter } from 'next/navigation';
@@ -7,8 +6,11 @@ import { useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 import { getProfileMenuItems } from '../utils';
+import TextFormatter from '@/lib/text';
 
 const avatarColors = ['#f9ccd0', '#ed6675', '#e3001b', '#890011', '#2e0006'];
+
+const textFormatter = new TextFormatter();
 
 const ProfileMenu = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -26,8 +28,8 @@ const ProfileMenu = () => {
   return (
     <Menu open={isMenuOpen} onOpenChange={setIsMenuOpen} placement="bottom-end">
       <MenuTrigger as={Button} variant="ghost" className="flex items-center gap-1 rounded-full py-0.5 pr-0 pl-0.5 cursor-pointer">
-        <Typography className="text-sm text-gray-800">{displayFullName(user.firstName, user.lastName)}</Typography>
-        <Avatar size={25} colors={avatarColors} name={displayFullName(user.firstName, user.lastName)} variant="pixel" />
+        <Typography className="text-sm text-gray-800">{textFormatter.displayFullName(user.firstName, user.lastName)}</Typography>
+        <Avatar size={25} colors={avatarColors} name={textFormatter.displayFullName(user.firstName, user.lastName)} variant="pixel" />
         <FaChevronDown strokeWidth={2.5} color="gray" className={`h-3 w-3 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
       </MenuTrigger>
       <MenuContent className="p-1">

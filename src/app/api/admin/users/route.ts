@@ -1,6 +1,8 @@
 import { verifyToken, verifyTokenAuthLevel } from '@/lib/auth';
 import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL, SALT_ROUNDS, USER_AUTH_LEVEL } from '@/lib/constants';
 import prisma from '@/lib/prisma';
+import { PrismaQueryBuilder } from '@/lib/query';
+import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { getCookie } from 'cookies-next';
 import { NextRequest } from 'next/server';
@@ -13,13 +15,15 @@ export async function GET(req: NextRequest) {
   }
   const userId = req.nextUrl.searchParams.get('id');
   if (userId !== null && userId.length) {
-    const foundUser = await prisma.user.findUnique({ where: { id: userId.trim() }, omit: { password: true } });
+    const query = new PrismaQueryBuilder<User>().omit('password').where('id', userId.trim()).build();
+    const foundUser = await prisma.user.findUnique(query);
     if (foundUser === null) {
       return Response.json({ message: 'Nie znaleziono użytkownika o podanym identyfikatorze.' }, { status: 400 });
     }
     return Response.json(foundUser, { status: 200 });
   }
-  const users = await prisma.user.findMany({ omit: { password: true }, orderBy: { createdAt: 'desc' } });
+  const query = new PrismaQueryBuilder<User>().omit('password').orderBy('createdAt', 'desc').build();
+  const users = await prisma.user.findMany(query);
   return Response.json(users, { status: 200 });
 }
 

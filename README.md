@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clean Code Labs
 
-## Getting Started
+## Lab 1
 
-First, run the development server:
+### Wzorce konstrukcyjne
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#### Singleton
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Stworzony w: [./src/lib/console.ts](./src/lib/console.ts)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Nazwa Klasy: `CConsole`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Cel wykorzystania: Wykorzystany jako obiekt loggera aby zapobiec tworzeniu się kolejnych instancji tej samej klasy, gdyż w przypadku takich narzędzi jak logger, nie jest to konieczne.
 
-## Learn More
+Przykład wykorzystania: [./src/modules/middleware/log.ts](./src/modules/middleware/log.ts)
 
-To learn more about Next.js, take a look at the following resources:
+#### Builder
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Stworzony w: [./src/lib/query.ts](./src/lib/query.ts)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Nazwa Klasy: `PrismaQueryBuilder`
 
-## Deploy on Vercel
+Cel wykorzystania: Wykorzystany wzorzec pozwolił na łatwiejsze tworzenie zapytań dla narzędzia ORM Prisma. Klasa automatycznie buduje części zapytania SQL takie jak `WHERE`, `ORDER BY`, dołączanie tabel, czy wybór odpowiednich kolumn.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Przykład wykorzystania: [./src/app/api/admin/users/route.ts](./src/app/api/admin/users/route.ts)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Abstract Factory
+
+Stworzony w: [./src/lib/axios/parser/index.ts](./src/lib/axios/parser/index.ts), [./src/lib/axios/parser/pathParser.ts](./src/lib/axios/parser/pathParser.ts), [./src/lib/axios/parser/queryParser.ts](./src/lib/axios/parser/queryParser.ts)
+
+Nazwy klas: `URLParser`, `URLPathParser`, `URLQueryParser`
+
+Cel wykorzystania: Dwie klasy posiadające nieznacznie różniące się parsery URL implementują tę samą metodę z abstrakcyjnej klasy nadrzędnej. Dzięki temu w zależności od sytuacji możliwy jest wybór parsera a kod klas implementujacych jest czytelny oraz jest łatwa możliwość dodania nowych parserów.
+
+Przykład wykorzystania: [./src/lib/axios/index.ts](./src/lib/axios/index.ts)
+
+### Wzorce strukturalne
+
+#### Facade
+
+Stworzony w: [./src/lib/text.ts](./src/lib/text.ts)
+
+Nazwa klasy: `TextFormatter`
+
+Cel wykorzystania: Zastąpienie samotnych funkcji klasą fasady, która uprościła strukturę kodu a także dostęp do poszczególnych metod. Kod jest lepiej zorganizowany oraz istnieje możliwość dodawania kolejnych funkcjonalności w klasie.
+
+Przykład wykorzystania: [./src/modules/admin/users/utils/columns.tsx](./src/modules/admin/users/utils/columns.tsx)
+
+#### Flyweight
+
+Stworzony w: [./src/lib/color/factory.ts](./src/lib/color/factory.ts)
+
+Nazwy klas: `ColorFactory` `<>->` `Color`
+
+Cel wykrozystania: Przechowywanie listy kolorów w obiekcie klasy `ColorFactory` aby zapobiec powtarzającemu tworzeniu obiektów tego samego koloru. Wywołując konstruktor klasy `Color` dla tego samego koloru tworzymy takie same obiekty klas które zachowują się identycznie. W przypadku korzystania z `ColorFactory` obiekty tego samego koloru są wykorzystywane ponownie.
+
+Przykład wykorzystania: [./src/modules/admin/users/components/index.tsx](./src/modules/admin/users/components/index.tsx)
