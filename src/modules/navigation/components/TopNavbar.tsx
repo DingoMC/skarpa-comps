@@ -3,8 +3,10 @@ import { siteMapByPath } from '@/lib/siteMap';
 import { usePathname } from 'next/navigation';
 import { FaBars } from 'react-icons/fa6';
 import ProfileMenu from './ProfileMenu';
+import { useNavbarMediator } from './Navbar/NavbarMediatorProvider';
 
-const TopNavbar = ({ toggleIsNavOpen }: { toggleIsNavOpen: () => void }) => {
+const TopNavbar = () => {
+  const mediator = useNavbarMediator();
   const navbarStyle: React.CSSProperties = {
     display: 'flex',
     position: 'relative',
@@ -51,7 +53,7 @@ const TopNavbar = ({ toggleIsNavOpen }: { toggleIsNavOpen: () => void }) => {
       </div>
       <div className="relative mx-auto flex items-center justify-between h-[33px]" style={{ flexShrink: 0 }}>
         <div className="flex items-center ml-auto">
-          <IconButton size="sm" color="secondary" variant="ghost" onClick={toggleIsNavOpen} className="lg:hidden">
+          <IconButton size="sm" color="secondary" variant="ghost" onClick={() => mediator.toggleNav()} className="lg:hidden">
             <FaBars className="h-6 w-6" />
           </IconButton>
           <div className="hidden lg:block">

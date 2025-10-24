@@ -55,3 +55,39 @@ Nazwy klas: `ColorFactory` `<>->` `Color`
 Cel wykrozystania: Przechowywanie listy kolorów w obiekcie klasy `ColorFactory` aby zapobiec powtarzającemu tworzeniu obiektów tego samego koloru. Wywołując konstruktor klasy `Color` dla tego samego koloru tworzymy takie same obiekty klas które zachowują się identycznie. W przypadku korzystania z `ColorFactory` obiekty tego samego koloru są wykorzystywane ponownie.
 
 Przykład wykorzystania: [./src/modules/admin/users/components/index.tsx](./src/modules/admin/users/components/index.tsx)
+
+## Lab 2
+
+### Wzorce behawioralne
+
+#### Strategy
+
+Stworzony w: [./src/modules/loaders/types/index.ts](./src/modules/loaders/types/index.ts), [./src/modules/loaders/types/defaultStyle.ts](./src/modules/loaders/types/defaultStyle.ts), [./src/modules/loaders/types/highContrastStyle.ts](./src/modules/loaders/types/highContrastStyle.ts)
+
+Nazwy klas/interfejsów: `LoaderStyleStrategy <- DefaultLoaderStyle, HighContrastLoaderStyle`
+
+Cel wykorzystania: Możliwość tworzenia wielu różnych komponentów animacji ładowania używających klas stylizujących, które implementują ten sam interfejs. Dzięki temu metody stylizujące danego komponentu można modyfikować w zależności od potrzeb nie naruszając innego komponentu.
+
+Przykład wykorzystania: [./src/modules/loaders/components/Loader.tsx](./src/modules/loaders/components/Loader.tsx), [./src/modules/loaders/components/HCLoader.tsx](./src/modules/loaders/components/HCLoader.tsx)
+
+#### State
+
+Stworzony w: [./src/modules/navigation/types/sidebar/index.tsx](./src/modules/navigation/types/sidebar/index.tsx), [./src/modules/navigation/types/sidebar/expanded.tsx](./src/modules/navigation/types/sidebar/expanded.tsx), [./src/modules/navigation/types/sidebar/collapsed.tsx](./src/modules/navigation/types/sidebar/collapsed.tsx)
+
+Nazwy klas/interfejsów: `SidebarState <- ExpandedState, CollapsedState`
+
+Cel wykorzystania: Przechowywanie i zmiana stanu panelu bocznego w zależności od jego ukrycia/pokazania. Stan przechowuje niezbędne metody do prawidłowego wyrenderowania tego komponentu.
+
+Przykład wykorzystania: [./src/modules/navigation/components/Sidebar/Sidebar.tsx](./src/modules/navigation/components/Sidebar/Sidebar.tsx)
+
+#### Mediator + Observer
+
+Stworzony w: [./src/modules/navigation/types/navbar/index.ts](./src/modules/navigation/types/navbar/index.ts), [./src/modules/navigation/types/navbar/mediator.ts](./src/modules/navigation/types/navbar/mediator.ts), [./src/modules/navigation/components/Navbar/NavbarMediatorProvider.tsx](./src/modules/navigation/components/Navbar/NavbarMediatorProvider.tsx)
+
+Nazwy klas/interfejsów: `NavbarMediator <- NavbarMediatorImpl`
+
+Cel wykorzystania: Przechowywanie stanu paska nawigacji oraz współdzielenie go z innymi podzrędnymi komponentami. Podrzędne komponenty mają możliwość subskrypcji (obserwowania) zmiany stanu, gdy ten zostanie zmieniony przez inny komponent.
+
+Przykład wykorzystania: [./src/modules/navigation/components/index.tsx](./src/modules/navigation/components/index.tsx), [./src/modules/navigation/components/TopNavbar.tsx](./src/modules/navigation/components/TopNavbar.tsx), [./src/modules/navigation/components/NavList.tsx](./src/modules/navigation/components/NavList.tsx)
+
+Observer: [./src/modules/navigation/components/BottomNavbar.tsx](./src/modules/navigation/components/BottomNavbar.tsx)

@@ -2,24 +2,24 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import BottomNavbar from './BottomNavbar';
+import { NavbarMediatorProvider, useNavbarMediator } from './Navbar/NavbarMediatorProvider';
 import TopNavbar from './TopNavbar';
 
-const ComplexNavbar = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+const NavbarContent = () => {
+  const mediator = useNavbarMediator();
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 960 && isNavOpen) {
-        setIsNavOpen(false);
+      if (window.innerWidth >= 960 && mediator.isOpen()) {
+        mediator.closeNav();
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isNavOpen]);
+  }, [mediator]);
 
   return (
     <div className="lg:flex items-center relative bg-main">
@@ -36,11 +36,17 @@ const ComplexNavbar = () => {
         </Link>
       </div>
       <div className="flex flex-col flex-1 max-w-full self-start">
-        <TopNavbar toggleIsNavOpen={toggleIsNavOpen} />
-        <BottomNavbar isNavOpen={isNavOpen} toggleIsNavOpen={toggleIsNavOpen} />
+        <TopNavbar />
+        <BottomNavbar />
       </div>
     </div>
   );
 };
+
+const ComplexNavbar = () => (
+  <NavbarMediatorProvider>
+    <NavbarContent />
+  </NavbarMediatorProvider>
+);
 
 export default ComplexNavbar;
