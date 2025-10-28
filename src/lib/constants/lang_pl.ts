@@ -24,6 +24,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     lockEnroll: 'Zablokuj zapisy',
     allowFamilyRanking: 'Rodzinna',
     clubMembersPay: 'Członkowie płacą',
+    isInternal: 'Wewnętrzne',
     startDate: 'Rozpoczęcie zawodów',
     endDate: 'Zakończenie zawodów',
     enrollStart: 'Rozpoczęcie zapisów',

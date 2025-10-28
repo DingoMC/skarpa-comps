@@ -1,27 +1,3 @@
-import { verifyToken } from '@/lib/auth';
-import { ADMIN_AUTH_LEVEL } from '@/lib/constants';
-import prisma from '@/lib/prisma';
-import { getCookie } from 'cookies-next';
-import { NextRequest } from 'next/server';
-
-export async function GET(req: NextRequest) {
-  const token = await getCookie('token', { req });
-  const ok = await verifyToken(token, ADMIN_AUTH_LEVEL);
-  if (!ok) {
-    return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
-  }
-  const categoryId = req.nextUrl.searchParams.get('id');
-  if (categoryId !== null && categoryId.length) {
-    const found = await prisma.category.findUnique({ where: { id: categoryId.trim() } });
-    if (found === null) {
-      return Response.json({ message: 'Nie znaleziono kategorii o podanym identyfikatorze.' }, { status: 400 });
-    }
-    return Response.json(found, { status: 200 });
-  }
-  const data = await prisma.category.findMany({ orderBy: { seq: 'asc' } });
-  return Response.json(data, { status: 200 });
-}
-
 export async function POST(req: NextRequest) {
   const token = await getCookie('token', { req });
   const ok = await verifyToken(token, ADMIN_AUTH_LEVEL);
