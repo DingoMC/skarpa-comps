@@ -1,10 +1,12 @@
-import { columnNamesPL } from "@/lib/constants/lang_pl";
-import TemplateButton from "@/modules/buttons/TemplateButton";
-import ConfirmDialog from "@/modules/dialogs/ConfirmDialog";
-import { Competition } from "@prisma/client";
-import { createColumnHelper } from "@tanstack/react-table";
-import { FaCog, FaTimes } from "react-icons/fa";
-import { FaCheck, FaLock, FaTrash, FaUnlock } from "react-icons/fa6";
+import { columnNamesPL } from '@/lib/constants/lang_pl';
+import { Tooltip, Typography } from '@/lib/mui';
+import TemplateButton from '@/modules/buttons/TemplateButton';
+import ConfirmDialog from '@/modules/dialogs/ConfirmDialog';
+import { Competition } from '@prisma/client';
+import { createColumnHelper } from '@tanstack/react-table';
+import { FaCog, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaLock, FaTrash, FaUnlock } from 'react-icons/fa6';
+import { TbSquareLetterS } from 'react-icons/tb';
 
 const columnHelper = createColumnHelper<Competition>();
 
@@ -41,35 +43,27 @@ export const columns = (loading: boolean, onEdit: (_: string) => void, onDelete:
     enableColumnFilter: true,
     enableSorting: true,
   }),
-  columnHelper.accessor((row) => row.isInternal, {
-    id: 'isInternal',
-    header: () => <div className="text-left">{columnNamesPL.get('isInternal')}</div>,
-    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
-    enableSorting: true,
-  }),
-  columnHelper.accessor((row) => row.lockEnroll, {
-    id: 'lockEnroll',
-    header: () => <div className="text-left">{columnNamesPL.get('lockEnroll')}</div>,
-    cell: (info) => (info.getValue() ? <FaLock className="w-4 h-4 text-red-800" /> : <FaUnlock className="w-4 h-4 text-green-800" />),
-    enableSorting: true,
-  }),
-  columnHelper.accessor((row) => row.lockResults, {
-    id: 'lockResults',
-    header: () => <div className="text-left">{columnNamesPL.get('lockResults')}</div>,
-    cell: (info) => (info.getValue() ? <FaLock className="w-4 h-4 text-red-800" /> : <FaUnlock className="w-4 h-4 text-green-800" />),
-    enableSorting: true,
-  }),
-  columnHelper.accessor((row) => row.allowFamilyRanking, {
-    id: 'allowFamilyRanking',
-    header: () => <div className="text-left">{columnNamesPL.get('allowFamilyRanking')}</div>,
-    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
-    enableSorting: true,
-  }),
-  columnHelper.accessor((row) => row.clubMembersPay, {
-    id: 'clubMembersPay',
-    header: () => <div className="text-left">{columnNamesPL.get('clubMembersPay')}</div>,
-    cell: (info) => (info.getValue() ? <FaCheck className="w-4 h-4 text-green-800" /> : <FaTimes className="w-4 h-4 text-red-800" />),
-    enableSorting: true,
+  columnHelper.accessor((row) => row, {
+    id: 'flags',
+    header: () => <div className="text-left">{columnNamesPL.get('flags')}</div>,
+    cell: (info) => {
+      const { isInternal, lockEnroll, lockResults, allowFamilyRanking, clubMembersPay } = info.getValue();
+      return (
+        <div className="flex gap-1 items-center">
+          {isInternal && (
+            <Tooltip>
+              <Tooltip.Trigger>
+                <TbSquareLetterS className="w-4 h-4 text-skarpa-500" />
+              </Tooltip.Trigger>
+              <Tooltip.Content>
+                <Typography className="text-xs">Zawody Wewnętrzne</Typography>
+                <Tooltip.Arrow />
+              </Tooltip.Content>
+            </Tooltip>
+          )}
+        </div>
+      );
+    },
   }),
   columnHelper.accessor((row) => row.startDate, {
     id: 'startDate',

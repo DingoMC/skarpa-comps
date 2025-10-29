@@ -46,6 +46,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     task: 'Zadanie',
     userCompetition: 'Zapis',
     family: 'Rodzina',
+    flags: 'Flagi',
   },
   'N/A'
 );

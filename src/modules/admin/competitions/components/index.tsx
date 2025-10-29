@@ -16,8 +16,6 @@ type Props = {
 };
 
 const AdminCompetitions = ({ data, loading, onRefresh, onDelete }: Props) => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const authLevel = useSelector((state: RootState) => state.auth.authLevel);
   const router = useRouter();
 
   const handleAddClick = () => {

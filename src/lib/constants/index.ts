@@ -1,4 +1,5 @@
-import { Category, User } from '@prisma/client';
+import { Category, Competition, User } from '@prisma/client';
+import { FamilySettings } from '../types/competition';
 
 export const EMPTY_USER: User = {
   id: '',
@@ -23,6 +24,33 @@ export const EMPTY_CATGEORY: Category = {
   seq: 0,
   minAge: null,
   maxAge: null,
+};
+
+export const EMPTY_COMPETITION: Competition = {
+  id: '',
+  name: '',
+  description: null,
+  lockResults: false,
+  lockEnroll: false,
+  isInternal: false,
+  familySettings: null,
+  pzaSettings: null,
+  selfScoringSettings: null,
+  allowFamilyRanking: false,
+  clubMembersPay: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  startDate: new Date(),
+  endDate: new Date(),
+  enrollStart: new Date(),
+  enrollEnd: new Date(),
+};
+
+export const EMPTY_FAMILY_SETTINGS: FamilySettings = {
+  include: 'all',
+  includePZAMembers: false,
+  pzaFilterCategories: [],
+  aggregation: 'sum',
 };
 
 export const SALT_ROUNDS = 10;
