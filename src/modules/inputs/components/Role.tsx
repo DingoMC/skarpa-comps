@@ -1,6 +1,6 @@
 'use client';
 
-import { transformRoleName } from '@/lib/text';
+import TextFormatter from '@/lib/text';
 import { defaultStyleOutlined } from '@/lib/themes/react-select/select';
 import { Role } from '@prisma/client';
 import { useMemo } from 'react';
@@ -8,6 +8,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
+
+const textFormatter = new TextFormatter();
 
 type OptionType = {
   label: string;
@@ -22,7 +24,7 @@ type Props = {
 };
 
 const SelectRole = ({ roles, value, disabled, onChange }: Props) => {
-  const options = useMemo(() => roles.map((r) => ({ label: transformRoleName(r.name), value: r.id })), [roles]);
+  const options = useMemo(() => roles.map((r) => ({ label: textFormatter.transformRoleName(r.name), value: r.id })), [roles]);
 
   return (
     <Select<OptionType>
