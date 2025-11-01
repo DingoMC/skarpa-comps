@@ -20,12 +20,14 @@ export interface PZASettings {
   pzaFilterCategories: string[] | null; // array of Category IDs
 }
 
+export interface SelfScoringCategorySettings {
+  categoryId: string;
+  modifyAfterSent: boolean;
+  selfScoringFrom?: number;
+  selfScoringTo?: number;
+}
+
 export interface SelfScoringSettings {
   allowSelfScoring: boolean;
-  settings: {
-    categoryId: string;
-    modifyAfterSent: boolean;
-    selfScoringFrom?: number;
-    selfScoringTo?: number;
-  }[];
+  settings: SelfScoringCategorySettings[];
 }

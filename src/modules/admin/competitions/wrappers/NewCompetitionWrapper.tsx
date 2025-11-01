@@ -43,7 +43,7 @@ const NewCompetitionWrapper = () => {
     loadData();
   }, []);
 
-  return <NewCompetition loading={refetching} handleAdd={handleAdd} handleBack={handleBack} />;
+  return <NewCompetition loading={refetching} categories={categories} handleAdd={handleAdd} handleBack={handleBack} />;
 };
 
 export default NewCompetitionWrapper;

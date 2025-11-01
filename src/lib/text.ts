@@ -30,3 +30,9 @@ export const transformRoleName = (name: string) => {
   }
   return capitalizeFirstLetter(name);
 };
+
+export const showDate = (date: Date, seconds: boolean = true) => {
+  const str = new Date(date).toLocaleString();
+  if (seconds) return str;
+  return str.slice(0, str.length - 3);
+};

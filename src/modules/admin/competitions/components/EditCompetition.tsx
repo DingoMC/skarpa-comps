@@ -1,26 +1,27 @@
 'use client';
 
-import { EMPTY_COMPETITION } from '@/lib/constants';
 import { Button, Switch, Typography } from '@/lib/mui';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardFrame from '@/modules/dashboard/components';
 import InputDateTimeRange from '@/modules/inputs/components/DateTimeRange';
 import InputString from '@/modules/inputs/components/String';
 import { Category, Competition } from '@prisma/client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EditFamilySettings from './FamilySettings';
 import EditPZASettings from './PZASettings';
 import EditSelfScoringSettings from './SelfScoringSettings';
 
 type Props = {
+  initComp: Competition;
   loading: boolean;
   categories: Category[];
-  handleAdd: (_: Competition) => Promise<void>;
+  onRefresh: () => Promise<void>;
+  handleEdit: (_: Competition) => Promise<void>;
   handleBack: () => void;
 };
 
-const NewCompetition = ({ loading, categories, handleAdd, handleBack }: Props) => {
-  const [comp, setComp] = useState(EMPTY_COMPETITION);
+const EditCompetition = ({ initComp, loading, categories, handleEdit, onRefresh, handleBack }: Props) => {
+  const [comp, setComp] = useState(initComp);
   const [nameError, setNameError] = useState<string | null>(null);
   const durationError = useMemo(() => {
     if (new Date(comp.startDate).getTime() >= new Date(comp.endDate).getTime()) {
@@ -41,11 +42,20 @@ const NewCompetition = ({ loading, categories, handleAdd, handleBack }: Props) =
     return null;
   }, [comp]);
 
+  useEffect(() => {
+    setComp({ ...initComp });
+  }, [initComp]);
+
   return (
     <DashboardFrame
-      title="Nowe Zawody"
+      title={`Edytuj zawody: ${initComp.name}`}
       refreshing={loading}
-      cardHeaderRight={<TemplateButton template="back" disabled={loading} onClick={handleBack} />}
+      cardHeaderRight={
+        <>
+          <TemplateButton template="back" disabled={loading} onClick={handleBack} />
+          <TemplateButton template="refresh" onClick={onRefresh} disabled={loading} message="Pobierz ponownie dane zawodów" />
+        </>
+      }
     >
       <div className="flex flex-col md:items-center md:grid md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] md:gap-2 gap-px w-full">
         <Typography type="p">Nazwa:</Typography>
@@ -172,13 +182,13 @@ const NewCompetition = ({ loading, categories, handleAdd, handleBack }: Props) =
         <Button
           color="primary"
           disabled={nameError !== null || durationError !== null || enrollDurationError !== null || loading || !comp.name.length}
-          onClick={() => handleAdd({ ...comp })}
+          onClick={() => handleEdit({ ...comp })}
         >
-          Utwórz Zawody
+          Zapisz Zmiany
         </Button>
       </div>
     </DashboardFrame>
   );
 };
 
-export default NewCompetition;
+export default EditCompetition;

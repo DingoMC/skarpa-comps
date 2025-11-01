@@ -54,10 +54,10 @@ export async function POST(req: NextRequest) {
   const selfScoringSettingsCorr = typeof selfScoringSettings === 'string' ? selfScoringSettings : null;
   const isInternalCorr = typeof isInternal === 'boolean' ? isInternal : false;
   const clubMembersPayCorr = typeof clubMembersPay === 'boolean' ? clubMembersPay : false;
-  const startDateCorr = typeof startDate === 'number' ? new Date(startDate) : null;
-  const endDateCorr = typeof endDate === 'number' ? new Date(endDate) : null;
-  const enrollStartCorr = typeof enrollStart === 'number' ? new Date(enrollStart) : null;
-  const enrollEndCorr = typeof enrollEnd === 'number' ? new Date(enrollEnd) : null;
+  const startDateCorr = typeof startDate === 'string' ? new Date(startDate) : null;
+  const endDateCorr = typeof endDate === 'string' ? new Date(endDate) : null;
+  const enrollStartCorr = typeof enrollStart === 'string' ? new Date(enrollStart) : null;
+  const enrollEndCorr = typeof enrollEnd === 'string' ? new Date(enrollEnd) : null;
   if (
     !nameCorr.length
     || !descriptionCorr.length
@@ -136,10 +136,10 @@ export async function PUT(req: NextRequest) {
   const selfScoringSettingsCorr = typeof selfScoringSettings === 'string' ? selfScoringSettings : null;
   const isInternalCorr = typeof isInternal === 'boolean' ? isInternal : false;
   const clubMembersPayCorr = typeof clubMembersPay === 'boolean' ? clubMembersPay : false;
-  const startDateCorr = typeof startDate === 'number' ? new Date(startDate) : null;
-  const endDateCorr = typeof endDate === 'number' ? new Date(endDate) : null;
-  const enrollStartCorr = typeof enrollStart === 'number' ? new Date(enrollStart) : null;
-  const enrollEndCorr = typeof enrollEnd === 'number' ? new Date(enrollEnd) : null;
+  const startDateCorr = typeof startDate === 'string' ? new Date(startDate) : null;
+  const endDateCorr = typeof endDate === 'string' ? new Date(endDate) : null;
+  const enrollStartCorr = typeof enrollStart === 'string' ? new Date(enrollStart) : null;
+  const enrollEndCorr = typeof enrollEnd === 'string' ? new Date(enrollEnd) : null;
   if (
     !nameCorr.length
     || !descriptionCorr.length

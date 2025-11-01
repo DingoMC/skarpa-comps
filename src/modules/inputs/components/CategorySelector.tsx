@@ -3,7 +3,7 @@
 import { defaultStyleOutlined } from '@/lib/themes/react-select/select';
 import { Category } from '@prisma/client';
 import { useMemo } from 'react';
-import Select, { MultiValue } from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
@@ -15,23 +15,21 @@ type OptionType = {
 
 type Props = {
   categories: Category[];
-  value: string[];
+  value: string;
   disabled?: boolean;
-  onChange: (_: string[] | null) => void;
+  onChange: (_: string | null) => void;
 };
 
-const SelectCategoryMulti = ({ categories, value, disabled, onChange }: Props) => {
+const SelectCategory = ({ categories, value, disabled, onChange }: Props) => {
   const options = useMemo(() => categories.map((r) => ({ label: r.name, value: r.id })), [categories]);
 
-  const handleChange = (newValue: MultiValue<OptionType>) => {
+  const handleChange = (newValue: SingleValue<OptionType>) => {
     if (!newValue) onChange(null);
-    if (!newValue.length) onChange(null);
-    else onChange(newValue.map((v) => v.value));
+    else onChange(newValue.value);
   };
 
   return (
-    <Select<OptionType, true>
-      isMulti
+    <Select<OptionType, false>
       value={options.filter((option) => value.includes(option.value))}
       components={animatedComponents}
       options={options}
@@ -43,4 +41,4 @@ const SelectCategoryMulti = ({ categories, value, disabled, onChange }: Props) =
   );
 };
 
-export default SelectCategoryMulti;
+export default SelectCategory;
