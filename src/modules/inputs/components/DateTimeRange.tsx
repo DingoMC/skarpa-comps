@@ -40,7 +40,7 @@ const InputDateTimeRange = ({ begin, end, error, disabled, handleBeginChange, ha
   return (
     <div className="flex gap-2 items-center flex-wrap">
       <DateTimePicker
-        className="[&>div]:rounded [&>div]:!border-gray-400 [&>div]:text-sm [&>div]:px-1"
+        className="[&>div]:rounded [&>div]:!border-gray-400 [&>div]:text-sm [&>div]:px-1 [&_.react-datetime-picker\_\_calendar]:!z-3"
         value={new Date(begin)}
         onChange={onInputBegin}
         clearIcon={null}
@@ -49,7 +49,7 @@ const InputDateTimeRange = ({ begin, end, error, disabled, handleBeginChange, ha
       <DateTimePicker
         value={new Date(end)}
         onChange={onInputEnd}
-        className="[&>div]:rounded [&>div]:!border-gray-400 [&>div]:text-sm [&>div]:px-1"
+        className="[&>div]:rounded [&>div]:!border-gray-400 [&>div]:text-sm [&>div]:px-1 [&_.react-datetime-picker\_\_calendar]:!z-3"
         clearIcon={null}
       />
     </div>

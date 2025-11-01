@@ -36,3 +36,25 @@ export const showDate = (date: Date, seconds: boolean = true) => {
   if (seconds) return str;
   return str.slice(0, str.length - 3);
 };
+
+export const cleanName = (name: string) =>
+  name
+    .toLowerCase()
+    .replaceAll(' ', '')
+    .replaceAll('-', '')
+    .replaceAll('ą', '')
+    .replaceAll('ć', '')
+    .replaceAll('ę', '')
+    .replaceAll('ł', '')
+    .replaceAll('ń', '')
+    .replaceAll('ó', '')
+    .replaceAll('ś', '')
+    .replaceAll('ż', '')
+    .replaceAll('ź', '');
+
+export const childEmail = (email: string, firstName: string, lastName: string) => {
+  const [e, d] = email.split('@');
+  const fn = cleanName(firstName);
+  const ln = cleanName(lastName).length > 3 ? cleanName(lastName).slice(0, 3) : cleanName(lastName);
+  return `${e}+${fn}${ln}@${d}`;
+};
