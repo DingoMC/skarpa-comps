@@ -40,7 +40,14 @@ export async function POST(req: NextRequest) {
   const clubCorr = typeof isClubMember === 'boolean' ? isClubMember : false;
   const pzaCorr = typeof isPZAMember === 'boolean' ? isPZAMember : false;
   const clubNameCorr = typeof clubName === 'string' && clubName.length > 0 ? clubName : null;
-  if (!firstNameCorr.length || !lastNameCorr.length || !emailCorr.length || !compIdCorr.length || categoryIdCorr.length || yearCorr === 0) {
+  if (
+    !firstNameCorr.length
+    || !lastNameCorr.length
+    || !emailCorr.length
+    || !compIdCorr.length
+    || !categoryIdCorr.length
+    || yearCorr === 0
+  ) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe' }, { status: 400 });
   }
   if (tokenOk && userIdCorr !== null && decoded?.user.id !== userIdCorr) {

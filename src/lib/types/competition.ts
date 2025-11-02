@@ -38,4 +38,5 @@ export interface CompetitionWithMemberCount extends Competition {
   countAll: number;
   countMen: number;
   countWomen: number;
+  alreadyEnrolled: boolean;
 }

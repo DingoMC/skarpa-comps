@@ -1,5 +1,6 @@
 import { Category, Competition, User } from '@prisma/client';
 import { FamilySettings } from '../types/competition';
+import { EnrollRequest } from '../types/enroll';
 
 export const EMPTY_USER: User = {
   id: '',
@@ -16,6 +17,23 @@ export const EMPTY_USER: User = {
   createdAt: new Date(),
   updatedAt: new Date(),
   clubName: null,
+};
+
+export const EMPTY_ENROLL: EnrollRequest = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  yearOfBirth: 2000,
+  gender: false,
+  password: null,
+  isPZAMember: false,
+  isClubMember: false,
+  clubName: null,
+  competitionId: '',
+  userId: null,
+  categoryId: '',
+  enrollAsChild: false,
+  requestsFamilyRanking: false,
 };
 
 export const EMPTY_CATGEORY: Category = {

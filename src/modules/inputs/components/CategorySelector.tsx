@@ -16,12 +16,28 @@ type OptionType = {
 type Props = {
   categories: Category[];
   value: string;
+  labelYears?: boolean;
   disabled?: boolean;
   onChange: (_: string | null) => void;
 };
 
-const SelectCategory = ({ categories, value, disabled, onChange }: Props) => {
-  const options = useMemo(() => categories.map((r) => ({ label: r.name, value: r.id })), [categories]);
+const generateLabel = (category: Category, labelYears?: boolean) => {
+  if (!labelYears) return category.name;
+  const year = new Date().getFullYear();
+  if (category.minAge !== null && category.maxAge !== null) {
+    return `${category.name} (${year - category.maxAge} - ${year - category.minAge})`;
+  }
+  if (category.minAge !== null) {
+    return `${category.name} (${year - category.minAge} i starsi)`;
+  }
+  if (category.maxAge !== null) {
+    return `${category.name} (${year - category.maxAge} i młodsi)`;
+  }
+  return category.name;
+};
+
+const SelectCategory = ({ categories, value, labelYears, disabled, onChange }: Props) => {
+  const options = useMemo(() => categories.map((r) => ({ label: generateLabel(r, labelYears), value: r.id })), [categories, labelYears]);
 
   const handleChange = (newValue: SingleValue<OptionType>) => {
     if (!newValue) onChange(null);
@@ -30,6 +46,8 @@ const SelectCategory = ({ categories, value, disabled, onChange }: Props) => {
 
   return (
     <Select<OptionType, false>
+      placeholder="Wybierz..."
+      noOptionsMessage={() => 'Brak opcji.'}
       value={options.filter((option) => value.includes(option.value))}
       components={animatedComponents}
       options={options}

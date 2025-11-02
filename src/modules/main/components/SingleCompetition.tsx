@@ -2,7 +2,11 @@
 
 import { Button, Typography } from '@/lib/mui';
 import { CompetitionWithMemberCount } from '@/lib/types/competition';
+import { RootState } from '@/store/store';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+import { FaCheck } from 'react-icons/fa6';
+import { useSelector } from 'react-redux';
 
 type Props = {
   data: CompetitionWithMemberCount;
@@ -10,6 +14,8 @@ type Props = {
 };
 
 const SingleCompetition = ({ data, loading }: Props) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
   const isEnrollable = useMemo(() => {
     const now = new Date().getTime();
     return !data.lockEnroll && new Date(data.enrollStart).getTime() <= now && new Date(data.enrollEnd).getTime() >= now;
@@ -26,6 +32,10 @@ const SingleCompetition = ({ data, loading }: Props) => {
     const now = new Date().getTime();
     return new Date(data.startDate).getTime() > now;
   }, [data]);
+
+  const handleClickEnroll = () => {
+    router.push(`/comp_signups?id=${data.id}`);
+  };
 
   return (
     <div className="p-2 flex flex-col gap-2 border rounded-lg border-gray-400">
@@ -45,8 +55,14 @@ const SingleCompetition = ({ data, loading }: Props) => {
         <Typography className="text-sm font-semibold">-</Typography>
         <div className="text-xs px-1.5 py-0.5 bg-blue-500 text-white rounded-lg font-semibold">{data.countMen}</div>
         <Typography className="text-sm font-semibold">/</Typography>
-        <div className="text-xs px-1.5 py-0.5 bg-pink-500 text-white rounded-lg font-semibold">{data.countMen}</div>
+        <div className="text-xs px-1.5 py-0.5 bg-pink-500 text-white rounded-lg font-semibold">{data.countWomen}</div>
       </div>
+      {user !== null && data.alreadyEnrolled && (
+        <div className="flex w-max items-center gap-1 text-xs px-1.5 py-0.5 bg-lime-700 text-white rounded font-semibold">
+          <FaCheck />
+          <span>{`Zapisał${user.gender ? 'e' : 'a'}ś się`}</span>
+        </div>
+      )}
       <div className="w-full h-px bg-gray-300" />
       <Typography className="text-sm italic text-gray-900 font-semibold">Opis:</Typography>
       {data.description !== null && data.description.length > 0 ? (
@@ -63,7 +79,7 @@ const SingleCompetition = ({ data, loading }: Props) => {
           Lista
         </Button>
         {isEnrollable && (
-          <Button size="sm" variant="gradient" color="success" disabled={loading}>
+          <Button size="sm" variant="gradient" color="success" disabled={loading} onClick={() => handleClickEnroll()}>
             Zapisz się
           </Button>
         )}
