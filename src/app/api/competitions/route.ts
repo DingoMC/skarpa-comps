@@ -1,5 +1,6 @@
 import { decodeToken, verifyToken } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { CompetitionWithMemberCount } from '@/lib/types/competition';
 import { getCookie } from 'cookies-next';
 import { NextRequest } from 'next/server';
 
@@ -12,17 +13,20 @@ export async function GET(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { id: decoded.user.id } });
     if (user && user.hasAccount && user.isClubMember) allowInternal = true;
   }
-  const now = new Date();
-  const data = await prisma.competition.findMany({
+  const data: CompetitionWithMemberCount[] = [];
+  const comps = await prisma.competition.findMany({
     where: {
-      lockEnroll: false,
-      enrollStart: { lte: now },
-      enrollEnd: { gte: now },
       isInternal: allowInternal ? undefined : false,
     },
     orderBy: {
       createdAt: 'desc',
     },
   });
+  for (const c of comps) {
+    const countAll = await prisma.user_Competition.count({ where: { competitionId: c.id } });
+    const countMen = await prisma.user_Competition.count({ where: { competitionId: c.id, user: { gender: true } } });
+    const countWomen = countAll - countMen;
+    data.push({ ...c, countAll, countMen, countWomen });
+  }
   return Response.json(data, { status: 200 });
 }

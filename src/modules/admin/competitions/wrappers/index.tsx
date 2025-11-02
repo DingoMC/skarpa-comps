@@ -5,7 +5,7 @@ import { Competition } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import AdminCompetitions from '../components';
-import { createCompetitionAdmin, deleteCompetitionAdmin, getAllCompetitionsAdmin, updateCompetitionAdmin } from '../requests';
+import { deleteCompetitionAdmin, getAllCompetitionsAdmin } from '../requests';
 
 const AdminCompetitionsWrapper = () => {
   const [data, setData] = useState<Competition[]>([]);
@@ -24,30 +24,6 @@ const AdminCompetitionsWrapper = () => {
   const handleRefresh = async () => {
     setRefetching(true);
     await loadData();
-    setRefetching(false);
-  };
-
-  const handleCreate = async (data: Competition) => {
-    setRefetching(true);
-    const resp = await createCompetitionAdmin(data);
-    if (resp.error !== null) {
-      toast.error(resp.error);
-    } else {
-      toast.success('Zawody zostały utworzone pomyślnie.');
-      await loadData();
-    }
-    setRefetching(false);
-  };
-
-  const handleUpdate = async (data: Competition) => {
-    setRefetching(true);
-    const resp = await updateCompetitionAdmin(data);
-    if (resp.error !== null) {
-      toast.error(resp.error);
-    } else {
-      toast.success('Zawody zostały zaktualizowane pomyślnie.');
-      await loadData();
-    }
     setRefetching(false);
   };
 
