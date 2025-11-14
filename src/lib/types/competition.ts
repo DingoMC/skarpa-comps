@@ -1,3 +1,5 @@
+import { Competition } from "@prisma/client";
+
 export interface FamilySettingsBase {
   includePZAMembers: boolean;
   pzaFilterCategories: string[] | null; // array of Category IDs
@@ -20,12 +22,21 @@ export interface PZASettings {
   pzaFilterCategories: string[] | null; // array of Category IDs
 }
 
+export interface SelfScoringCategorySettings {
+  categoryId: string;
+  modifyAfterSent: boolean;
+  selfScoringFrom?: number;
+  selfScoringTo?: number;
+}
+
 export interface SelfScoringSettings {
   allowSelfScoring: boolean;
-  settings: {
-    categoryId: string;
-    modifyAfterSent: boolean;
-    selfScoringFrom?: number;
-    selfScoringTo?: number;
-  }[];
+  settings: SelfScoringCategorySettings[];
+}
+
+export interface CompetitionWithMemberCount extends Competition {
+  countAll: number;
+  countMen: number;
+  countWomen: number;
+  alreadyEnrolled: boolean;
 }

@@ -1,21 +1,30 @@
 'use client';
 
-import RichTextEditor from '@/modules/inputs/components/RichText';
-import RichTextViewer from '@/modules/inputs/components/RichTextViewer';
-import { useEffect, useState } from 'react';
+import { CompetitionWithMemberCount } from '@/lib/types/competition';
+import TemplateButton from '@/modules/buttons/TemplateButton';
+import DashboardFrame from '@/modules/dashboard/components';
+import NoData from '@/modules/lottie/NoData';
+import SingleCompetition from './SingleCompetition';
 
-const MainPage = () => {
-  const [value, setValue] = useState<string>('{}');
+type Props = {
+  data: CompetitionWithMemberCount[];
+  loading: boolean;
+  onRefresh: () => Promise<void>;
+};
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
-
+const MainPage = ({ data, loading, onRefresh }: Props) => {
   return (
-    <div className="flex flex-col gap-4">
-      <RichTextEditor value={value} onChange={(v) => setValue(v)} />
-      <RichTextViewer value={value} />
-    </div>
+    <DashboardFrame
+      title="Harmonogram wydarzeń"
+      refreshing={loading}
+      cardBodyClassName="flex flex-col gap-4"
+      cardHeaderRight={<TemplateButton template="refresh" onClick={onRefresh} disabled={loading} message="Pobierz ponownie dane zawodów" />}
+    >
+      {data.map((d) => (
+        <SingleCompetition key={d.id} data={d} loading={loading} />
+      ))}
+      {!data.length && <NoData message="Brak wydarzeń." />}
+    </DashboardFrame>
   );
 };
 

@@ -1,5 +1,5 @@
 import { FaHome, FaUsers } from 'react-icons/fa';
-import { FaRegAddressBook, FaTableList } from 'react-icons/fa6';
+import { FaRankingStar, FaRegAddressBook, FaTableList } from 'react-icons/fa6';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
@@ -80,8 +80,15 @@ export const siteMap = {
         href: '/admin/users',
         icon: <FaUsers className={icon} />,
       },
+      competitions: {
+        id: 1,
+        name: 'Zawody',
+        tabName: tabName('Zawody'),
+        href: '/admin/competitions',
+        icon: <FaRankingStar className={icon} />,
+      },
       categories: {
-        id: 0,
+        id: 2,
         name: 'Kategorie',
         tabName: tabName('Kategorie'),
         href: '/admin/categories',
@@ -131,6 +138,8 @@ export const siteMapByPath = new ObjectWithFallback<SiteMapPage>(
     ...hrefPageKeyPair(),
     '/admin/users/new': siteMap.admin.pages.users,
     '/admin/users/[id]': siteMap.admin.pages.users,
+    '/admin/competitions/new': siteMap.admin.pages.competitions,
+    '/admin/competitions/[id]': siteMap.admin.pages.competitions,
   },
   siteMap.home.pages.home
 );
@@ -145,6 +154,8 @@ export const sectionByPath = new ObjectWithFallback<Section>(
     ...hrefSectionKeyPair(),
     '/admin/users/new': siteMap.admin,
     '/admin/users/[id]': siteMap.admin,
+    '/admin/competitions/new': siteMap.admin,
+    '/admin/competitions/[id]': siteMap.admin,
   },
   siteMap.home
 );

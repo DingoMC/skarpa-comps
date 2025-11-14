@@ -3,10 +3,10 @@
 import { MenuItem, Typography } from '@/lib/mui';
 import { useRouter } from 'next/navigation';
 import { getProfileMenuItems } from '../utils';
+import { useNavbarMediator } from './Navbar/NavbarMediatorProvider';
 
-const NavList = ({ toggleIsNavOpen }: {
-  toggleIsNavOpen: () => void
-}) => {
+const NavList = () => {
+  const mediator = useNavbarMediator();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -18,12 +18,7 @@ const NavList = ({ toggleIsNavOpen }: {
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       {navListItems.map((item) => (
-        <Typography
-          key={item.label}
-          as="a"
-          href="#"
-          className="text-sm text-white"
-        >
+        <Typography key={item.label} as="a" href="#" className="text-sm text-white">
           <MenuItem
             className="
               flex
@@ -40,7 +35,7 @@ const NavList = ({ toggleIsNavOpen }: {
               focus:bg-opacity-100
               active:bg-opacity-100"
             onClick={() => {
-              toggleIsNavOpen();
+              mediator.toggleNav();
               if (item.type === 'action') {
                 item.action();
               }

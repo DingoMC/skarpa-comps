@@ -1,5 +1,5 @@
 import { siteMap } from '@/lib/siteMap';
-import MainPage from '@/modules/main/components';
+import MainPageWrapper from '@/modules/main/wrappers';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,6 +7,6 @@ export const metadata: Metadata = {
   description: 'Witamy na stronie - Zawody Skarpa Lublin',
 };
 
-const Page = () => <MainPage />;
+const Page = () => <MainPageWrapper />;
 
 export default Page;
