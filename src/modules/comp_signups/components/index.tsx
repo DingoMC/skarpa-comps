@@ -2,7 +2,6 @@
 
 import { EMPTY_ENROLL } from '@/lib/constants';
 import { Button, Switch, Typography } from '@/lib/mui';
-import { transformName } from '@/lib/text';
 import { UserUI } from '@/lib/types/auth';
 import { EnrollRequest } from '@/lib/types/enroll';
 import DashboardFrame from '@/modules/dashboard/components';
@@ -17,6 +16,9 @@ import InputString from '@/modules/inputs/components/String';
 import { Category, Competition } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
 import { autoAssignCategoryByAge } from '../utils';
+import TextFormatter from '@/lib/text';
+
+const textFormatter = new TextFormatter();
 
 type Props = {
   user: UserUI | null;
@@ -58,8 +60,8 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
       setData((prev) => ({
         ...prev,
         email: user.email,
-        firstName: transformName(user.firstName),
-        lastName: transformName(user.lastName),
+        firstName: textFormatter.transformName(user.firstName),
+        lastName: textFormatter.transformName(user.lastName),
         gender: user.gender,
         yearOfBirth: user.yearOfBirth,
         clubName: user.clubName,

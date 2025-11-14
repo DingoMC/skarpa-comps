@@ -1,5 +1,6 @@
 'use client';
 
+import { ADMIN_AUTH_LEVEL, SUPER_ADMIN_AUTH_LEVEL, USER_AUTH_LEVEL } from '@/lib/constants';
 import { Role } from '@prisma/client';
 import { useMemo } from 'react';
 
@@ -15,15 +16,15 @@ const RoleBadge = ({ roles, roleId }: Props) => {
 
   if (!role) return null;
 
-  if (role.authLevel >= 100) {
+  if (role.authLevel >= SUPER_ADMIN_AUTH_LEVEL) {
     return <div className={`${commonClass} text-skarpa-800 border-skarpa-800 bg-skarpa-50`}>Super</div>;
   }
 
-  if (role.authLevel >= 10) {
+  if (role.authLevel >= ADMIN_AUTH_LEVEL) {
     return <div className={`${commonClass} text-purple-800 border-purple-800 bg-purple-50`}>Admin</div>;
   }
 
-  if (role.authLevel >= 1) {
+  if (role.authLevel >= USER_AUTH_LEVEL) {
     return <div className={`${commonClass} text-green-800 border-green-800 bg-green-50`}>User</div>;
   }
 

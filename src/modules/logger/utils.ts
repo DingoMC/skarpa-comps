@@ -2,6 +2,7 @@ import { AxiosRequestLogData } from './types';
 
 const SIZE_UNITS = ['B', 'kB', 'MB', 'GB', 'TB'];
 const SPEED_UNITS = ['B/s', 'kB/s', 'MB/s', 'GB/s', 'TB/s'];
+const MAX_UNIT_MULTIPLIER = 12.0;
 
 const getStatusCodeColor = (statusCode: number) => {
   if ((statusCode >= 100 && statusCode <= 199) || statusCode === 9006) return '&3';
@@ -86,7 +87,7 @@ const showAxiosTime = (ms: number) => {
 const showBytes = (bytes: number) => {
   if (bytes <= 0) return '0B';
   const logBytes = Math.floor(Math.log10(bytes));
-  const divider = logBytes > 12 ? 10.0 ** 12.0 : 10.0 ** (3 * Math.floor(logBytes / 3));
+  const divider = logBytes > MAX_UNIT_MULTIPLIER ? 10.0 ** MAX_UNIT_MULTIPLIER : 10.0 ** (3 * Math.floor(logBytes / 3));
   const unitIdx = Math.floor(logBytes / 3) > 4 ? 4 : Math.floor(logBytes / 3);
   let precision = 0;
   if (bytes >= 1000) {
@@ -100,7 +101,7 @@ const showSpeed = (data: AxiosRequestLogData) => {
   if (data.time <= 0) return '&1---';
   const bytesPerSec = (data.txBytes + data.txHeaderBytes + data.rxHeaderBytes + data.rxBytes) / (data.time * 0.001);
   const logBytes = Math.floor(Math.log10(bytesPerSec));
-  const divider = logBytes > 12 ? 10.0 ** 12.0 : 10.0 ** (3 * Math.floor(logBytes / 3));
+  const divider = logBytes > MAX_UNIT_MULTIPLIER ? 10.0 ** MAX_UNIT_MULTIPLIER : 10.0 ** (3 * Math.floor(logBytes / 3));
   const unitIdx = Math.floor(logBytes / 3) > 4 ? 4 : Math.floor(logBytes / 3);
   let precision = 0;
   if (bytesPerSec >= 1000) {

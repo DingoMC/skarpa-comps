@@ -5,6 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
+const YEAR_RANGE = 100;
 
 type OptionType = {
   label: string;
@@ -14,7 +15,7 @@ type OptionType = {
 const options = () => {
   const opts: OptionType[] = [];
   const max = new Date().getFullYear();
-  const min = max - 100;
+  const min = max - YEAR_RANGE;
   for (let i = min; i <= max; i++) {
     opts.push({ label: i.toFixed(0), value: i });
   }

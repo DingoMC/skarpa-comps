@@ -4,6 +4,8 @@ import { LoggerObject, ParamAcceptable } from './types';
 import URLQueryParser from './parser/queryParser';
 import URLPathParser from './parser/pathParser';
 
+const DEFAULT_TIMEOUT = 60000;
+
 const callLoggerAPI = async (data: LoggerObject) => {
   const { url, method, startTime, statusCode, rxHeaderBytes, txHeaderBytes, rxBytes, txBytes } = data;
   const end = new Date().getTime();
@@ -138,7 +140,7 @@ export default async function axiosRequest({
       url: pathParser.parse(url, pathParams),
       method: rMethod,
       data,
-      timeout: requestTimeout ?? 60000,
+      timeout: requestTimeout ?? DEFAULT_TIMEOUT,
       headers,
       params,
       responseType,

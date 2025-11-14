@@ -4,6 +4,10 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { SUPER_ADMIN_AUTH_LEVEL, USER_AUTH_LEVEL } from './constants';
 import { TokenPayload } from './types/auth';
+import { HttpStatusCode } from 'axios';
+
+const MS_IN_SECOND = 1000;
+const SEC_IN_DAY = 86400;
 
 interface TokenData extends TokenPayload {
   exp: number;
@@ -53,14 +57,14 @@ export const verifyToken = async (token?: string | null, requiredAuthLevel?: num
     if (decoded === null) return false;
     if (requiredAuthLevel !== undefined && decoded.authLevel < requiredAuthLevel) return false;
     // Check expiry
-    const now = Date.now() / 1000;
-    const iatMin = now - 86400;
+    const now = Date.now() / MS_IN_SECOND;
+    const iatMin = now - SEC_IN_DAY;
     if (decoded.iat < iatMin || decoded.exp < now) return false;
     // Check user id
     const resp = await fetch(`${process.env.NEXT_PUBLIC_APPLICATION_URL ?? ''}/api/internal/validate-user?userId=${decoded.user.id}`, {
       headers: { 'Next-Internal-API': '1' },
     });
-    if (resp.status !== 200) return false;
+    if (resp.status !== HttpStatusCode.Ok) return false;
     return true;
   } catch (error) {
     console.error(error);
