@@ -10,16 +10,8 @@ export async function GET(req: NextRequest) {
   if (!ok) {
     return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
   }
-  const categoryId = req.nextUrl.searchParams.get('id');
-  if (categoryId !== null && categoryId.length) {
-    const found = await prisma.category.findUnique({ where: { id: categoryId.trim() } });
-    if (found === null) {
-      return Response.json({ message: 'Nie znaleziono kategorii o podanym identyfikatorze.' }, { status: 400 });
-    }
-    return Response.json(found, { status: 200 });
-  }
-  const data = await prisma.category.findMany({ orderBy: { seq: 'asc' } });
-  return Response.json(data, { status: 200 });
+  const roles = await prisma.category.findMany({ orderBy: { seq: 'asc' } });
+  return Response.json(roles, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {

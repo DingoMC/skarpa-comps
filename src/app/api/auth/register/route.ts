@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   try {
     const userRole = await prisma.role.findFirst({ where: { authLevel: 1 } });
     if (userRole === null) {
-      return Response.json({ message: 'Zarejestrowano pomyślnie.' }, { status: 200 });
+      return Response.json({ message: 'Brak roli dla użytkownika.' }, { status: 500 });
     }
     if (sameEmailUser !== null) {
       await prisma.user.update({
