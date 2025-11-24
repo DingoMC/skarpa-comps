@@ -4,6 +4,7 @@ export default class TextFormatter {
     return `${val[0].toUpperCase()}${val.substring(1).toLowerCase()}`;
   }
 
+  // Example 2 of streamlining string (array of chars)
   private transformWithDelimiter(val: string, delimiter: string): string {
     return val
       .split(delimiter)

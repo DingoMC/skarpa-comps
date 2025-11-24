@@ -2,6 +2,7 @@ import { C_AMP } from '@/lib/console';
 import URLParser from '.';
 import { ParamAcceptable } from '../types';
 
+// Example 1 Streamlining array functions
 class URLQueryParser extends URLParser {
   public parse(url: string, params?: { [key: string]: ParamAcceptable } | ParamAcceptable[]): string {
     let full = url;
