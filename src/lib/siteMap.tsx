@@ -3,10 +3,12 @@ import { FaRankingStar, FaRegAddressBook, FaTableList } from 'react-icons/fa6';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
-import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL } from './constants';
+import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL, USER_AUTH_LEVEL } from './constants';
 import { objectValues } from './object';
 import ObjectWithFallback from './types/objectWithFallback';
 import { Section, SiteMapPage } from './types/siteMap';
+import { IoLogoAndroid } from 'react-icons/io';
+import { UserUI } from './types/auth';
 
 const icon = 'h-5 w-5';
 
@@ -65,6 +67,21 @@ export const siteMap = {
         tabName: tabName('Rejestracja'),
         href: '/register',
         icon: <FaRegAddressBook className={icon} />,
+      },
+    },
+  },
+  skarpa: {
+    id: 3,
+    title: 'Skarpa',
+    authLevel: (ual: number | null) => ual !== null && ual >= USER_AUTH_LEVEL,
+    userAuth: (u: UserUI | null) => u?.isClubMember ?? false,
+    pages: {
+      apps: {
+        id: 0,
+        name: 'Aplikacje',
+        tabName: tabName('Aplikacje'),
+        href: '/skarpa/apps',
+        icon: <IoLogoAndroid className={icon} />,
       },
     },
   },

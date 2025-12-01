@@ -20,8 +20,12 @@ export const getMiddlewareActions = async (request: NextRequest) => {
   const section = sectionByPath.get(pathname);
   const page = siteMapByPath.get(pathname);
   let redirect: string | null;
-  const canAccessSection = section.authLevel === undefined || section.authLevel(userLevel);
-  const canAccessPage = page.authLevel === undefined || page.authLevel(userLevel);
+  const canAccessSection =
+    (section.authLevel === undefined || section.authLevel(userLevel))
+    && (section.userAuth === undefined || section.userAuth(decodedToken?.user ?? null));
+  const canAccessPage =
+    (page.authLevel === undefined || page.authLevel(userLevel))
+    && (page.userAuth === undefined || page.userAuth(decodedToken?.user ?? null));
   if (hasToken) {
     if (tokenValid) redirect = canAccessPage && canAccessSection ? null : '/';
     else redirect = '/logout';

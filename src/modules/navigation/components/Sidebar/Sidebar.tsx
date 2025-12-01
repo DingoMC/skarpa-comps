@@ -14,14 +14,15 @@ import SidebarList from './SidebarList';
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
   const authLevel = useSelector((state: RootState) => state.auth.authLevel);
+  const user = useSelector((state: RootState) => state.auth.user);
   const path = usePathname();
   const section = sectionByPath.get(clearDynamicRoute(path));
   const links = useMemo(() => {
     return Object.values(section.pages)
       .filter((page) => !page.hidden)
-      .filter((page) => page.authLevel === undefined || page.authLevel(authLevel))
+      .filter((page) => (page.authLevel === undefined || page.authLevel(authLevel)) && (page.userAuth === undefined || page.userAuth(user)))
       .sort((a, b) => a.id - b.id);
-  }, [section, authLevel]);
+  }, [section, authLevel, user]);
 
   return (
     <div

@@ -12,13 +12,22 @@ import { useSelector } from 'react-redux';
 const SubNavbar = () => {
   const pathname = usePathname();
   const authLevel = useSelector((state: RootState) => state.auth.authLevel);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const subnav = Object.values(siteMap)
     .filter((section) => {
       const pages: SiteMapPage[] = Object.values(section.pages);
-      return pages.some((page) => !page.hidden && (page.authLevel === undefined || page.authLevel(authLevel)));
+      return pages.some(
+        (page) =>
+          !page.hidden
+          && (page.authLevel === undefined || page.authLevel(authLevel))
+          && (page.userAuth === undefined || page.userAuth(user))
+      );
     })
-    .filter((section: Section) => section.authLevel === undefined || section.authLevel(authLevel))
+    .filter(
+      (section: Section) =>
+        (section.authLevel === undefined || section.authLevel(authLevel)) && (section.userAuth === undefined || section.userAuth(user))
+    )
     .sort((a, b) => a.id - b.id);
 
   const getLinkClass = (href: string) => {

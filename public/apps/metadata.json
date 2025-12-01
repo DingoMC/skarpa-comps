@@ -1,0 +1,253 @@
+[
+  {
+    "name": "Dingo Workout App",
+    "version": "0.4.0",
+    "versionType": "release",
+    "appCode": "WTTA",
+    "appPrefix": "workout_app",
+    "description": "Aplikacja do rozgrzewek. Możliwość tworzenia własnych zestawów, edycji nazw ćwiczeń ich czasów trwania, czasów odpoczynku, czasu przygotowania, liczby serii, przerwy między seriami. Dodatkowo aplikacja pobiera domyślne zestawy treningowe.",
+    "buglist": [
+      {
+        "id": 1,
+        "fixed": true,
+        "description": "Aplikacja nie posiada uprawnień do korzystania z internetu",
+        "from": { "version": "0.3.0", "versionType": "beta" },
+        "to": { "version": "0.3.0", "versionType": "beta" }
+      },
+      {
+        "id": 2,
+        "fixed": true,
+        "description": "ID Ćwiczeń z zestawów pobranych z internetu są niepoprawne",
+        "from": { "version": "0.3.0", "versionType": "beta" },
+        "to": { "version": "0.3.0", "versionType": "beta" }
+      }
+    ],
+    "changelog": [
+      {
+        "version": "0.1.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Utworzono strukturę aplikacji", "type": "add" },
+          { "content": "Stworzono model pojedyńczego zadania", "type": "add" },
+          { "content": "Stworzono model zestawu", "type": "add" },
+          { "content": "Stworzono czasomierz i sekwencer", "type": "add" }
+        ]
+      },
+      {
+        "version": "0.2.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano ustawienia głośności i dźwięków", "type": "add" },
+          { "content": "Dodano przycisk Start/Pauza oraz Restart", "type": "add" }
+        ]
+      },
+      {
+        "version": "0.3.0",
+        "versionType": "beta",
+        "log": [{ "content": "Dodano pobieranie zestawów domyślnych", "type": "add" }]
+      },
+      {
+        "version": "0.3.1",
+        "versionType": "beta",
+        "log": [
+          { "content": "Naprawiono {bug-wtta-1} poprzez nadanie odpowiednich uprawnień", "type": "fix" },
+          { "content": "Naprawiono {bug-wtta-2}", "type": "fix" }
+        ]
+      },
+      {
+        "version": "0.3.2",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano informację o pobieraniu danych z serwera", "type": "add" },
+          { "content": "Dodano inicjalizację dźwięków przy uruchamianiu aplikacji, aby zapobiec opóźnieniom", "type": "fix" }
+        ]
+      },
+      {
+        "version": "0.3.3",
+        "versionType": "beta",
+        "log": [{ "content": "Poprawiono wielkość czcionek tekstu, aby zapobiec obcinaniu tekstu", "type": "fix" }]
+      },
+      {
+        "version": "0.4.0",
+        "versionType": "release",
+        "log": [
+          { "content": "Automatyczne pobieranie ćwiczeń zmieniono na manualne za pomocą przycisku", "type": "change" },
+          {
+            "content": "Gdy pobieranie ćwiczeń z serwera się nie powiodło (max. 15s), następuje pobranie wbudowanych ćwiczeń z lokalnego pliku",
+            "type": "fix"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Dingo SC Timer App",
+    "version": "0.6.5",
+    "versionType": "beta",
+    "appPrefix": "sc_app",
+    "appCode": "SCTA",
+    "description": "Aplikacja do pomiarów czasówek. Możliwość pomiarów manualnych jak i poprzez zewnętrzny system USB. Zapisywanie czasów, użytkowików, tras oraz definiowanie kolejek (rund).",
+    "buglist": [
+      {
+        "id": 1,
+        "fixed": true,
+        "description": "Sygnał startu jest opóźniony o ok. 0.24s.",
+        "from": { "version": "0.1.0", "versionType": "beta" },
+        "to": { "version": "0.2.0", "versionType": "beta" }
+      },
+      {
+        "id": 2,
+        "fixed": true,
+        "description": "W trybie USB niektóre ikony są zablokowane, gdy nie powinny.",
+        "from": { "version": "0.4.0", "versionType": "beta" },
+        "to": { "version": "0.4.0", "versionType": "beta" }
+      },
+      {
+        "id": 3,
+        "fixed": true,
+        "description": "Na niektórych urządzeniach czcionka jest większa i wychodzi poza ekran.",
+        "from": { "version": "0.1.0", "versionType": "beta" },
+        "to": { "version": "0.4.0", "versionType": "beta" }
+      },
+      {
+        "id": 4,
+        "fixed": false,
+        "description": "Czasami falstart włącza się błędnie (Możliwy błąd w systemie USB).",
+        "from": { "version": "0.4.0", "versionType": "beta" }
+      },
+      {
+        "id": 5,
+        "fixed": false,
+        "description": "Niektóre urządzenia nie zezwalają na połączenia USB.",
+        "from": { "version": "0.4.0", "versionType": "beta" }
+      },
+      {
+        "id": 6,
+        "fixed": true,
+        "description": "Sekwencje nie usuwają się po naciśnięciu przycisku.",
+        "from": { "version": "0.6.3", "versionType": "beta" },
+        "to": { "version": "0.6.3", "versionType": "beta" }
+      },
+      {
+        "id": 7,
+        "fixed": true,
+        "description": "W trybie USB przycisk 'Start' nie blokuje się po jego naciśnięciu.",
+        "from": { "version": "0.6.3", "versionType": "beta" },
+        "to": { "version": "0.6.3", "versionType": "beta" }
+      },
+      {
+        "id": 8,
+        "fixed": true,
+        "description": "W trybie USB czasów nie można zapisać dla trybu sekwencyjnego.",
+        "from": { "version": "0.6.3", "versionType": "beta" },
+        "to": { "version": "0.6.3", "versionType": "beta" }
+      },
+      {
+        "id": 9,
+        "fixed": true,
+        "description": "Okienko wyboru sekwencji nie zamyka się po wyborze.",
+        "from": { "version": "0.6.3", "versionType": "beta" },
+        "to": { "version": "0.6.3", "versionType": "beta" }
+      },
+      {
+        "id": 10,
+        "fixed": true,
+        "description": "Podczas wydawania komend, restart nie jest możliwy.",
+        "from": { "version": "0.6.3", "versionType": "beta" },
+        "to": { "version": "0.6.4", "versionType": "beta" }
+      }
+    ],
+    "changelog": [
+      {
+        "version": "0.1.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Utworzono strukturę aplikacji", "type": "add" },
+          { "content": "Stworzono model zawodnika", "type": "add" },
+          { "content": "Stworzono model pojedyńczego czasu", "type": "add" }
+        ]
+      },
+      {
+        "version": "0.2.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Zamiast przycisku \"Finish\" pomiar kończy się po kliknięciu na czas", "type": "change" },
+          { "content": "Dodano opcje do dróg", "type": "add" },
+          { "content": "Środkowy przycisk służy do startu, anulowania, zapisu i resetu", "type": "change" }
+        ]
+      },
+      {
+        "version": "0.3.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Naprawiono {bug-scta-1} poprzez dodanie stałego opóźnienia do zegara kompensując błąd", "type": "fix" },
+          { "content": "Dodano sekwencje zawodników (rundy)", "type": "add" },
+          { "content": "Dodano automatyczny sekwencer zmieniający zawodników zgodnie z wybraną sekwencją", "type": "add" }
+        ]
+      },
+      {
+        "version": "0.4.0",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano wsparcie systemu USB", "type": "add" },
+          { "content": "Zmieniono wygląd widoku tabeli zawodników, czasów i sekwencji", "type": "change" }
+        ]
+      },
+      {
+        "version": "0.4.1",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano tryb bez platform do systemu USB", "type": "add" },
+          { "content": "Naprawiono {bug-scta-2}", "type": "fix" },
+          { "content": "Naprawiono {bug-scta-3} poprzez dostosowanie wielkości czcionki", "type": "fix" }
+        ]
+      },
+      {
+        "version": "0.5.2",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano tryb użytkowników bez definiowania sekwencji", "type": "add" },
+          { "content": "Dodano pobieranie użytkowników online ze skarpanetu", "type": "add" },
+          { "content": "Zmieniono wielkości czcionek, aby zapobiec przepełnieniom", "type": "fix" }
+        ]
+      },
+      {
+        "version": "0.6.3",
+        "versionType": "beta",
+        "log": [
+          { "content": "Dodano widok definiowania własnych tras. Trasy w timerze wybierane są po kliknięciu na nazwę", "type": "add" },
+          { "content": "Dodano widok ustawień umożliwiający dostosowanie komend startowych oraz opóźnień między nimi", "type": "add" },
+          {
+            "content": "Pobieranie uzytkowników nie odbywa się automatycznie lecz w widoku użytkowników po naciśnięciu przycisku",
+            "type": "change"
+          },
+          { "content": "W trybie USB kolor czasu reakcji zmienia się w zależności od danego czasu", "type": "change" },
+          {
+            "content": "Usunięcie użytkownika/czasu/sekwencji/trasy należy dodatkowo potwierdzić po kliknięciu na ikonę",
+            "type": "change"
+          },
+          { "content": "Optymalizacja widoków uzytkowników, sekwencji oraz czasów", "type": "fix" }
+        ]
+      },
+      {
+        "version": "0.6.4",
+        "versionType": "beta",
+        "log": [
+          { "content": "Naprawiono {bug-scta-6}", "type": "fix" },
+          { "content": "Naprawiono {bug-scta-7}. Przycisk blokuje się po wywołaniu sekwencji startowej.", "type": "fix" },
+          { "content": "Naprawiono {bug-scta-8}", "type": "fix" },
+          { "content": "Naprawiono {bug-scta-9}", "type": "fix" },
+          { "content": "Zmieniono wygląd okienek ustawień", "type": "change" }
+        ]
+      },
+      {
+        "version": "0.6.5",
+        "versionType": "beta",
+        "log": [
+          { "content": "Naprawiono {bug-scta-10}. Restart jest możliwy w dowolnym momencie.", "type": "fix" },
+          { "content": "W widoku ustawień dodano możliwość odsłuchania każdej z komend.", "type": "add" }
+        ]
+      }
+    ]
+  }
+]
