@@ -1,3 +1,5 @@
+import { Task } from '@prisma/client';
+
 export type TaskScoringSystem = 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear';
 
 export interface TaskZone {
@@ -94,4 +96,8 @@ export interface TaskResult {
     value?: number;
     zone?: { name: string; shortName: string; score: number };
   }[];
+}
+
+export interface TaskCategoryIds extends Task {
+  categories: { id: string }[];
 }
