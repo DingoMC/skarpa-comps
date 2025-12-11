@@ -169,7 +169,7 @@ const Register = ({ loading, handleRegister }: Props) => {
           onChange={() => setUser((prev) => ({ ...prev, isPZAMember: !prev.isPZAMember }))}
         />
         <Typography className="text-sm">
-          Jestem członkiem Polskiego Związku Alpinizmu i w ostatnim roku uczestniczyłem w ogólnopolskich zawodach we wspinaczce sportowej.
+          Jestem zawodnikiem Polskiego Związku Alpinizmu i w ostatnim roku uczestniczyłem w ogólnopolskich zawodach we wspinaczce sportowej.
         </Typography>
       </div>
       <div className="md:col-span-2 flex justify-center mt-2">

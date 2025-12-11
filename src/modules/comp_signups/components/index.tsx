@@ -211,7 +211,7 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
               onChange={() => setData((prev) => ({ ...prev, isPZAMember: !prev.isPZAMember }))}
             />
             <Typography className="text-sm">
-              Jestem członkiem Polskiego Związku Alpinizmu i w ostatnim roku uczestniczyłem w ogólnopolskich zawodach we wspinaczce
+              Jestem zawodnikiem Polskiego Związku Alpinizmu i w ostatnim roku uczestniczyłem w ogólnopolskich zawodach we wspinaczce
               sportowej.
             </Typography>
           </div>
