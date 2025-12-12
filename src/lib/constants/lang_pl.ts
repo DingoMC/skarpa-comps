@@ -47,6 +47,8 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     userCompetition: 'Zapis',
     family: 'Rodzina',
     flags: 'Flagi',
+    categories: 'Kategorie',
+    type: 'Typ',
   },
   'N/A'
 );

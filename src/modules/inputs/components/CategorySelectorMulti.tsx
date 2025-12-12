@@ -32,6 +32,7 @@ const SelectCategoryMulti = ({ categories, value, disabled, onChange }: Props) =
   return (
     <Select<OptionType, true>
       isMulti
+      noOptionsMessage={() => 'Brak opcji.'}
       value={options.filter((option) => value.includes(option.value))}
       components={animatedComponents}
       options={options}

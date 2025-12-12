@@ -1,14 +1,14 @@
-import { FaHome, FaUsers } from 'react-icons/fa';
+import { FaHome, FaTasks, FaUsers } from 'react-icons/fa';
 import { FaRankingStar, FaRegAddressBook, FaTableList } from 'react-icons/fa6';
+import { IoLogoAndroid } from 'react-icons/io';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
 import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL, USER_AUTH_LEVEL } from './constants';
 import { objectValues } from './object';
+import { UserUI } from './types/auth';
 import ObjectWithFallback from './types/objectWithFallback';
 import { Section, SiteMapPage } from './types/siteMap';
-import { IoLogoAndroid } from 'react-icons/io';
-import { UserUI } from './types/auth';
 
 const icon = 'h-5 w-5';
 
@@ -104,8 +104,16 @@ export const siteMap = {
         href: '/admin/competitions',
         icon: <FaRankingStar className={icon} />,
       },
-      categories: {
+      tasks: {
         id: 2,
+        name: 'Zadania',
+        tabName: tabName('Zadania'),
+        href: '/admin/tasks',
+        competitionSelector: true,
+        icon: <FaTasks className={icon} />,
+      },
+      categories: {
+        id: 3,
         name: 'Kategorie',
         tabName: tabName('Kategorie'),
         href: '/admin/categories',

@@ -7,6 +7,7 @@ export interface SiteMapPage {
   name: string;
   tabName: string;
   href: string;
+  competitionSelector?: boolean;
   authLevel?: (userAuthLevel: number | null) => boolean;
   userAuth?: (user: UserUI | null) => boolean;
   icon: React.JSX.Element;

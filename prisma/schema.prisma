@@ -163,7 +163,7 @@ model Task {
     {
       maxAttempts: number | null,
       timeLimit: number | null,
-      scoringSystem: 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear',
+      scoringSystem: 'normal' | 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear',
       zones?: {
         name: string,
         shortName: string,

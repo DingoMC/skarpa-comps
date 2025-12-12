@@ -1,6 +1,6 @@
 import { Task } from '@prisma/client';
 
-export type TaskScoringSystem = 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear';
+export type TaskScoringSystem = 'normal' | 'zones' | 'linear' | 'ranges' | 'time' | 'multilinear';
 
 export interface TaskZone {
   name: string;
@@ -31,6 +31,10 @@ export type TaskTimeTransformType = 'linear' | 'hyperbolic' | 'ranges';
 export interface TaskSettingsBase {
   maxAttempts: number | null;
   timeLimit: number | null;
+}
+
+export interface TaskSettingsNormal extends TaskSettingsBase {
+  scoringSystem: 'normal';
 }
 
 export interface TaskSettingsZones extends TaskSettingsBase {
@@ -89,7 +93,13 @@ export interface TaskSettingsTime extends TaskSettingsBase {
   time: TaskSettingsTimeRanges | TaskSettingsTimeLinear | TaskSettingsTimeHyperbolic;
 }
 
-export type TaskSettings = TaskSettingsZones | TaskSettingsLinear | TaskSettingsRanges | TaskSettingsMultilinear | TaskSettingsTime;
+export type TaskSettings =
+  | TaskSettingsNormal
+  | TaskSettingsZones
+  | TaskSettingsLinear
+  | TaskSettingsRanges
+  | TaskSettingsMultilinear
+  | TaskSettingsTime;
 
 export interface TaskResult {
   attempts: {

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Accordion,
   Button,
   Card,
   CardBody,
@@ -18,6 +19,7 @@ import {
   MenuContent,
   MenuItem,
   MenuTrigger,
+  Popover,
   Progress,
   Spinner,
   Switch,
@@ -28,6 +30,7 @@ import {
 } from '@material-tailwind/react';
 
 export {
+  Accordion,
   Button,
   Card,
   CardBody,
@@ -45,6 +48,7 @@ export {
   MenuContent,
   MenuItem,
   MenuTrigger,
+  Popover,
   Progress,
   Spinner,
   Switch,

@@ -6,6 +6,7 @@ import TokenGateway from '@/lib/wrappers/TokenGateway';
 import ComplexNavbar from '@/modules/navigation/components';
 import { Sidebar, SidebarMobile } from '@/modules/navigation/components/Sidebar';
 import SubNavbar from '@/modules/navigation/components/SubNavbar';
+import CompetitionSelectorGateway from '@/modules/selectors/competition/gateway';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -30,7 +31,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
                 <SidebarMobile />
                 <div className="flex">
                   <Sidebar />
-                  <div className="flex-1 max-w-full md:min-h-[calc(100vh-144px)] p-2 md:p-4">{children}</div>
+                  <div className="flex-1 max-w-full md:min-h-[calc(100vh-144px)] p-2 md:p-4">
+                    <CompetitionSelectorGateway />
+                    {children}
+                  </div>
                 </div>
                 <ToastContainer position="bottom-right" />
               </div>

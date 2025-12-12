@@ -1,6 +1,7 @@
-import { Category, Competition, User } from '@prisma/client';
+import { Category, Competition, Task, User } from '@prisma/client';
 import { FamilySettings } from '../types/competition';
 import { EnrollRequest } from '../types/enroll';
+import { TaskSettings } from '../types/task';
 
 export const EMPTY_USER: User = {
   id: '',
@@ -62,6 +63,23 @@ export const EMPTY_COMPETITION: Competition = {
   endDate: new Date(),
   enrollStart: new Date(),
   enrollEnd: new Date(),
+};
+
+export const DEFAULT_TASK_SETTINGS: TaskSettings = {
+  scoringSystem: 'normal',
+  maxAttempts: null,
+  timeLimit: null,
+};
+
+export const EMPTY_TASK: Task = {
+  name: '',
+  id: '',
+  type: 'route',
+  shortName: '',
+  settings: JSON.stringify(DEFAULT_TASK_SETTINGS),
+  competitionId: '',
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const EMPTY_FAMILY_SETTINGS: FamilySettings = {

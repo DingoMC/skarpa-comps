@@ -21,7 +21,7 @@ type Props = {
   onChange: (_: string | null) => void;
 };
 
-const generateLabel = (category: Category, labelYears?: boolean) => {
+export const generateCategoryLabel = (category: Category, labelYears?: boolean) => {
   if (!labelYears) return category.name;
   const year = new Date().getFullYear();
   if (category.minAge !== null && category.maxAge !== null) {
@@ -37,7 +37,10 @@ const generateLabel = (category: Category, labelYears?: boolean) => {
 };
 
 const SelectCategory = ({ categories, value, labelYears, disabled, onChange }: Props) => {
-  const options = useMemo(() => categories.map((r) => ({ label: generateLabel(r, labelYears), value: r.id })), [categories, labelYears]);
+  const options = useMemo(
+    () => categories.map((r) => ({ label: generateCategoryLabel(r, labelYears), value: r.id })),
+    [categories, labelYears]
+  );
 
   const handleChange = (newValue: SingleValue<OptionType>) => {
     if (!newValue) onChange(null);

@@ -1,11 +1,12 @@
 import { Action, ThunkAction, combineSlices, configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 import authSlice from './slices/auth';
+import competitionSlice from './slices/competition';
 import storage from './ssrSafeStorage';
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices(authSlice);
+const rootReducer = combineSlices(authSlice, competitionSlice);
 // const rootReducer = combineSlices(counterSlice, quotesApiSlice);
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
