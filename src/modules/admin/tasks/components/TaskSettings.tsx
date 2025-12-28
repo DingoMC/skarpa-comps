@@ -2,23 +2,50 @@
 
 import { Accordion, Typography } from '@/lib/mui';
 import { TaskSettings } from '@/lib/types/task';
-import TemplateButton from '@/modules/buttons/TemplateButton';
+import InputNumber from '@/modules/inputs/components/Number';
 import ScoringSystemSwitch from '@/modules/inputs/components/ScoringSystemSwitch';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
-import { FaArrowsLeftRightToLine, FaCircleNodes } from 'react-icons/fa6';
 import { IoIosArrowDown } from 'react-icons/io';
-import NewRangeDialog from './NewRangeDialog';
-import NewZoneDialog from './NewZoneDialog';
+import EditTaskLinearSettings from './TaskLinearSettings';
+import EditTaskMultilinearSettings from './TaskMultilinearSettings';
+import EditTaskRangeSettings from './TaskRangeSettings';
+import EditTaskTimeSettings from './TaskTimeSettings';
+import EditTaskZoneSettings from './TaskZoneSettings';
 
 type Props = {
   loading: boolean;
   settings: string;
   onChange: (_: string) => void;
+  onError: (_: boolean) => void;
 };
 
-const EditTaskSettings = ({ loading, settings, onChange }: Props) => {
+const EditTaskSettings = ({ loading, settings, onChange, onError }: Props) => {
   const data = useMemo(() => JSON.parse(settings) as TaskSettings, [settings]);
+  const zonesError = useMemo(() => data.scoringSystem === 'zones' && !data.zones.length, [data]);
+  const rangesError = useMemo(() => data.scoringSystem === 'ranges' && !data.ranges.data.length, [data]);
+  const rangesTError = useMemo(
+    () => data.scoringSystem === 'time' && data.time.transform === 'ranges' && !data.time.ranges.data.length,
+    [data]
+  );
+  const pLineError = useMemo(() => data.scoringSystem === 'multilinear' && !data.multilinear.data.length, [data]);
+  const [rangesBoundsError, setRangesBoundsError] = useState(false);
+  const [timeError, setTimeError] = useState(false);
+  const [plineBoundsError, setPLineBoundsError] = useState(false);
+  const [linearError, setLinearError] = useState(false);
+  const [maxAttError, setMaxAttError] = useState<string | null>(null);
+
+  useEffect(() => {
+    onError(
+      (data.scoringSystem === 'zones' && zonesError)
+        || (data.scoringSystem === 'ranges' && (rangesError || rangesBoundsError))
+        || (data.scoringSystem === 'time' && (timeError || rangesTError))
+        || (data.scoringSystem === 'linear' && linearError)
+        || (data.scoringSystem === 'multilinear' && (plineBoundsError || pLineError))
+        || maxAttError !== null
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, linearError, zonesError, rangesError, rangesBoundsError, plineBoundsError, pLineError, timeError, rangesTError, maxAttError]);
 
   const handleChange = (newData: TaskSettings) => {
     onChange(JSON.stringify(newData));
@@ -26,6 +53,24 @@ const EditTaskSettings = ({ loading, settings, onChange }: Props) => {
 
   return (
     <div className="flex flex-col gap-2 border border-gray-400 rounded-lg p-2">
+      <div className="flex flex-col md:items-center md:grid md:grid-cols-[max-content_1fr] md:gap-2 gap-px w-full">
+        <Typography className="text-sm md:mt-[14px]">Liczba podejść:</Typography>
+        <div className="flex flex-col gap-px max-w-[200px]">
+          <Typography className="text-xs italic text-gray-800">Puste = nieograniczona liczba</Typography>
+          <InputNumber
+            optional
+            min={1}
+            max={1000}
+            error={maxAttError !== null}
+            value={data.maxAttempts}
+            onChange={(maxAttempts, e) => {
+              handleChange({ ...data, maxAttempts });
+              setMaxAttError(e);
+            }}
+          />
+          {maxAttError !== null && <Typography className="text-xs text-red-600">{maxAttError}</Typography>}
+        </div>
+      </div>
       <div className="flex gap-2 flex-wrap items-center">
         <Typography className="text-sm">Schemat punktacji:</Typography>
         <ScoringSystemSwitch
@@ -46,7 +91,11 @@ const EditTaskSettings = ({ loading, settings, onChange }: Props) => {
               handleChange({
                 ...data,
                 scoringSystem,
-                multilinear: { b: 0, data: [{ min: 0, max: 10, coeff: 1 }], outOfMin: 0, outOfMax: 10 },
+                multilinear: {
+                  data: [],
+                  outOfMin: 0,
+                  outOfMax: 0,
+                },
               });
             }
           }}
@@ -104,67 +153,18 @@ const EditTaskSettings = ({ loading, settings, onChange }: Props) => {
           )}
         </Accordion.Item>
       </Accordion>
-      {data.scoringSystem === 'zones' && (
-        <div className="border border-gray-300 rounded-lg p-2">
-          <div className="flex items-center justify-between w-full">
-            <Typography className="font-semibold">Strefy</Typography>
-            <NewZoneDialog
-              loading={loading}
-              otherZones={data.zones}
-              onConfirm={(z) => handleChange({ ...data, zones: [...data.zones, z] })}
-            />
-          </div>
-          <div className="w-full h-px bg-gray-300 my-2" />
-          {!data.zones.length && <Typography className="text-xs text-red-600">Nie zdefiniowano żadnych stref.</Typography>}
-          <div className="flex flex-col gap-1">
-            {data.zones
-              .toSorted((a, b) => a.score - b.score)
-              .map((z) => (
-                <div key={z.shortName} className="flex items-center justify-between gap-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <FaCircleNodes className="w-4 h-4 text-pink-600" />
-                    <Typography className="text-sm">{`${z.name} (${z.shortName}): ${z.score} pkt.`}</Typography>
-                  </div>
-                  <TemplateButton
-                    template="delete"
-                    onClick={() => handleChange({ ...data, zones: data.zones.filter((v) => v.shortName !== z.shortName) })}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
+      {data.scoringSystem === 'zones' && <EditTaskZoneSettings data={data} loading={loading} handleChange={handleChange} />}
       {data.scoringSystem === 'ranges' && (
-        <div className="border border-gray-300 rounded-lg p-2">
-          <div className="flex items-center justify-between w-full">
-            <Typography className="font-semibold">Przedziały</Typography>
-            <NewRangeDialog
-              loading={loading}
-              otherRanges={data.ranges.data}
-              onConfirm={(r) => handleChange({ ...data, ranges: { ...data.ranges, data: [...data.ranges.data, r] } })}
-            />
-          </div>
-          <div className="w-full h-px bg-gray-300 my-2" />
-          {!data.ranges.data.length && <Typography className="text-xs text-red-600">Nie zdefiniowano żadnych przedziałów.</Typography>}
-          <div className="flex flex-col gap-1">
-            {data.ranges.data
-              .toSorted((a, b) => a.score - b.score)
-              .map((r) => (
-                <div key={r.min} className="flex items-center justify-between gap-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <FaArrowsLeftRightToLine className="w-4 h-4 text-purple-600" />
-                    <Typography className="text-sm">{`${r.min} - ${r.max}: ${r.score} pkt.`}</Typography>
-                  </div>
-                  <TemplateButton
-                    template="delete"
-                    onClick={() =>
-                      handleChange({ ...data, ranges: { ...data.ranges, data: data.ranges.data.filter((v) => v.min !== r.min) } })
-                    }
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
+        <EditTaskRangeSettings data={data} loading={loading} handleChange={handleChange} onError={(e) => setRangesBoundsError(e)} />
+      )}
+      {data.scoringSystem === 'linear' && (
+        <EditTaskLinearSettings data={data} loading={loading} handleChange={handleChange} onError={(e) => setLinearError(e)} />
+      )}
+      {data.scoringSystem === 'multilinear' && (
+        <EditTaskMultilinearSettings data={data} loading={loading} handleChange={handleChange} onError={(e) => setPLineBoundsError(e)} />
+      )}
+      {data.scoringSystem === 'time' && (
+        <EditTaskTimeSettings data={data} loading={loading} handleChange={handleChange} onError={(e) => setTimeError(e)} />
       )}
     </div>
   );

@@ -28,8 +28,8 @@ export const columns = (loading: boolean, categories: Category[], onEdit: (_: st
             triggerAs="icon"
             trigger={<FaTrash className="w-4 h-4 text-red-600" />}
             loading={loading}
-            header="Potwierdź usunięcie zawodów"
-            content={`Czy na pewno chcesz usunąć zadanie ${info.getValue().name} wraz z powiązanymi wynikami?
+            header="Potwierdź usunięcie zadania"
+            content={`Czy na pewno chcesz usunąć zadanie "${info.getValue().name}" wraz z powiązanymi wynikami?
             Ta operacja jest nieodwracalna!`}
             onConfirm={() => onDelete(info.getValue().id)}
           />
@@ -63,14 +63,14 @@ export const columns = (loading: boolean, categories: Category[], onEdit: (_: st
     id: 'categories',
     header: () => <div className="text-left">{columnNamesPL.get('categories')}</div>,
     cell: (info) => {
-      const currCatIds = info.getValue().map((v) => v.id);
+      const currCatIds = info.getValue().map((v) => v.categoryId);
       const catNames = categories
         .filter((v) => currCatIds.includes(v.id))
         .map((v) => ({ id: v.id, label: generateCategoryLabel(v, true) }));
       if (!currCatIds.length) return '-';
       return (
         <Popover placement="bottom">
-          <Popover.Trigger as={Typography} className="text-underline text-green-950 cursor-pointer">
+          <Popover.Trigger as={Typography} className="text-xs underline text-green-950 cursor-pointer">
             {currCatIds.length}
           </Popover.Trigger>
           <Popover.Content className="max-w-xs flex flex-col gap-px">

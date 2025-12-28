@@ -3,6 +3,7 @@
 import { Button, Dialog, IconButton, Switch, Typography } from '@/lib/mui';
 import { TaskRange } from '@/lib/types/task';
 import InputNumber from '@/modules/inputs/components/Number';
+import InputRealNumber from '@/modules/inputs/components/RealNumber';
 import { useEffect, useMemo, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
@@ -12,7 +13,7 @@ type Props = {
   onConfirm: (_: TaskRange) => void;
 };
 
-const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
+const NewTimeRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
   const [open, setOpen] = useState(false);
   const [newData, setNewData] = useState<TaskRange>({
     min: otherRanges.length > 0 ? otherRanges[0].max : 0,
@@ -48,7 +49,7 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
       <Dialog.Overlay>
         <Dialog.Content>
           <div className="flex items-center justify-between gap-4">
-            <Typography type="h6">Nowy przedział</Typography>
+            <Typography type="h6">Nowy przedział czasowy</Typography>
             <Dialog.DismissTrigger
               as={IconButton}
               size="sm"
@@ -64,11 +65,12 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
           <div className="flex flex-col md:grid md:grid-cols-[100px_1fr] gap-2 mb-6 mt-2 md:items-center">
             <Typography className="text-foreground text-sm">Min.:</Typography>
             <div className="flex flex-col">
-              <InputNumber
+              <InputRealNumber
                 optional={false}
                 disabled={loading || otherRanges.length > 0}
                 value={newData.min}
                 min={0}
+                maxPrecision={3}
                 onChange={(v) => {
                   setNewData((prevState) => ({ ...prevState, min: v }));
                 }}
@@ -86,11 +88,12 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
             />
             <Typography className="text-foreground text-sm">Max.:</Typography>
             <div className="flex flex-col">
-              <InputNumber
+              <InputRealNumber
                 optional={false}
                 disabled={loading}
                 value={newData.max}
                 min={0}
+                maxPrecision={3}
                 onChange={(v) => {
                   setNewData((prevState) => ({ ...prevState, max: v }));
                 }}
@@ -134,4 +137,4 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
   );
 };
 
-export default NewRangeDialog;
+export default NewTimeRangeDialog;

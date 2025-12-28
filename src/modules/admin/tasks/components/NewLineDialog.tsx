@@ -1,29 +1,31 @@
 'use client';
 
 import { Button, Dialog, IconButton, Switch, Typography } from '@/lib/mui';
-import { TaskRange } from '@/lib/types/task';
+import { TaskMultilinearCoeff } from '@/lib/types/task';
 import InputNumber from '@/modules/inputs/components/Number';
+import InputRealNumber from '@/modules/inputs/components/RealNumber';
 import { useEffect, useMemo, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
 type Props = {
   loading: boolean;
-  otherRanges: TaskRange[];
-  onConfirm: (_: TaskRange) => void;
+  otherRanges: TaskMultilinearCoeff[];
+  onConfirm: (_: TaskMultilinearCoeff) => void;
 };
 
-const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
+const NewLineDialog = ({ loading, otherRanges, onConfirm }: Props) => {
   const [open, setOpen] = useState(false);
-  const [newData, setNewData] = useState<TaskRange>({
+  const [newData, setNewData] = useState<TaskMultilinearCoeff>({
     min: otherRanges.length > 0 ? otherRanges[0].max : 0,
     minInclusive: otherRanges.length > 0 ? !otherRanges[0].maxInclusive : true,
     max: otherRanges.length > 0 ? otherRanges[0].max + 1 : 1,
     maxInclusive: true,
-    score: 0,
+    a: 1,
+    b: 0,
   });
-
-  const saveDisabled = useMemo(() => newData.min > newData.max, [newData]);
   const rangeError = useMemo(() => (newData.min >= newData.max ? 'Nieprawidłowy zakres.' : null), [newData]);
+
+  const saveDisabled = useMemo(() => newData.min > newData.max || rangeError !== null, [rangeError, newData]);
 
   useEffect(() => {
     setNewData({
@@ -31,7 +33,8 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
       minInclusive: otherRanges.length > 0 ? !otherRanges[0].maxInclusive : true,
       max: otherRanges.length > 0 ? otherRanges[0].max + 1 : 1,
       maxInclusive: true,
-      score: 0,
+      a: 1,
+      b: 0,
     });
   }, [open, otherRanges]);
 
@@ -48,7 +51,7 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
       <Dialog.Overlay>
         <Dialog.Content>
           <div className="flex items-center justify-between gap-4">
-            <Typography type="h6">Nowy przedział</Typography>
+            <Typography type="h6">Nowa funkcja liniowa</Typography>
             <Dialog.DismissTrigger
               as={IconButton}
               size="sm"
@@ -106,15 +109,25 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
                 setNewData((prevState) => ({ ...prevState, maxInclusive: !prevState.maxInclusive }));
               }}
             />
-            <Typography className="text-foreground text-sm">Punkty:</Typography>
+            <Typography className="text-foreground text-sm">Współczynnik a:</Typography>
             <div className="flex flex-col">
-              <InputNumber
+              <InputRealNumber
                 optional={false}
                 disabled={loading}
-                value={newData.score}
-                min={0}
+                value={newData.a}
                 onChange={(v) => {
-                  setNewData((prevState) => ({ ...prevState, score: v }));
+                  setNewData((prevState) => ({ ...prevState, a: v }));
+                }}
+              />
+            </div>
+            <Typography className="text-foreground text-sm">Współczynnik b:</Typography>
+            <div className="flex flex-col">
+              <InputRealNumber
+                optional={false}
+                disabled={loading}
+                value={newData.b}
+                onChange={(v) => {
+                  setNewData((prevState) => ({ ...prevState, b: v }));
                 }}
               />
             </div>
@@ -124,7 +137,7 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
             <Dialog.DismissTrigger as={Button} variant="ghost" color="error" disabled={loading}>
               Anuluj
             </Dialog.DismissTrigger>
-            <Button onClick={() => handleSave()} disabled={loading || saveDisabled || rangeError !== null}>
+            <Button onClick={() => handleSave()} disabled={loading || saveDisabled}>
               Dodaj
             </Button>
           </div>
@@ -134,4 +147,4 @@ const NewRangeDialog = ({ loading, otherRanges, onConfirm }: Props) => {
   );
 };
 
-export default NewRangeDialog;
+export default NewLineDialog;

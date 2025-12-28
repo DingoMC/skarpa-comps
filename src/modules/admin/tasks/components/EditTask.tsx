@@ -1,7 +1,7 @@
 'use client';
 
-import { EMPTY_TASK } from '@/lib/constants';
 import { Button, Typography } from '@/lib/mui';
+import { TaskCategoryIds } from '@/lib/types/task';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardFrame from '@/modules/dashboard/components';
 import SelectCategoryMulti from '@/modules/inputs/components/CategorySelectorMulti';
@@ -13,15 +13,15 @@ import EditTaskSettings from './TaskSettings';
 
 type Props = {
   loading: boolean;
-  currCompId: string;
   categories: Category[];
-  handleAdd: (_t: Task, _c: string[]) => Promise<void>;
+  original: TaskCategoryIds;
+  handleUpdate: (_t: Task, _c: string[]) => Promise<void>;
   handleBack: () => void;
 };
 
-const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Props) => {
-  const [task, setTask] = useState({ ...EMPTY_TASK, competitionId: currCompId });
-  const [categoryIds, setCategoryIds] = useState(categories.map((v) => v.id));
+const EditTask = ({ original, loading, categories, handleUpdate, handleBack }: Props) => {
+  const [task, setTask] = useState(original);
+  const [categoryIds, setCategoryIds] = useState(original.categories.map((v) => v.categoryId));
   const [nameError, setNameError] = useState<string | null>(null);
   const [settingsError, setSettingsError] = useState(false);
   const saveDisabled = useMemo(
@@ -30,12 +30,13 @@ const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Pro
   );
 
   useEffect(() => {
-    setCategoryIds(categories.map((v) => v.id));
-  }, [categories]);
+    setTask({ ...original });
+    setCategoryIds([...original.categories.map((v) => v.categoryId)]);
+  }, [original, categories]);
 
   return (
     <DashboardFrame
-      title="Nowe Zadanie"
+      title={`Edytuj Zadanie - ${original.name}`}
       refreshing={loading}
       cardHeaderRight={<TemplateButton template="back" disabled={loading} onClick={handleBack} />}
     >
@@ -91,7 +92,7 @@ const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Pro
         <Button
           color="info"
           disabled={saveDisabled}
-          onClick={() => handleAdd(task, categoryIds)}
+          onClick={() => handleUpdate(task, categoryIds)}
           className={`${saveDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {loading ? 'Zapisywanie...' : 'Zapisz'}
@@ -101,4 +102,4 @@ const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Pro
   );
 };
 
-export default NewTask;
+export default EditTask;

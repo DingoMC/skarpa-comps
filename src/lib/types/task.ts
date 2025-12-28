@@ -15,17 +15,22 @@ export interface TaskLinearCoeff {
 
 export interface TaskMultilinearCoeff {
   min: number;
+  minInclusive: boolean;
   max: number;
-  coeff: number;
+  maxInclusive: boolean;
+  a: number;
+  b: number;
 }
 
 export interface TaskRange {
   min: number;
+  minInclusive: boolean;
   max: number;
+  maxInclusive: boolean;
   score: number;
 }
 
-export type TaskTimeAggType = 'best' | 'worst' | 'sum' | 'avg';
+export type TaskTimeAggType = 'best' | 'sum' | 'avg';
 export type TaskTimeTransformType = 'linear' | 'hyperbolic' | 'ranges';
 
 export interface TaskSettingsBase {
@@ -59,7 +64,6 @@ export interface TaskSettingsRanges extends TaskSettingsBase {
 export interface TaskSettingsMultilinear extends TaskSettingsBase {
   scoringSystem: 'multilinear';
   multilinear: {
-    b: number;
     data: TaskMultilinearCoeff[];
     outOfMin: number;
     outOfMax: number;
@@ -109,5 +113,5 @@ export interface TaskResult {
 }
 
 export interface TaskCategoryIds extends Task {
-  categories: { id: string }[];
+  categories: { categoryId: string }[];
 }

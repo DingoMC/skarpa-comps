@@ -170,14 +170,26 @@ model Task {
         score: number,
       }[],
       ranges?: {
-        data: { min: number, max: number, score: number }[],
+        data: {
+          min: number;
+          minInclusive: boolean;
+          max: number;
+          maxInclusive: boolean;
+          score: number;
+        }[],
         outOfMin: number,
         outOfMax: number,
       },
       linear?: { a: number, b: number },
       multilinear?: {
-        b: number,
-        data: { min: number, max: number, coeff: number }[],
+        data: {
+          min: number;
+          minInclusive: boolean;
+          max: number;
+          maxInclusive: boolean;
+          a: number;
+          b: number;
+        }[],
         outOfMin: number,
         outOfMax: number,
       },
@@ -185,7 +197,13 @@ model Task {
         method: 'best' | 'worst' | 'sum' | 'avg',
         transform: 'linear' | 'hyperbolic' | 'ranges',
         ranges?: {
-          data: { min: number, max: number, score: number }[],
+          data: {
+            min: number;
+            minInclusive: boolean;
+            max: number;
+            maxInclusive: boolean;
+            score: number;
+          }[],
           outOfMin: number,
           outOfMax: number
         },

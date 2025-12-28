@@ -17,7 +17,7 @@ type Props = {
 
 const ConfirmDialog = ({ header, trigger, triggerAs, content, loading, cancelButtonText, confirmButtonText, onConfirm }: Props) => (
   <Dialog>
-    <Dialog.Trigger as={triggerAs === 'icon' ? IconButton : Button} variant="ghost" size="sm">
+    <Dialog.Trigger as={triggerAs === 'icon' ? IconButton : Button} variant="ghost" size="sm" disabled={loading}>
       {trigger}
     </Dialog.Trigger>
     <Dialog.Overlay>

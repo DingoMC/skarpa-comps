@@ -125,7 +125,7 @@ const classes = {
   headerRow: 'uppercase',
   th: 'py-2 px-4 text-sm font-medium border-b border-b-gray-300',
   nodata: 'p-4 md:p-8 border border-gray-100',
-  row: 'even:bg-blue-gray-50/50 border-b hover:bg-gray-200 cursor-pointer',
+  row: 'even:bg-blue-gray-50/50 border-b border-b-gray-300 hover:bg-gray-200 cursor-pointer',
   cell: 'px-4 py-2 text-xs',
 };
 

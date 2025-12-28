@@ -17,6 +17,21 @@ export const getAllTasksForComp = async (compId: string) => {
   return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
 };
 
+export const getTaskById = async (taskId: string) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/tasks',
+    method: 'GET',
+    params: { task_id: taskId.trim() },
+  });
+  if (error === null && data) {
+    return { success: true, error, data: data as TaskCategoryIds };
+  }
+  if (error === null && data && data.message) {
+    return { success: false, error: data.message as string, data: null };
+  }
+  return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
+};
+
 export const createTaskAdmin = async (taskData: Task, categoryIds: string[]) => {
   const { data, error } = await axiosRequest({
     url: '/api/admin/tasks',

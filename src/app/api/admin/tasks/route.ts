@@ -14,11 +14,19 @@ export async function GET(req: NextRequest) {
   if (compId !== null && compId.length) {
     const found = await prisma.task.findMany({
       where: { competitionId: compId.trim() },
-      include: { categories: { select: { id: true } } },
+      include: { categories: { select: { categoryId: true } } },
     });
     return Response.json(found, { status: 200 });
   }
-  const data = await prisma.task.findMany({ include: { categories: { select: { id: true } } } });
+  const taskId = req.nextUrl.searchParams.get('task_id');
+  if (taskId !== null && taskId.length) {
+    const found = await prisma.task.findUnique({
+      where: { id: taskId.trim() },
+      include: { categories: { select: { categoryId: true } } },
+    });
+    return Response.json(found, { status: 200 });
+  }
+  const data = await prisma.task.findMany({ include: { categories: { select: { categoryId: true } } } });
   return Response.json(data, { status: 200 });
 }
 
