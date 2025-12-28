@@ -256,6 +256,11 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
                       onChange={(v, e) => {
                         setData((prev) => ({ ...prev, password: v }));
                         setPasswordError(e);
+                        if (v !== repeatPassword) {
+                          setRepeatPasswordError('Powtórz poprawnie swoje hasło.');
+                        } else {
+                          setRepeatPasswordError(null);
+                        }
                       }}
                     />
                     {passwordError !== null && <Typography className="text-xs text-red-600">{passwordError}</Typography>}
