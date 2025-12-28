@@ -123,7 +123,7 @@ const AdminEditUser = ({ initUser, loading, roles, handleEdit, onRefresh, handle
             checked={user.isPZAMember}
             onChange={() => setUser((prev) => ({ ...prev, isPZAMember: !prev.isPZAMember }))}
           />
-          <Typography className="text-sm">Członek PZA</Typography>
+          <Typography className="text-sm">Zawodnik PZA</Typography>
         </div>
         <div className="md:col-span-2 flex justify-center mt-2">
           <Button
