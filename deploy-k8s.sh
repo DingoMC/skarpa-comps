@@ -87,7 +87,7 @@ echo -e "$(header)${ACK} ${GREEN}Docker image built successfully!${NC}"
 
 # Tag the image
 echo -e "$(header)${CALL} ${YELLOW}Tagging Docker image as ${DARK_AQUA}${IMAGE_NAME}:${NEW_VERSION}${YELLOW}...${NC}"
-docker tag "skarpa-comps-$CONTAINER_NAME:latest" "$IMAGE_NAME:$NEW_VERSION"
+docker tag "skarpa-comps_$CONTAINER_NAME:latest" "$IMAGE_NAME:$NEW_VERSION"
 if [ $? -ne 0 ]; then
   echo -e "$(header)${ERR} ${RED}Docker tag failed!${NC}"
   exit 1
