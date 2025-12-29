@@ -53,9 +53,14 @@ const SingleCompetition = ({ data, loading }: Props) => {
         <Typography className="text-sm">Uczestnicy:</Typography>
         <div className="text-xs px-1.5 py-0.5 bg-gray-600 text-white rounded-lg font-semibold">{data.countAll}</div>
         <Typography className="text-sm font-semibold">-</Typography>
-        <div className="text-xs px-1.5 py-0.5 bg-blue-500 text-white rounded-lg font-semibold">{data.countMen}</div>
-        <Typography className="text-sm font-semibold">/</Typography>
-        <div className="text-xs px-1.5 py-0.5 bg-pink-500 text-white rounded-lg font-semibold">{data.countWomen}</div>
+        <div
+          className="flex gap-2 items-center text-xs px-1.5 py-0.5 text-white rounded-lg font-semibold"
+          style={{ background: 'linear-gradient(110deg, #155dfc, #155dfc 35%, #e60076 65%, #e60076)' }}
+        >
+          <div>{data.countMen}</div>
+          <div>/</div>
+          <div>{data.countWomen}</div>
+        </div>
       </div>
       {user !== null && data.alreadyEnrolled && (
         <div className="flex w-max items-center gap-1 text-xs px-1.5 py-0.5 bg-lime-700 text-white rounded font-semibold">
