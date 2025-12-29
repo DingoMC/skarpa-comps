@@ -1,44 +1,34 @@
 'use client';
 
-import { defaultStyleOutlined } from '@/lib/themes/react-select/select';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
+import InputNumber from './Number';
 
-const animatedComponents = makeAnimated();
+const getMax = () => new Date().getFullYear();
 
-type OptionType = {
-  label: string;
-  value: number;
-};
-
-const options = () => {
-  const opts: OptionType[] = [];
-  const max = new Date().getFullYear();
-  const min = max - 100;
-  for (let i = min; i <= max; i++) {
-    opts.push({ label: i.toFixed(0), value: i });
-  }
-  return opts;
-};
+const getMin = () => getMax() - 100;
 
 type Props = {
   value: number;
+  error?: boolean;
+  placeholder?: string;
+  className?: string;
   disabled?: boolean;
-  onChange: (_: number) => void;
+  onChange: (_: number, _e: string | null) => void;
 };
 
-const SelectBirthYear = ({ value, disabled, onChange }: Props) => {
+const InputBirthYear = ({ value, disabled, error, placeholder, className, onChange }: Props) => {
   return (
-    <Select<OptionType>
-      value={options().find((option) => option.value === value) ?? null}
-      defaultValue={{ label: new Date().getFullYear().toFixed(0), value: new Date().getFullYear() }}
-      components={animatedComponents}
-      options={options()}
-      onChange={(v) => onChange(v?.value ?? new Date().getFullYear())}
-      styles={defaultStyleOutlined<OptionType>({ minWidth: '60px', menuHeight: '200px' })}
-      isDisabled={disabled}
+    <InputNumber
+      optional={false}
+      value={value}
+      onChange={onChange}
+      error={error}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={className}
+      min={getMin()}
+      max={getMax()}
     />
   );
 };
 
-export default SelectBirthYear;
+export default InputBirthYear;

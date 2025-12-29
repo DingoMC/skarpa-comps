@@ -4,7 +4,7 @@ import { Button, Switch, Typography } from '@/lib/mui';
 import { UserUI } from '@/lib/types/auth';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardFrame from '@/modules/dashboard/components';
-import SelectBirthYear from '@/modules/inputs/components/BirthYear';
+import InputBirthYear from '@/modules/inputs/components/BirthYear';
 import GenderSwitch from '@/modules/inputs/components/GenderSwitch';
 import InputName from '@/modules/inputs/components/Name';
 import SelectRole from '@/modules/inputs/components/Role';
@@ -25,6 +25,7 @@ const AdminEditUser = ({ initUser, loading, roles, handleEdit, onRefresh, handle
   const [user, setUser] = useState<User>({ ...initUser, password: '' });
   const [firstNameError, setFirstNameError] = useState<string | null>(null);
   const [lastNameError, setLastNameError] = useState<string | null>(null);
+  const [yearError, setYearError] = useState<string | null>(null);
 
   const saveDisabled = useMemo(
     () =>
@@ -32,8 +33,9 @@ const AdminEditUser = ({ initUser, loading, roles, handleEdit, onRefresh, handle
       || !user.lastName.length
       || !roles.find((r) => r.id === user.roleId)
       || firstNameError !== null
-      || lastNameError !== null,
-    [roles, firstNameError, lastNameError, user]
+      || lastNameError !== null
+      || yearError !== null,
+    [roles, firstNameError, lastNameError, yearError, user]
   );
 
   return (
@@ -100,8 +102,17 @@ const AdminEditUser = ({ initUser, loading, roles, handleEdit, onRefresh, handle
           }}
         />
         <Typography type="p">Rok urodzenia:</Typography>
-        <div className="mb-2 md:mb-0">
-          <SelectBirthYear value={user.yearOfBirth} onChange={(v) => setUser((prev) => ({ ...prev, yearOfBirth: v }))} />
+        <div className="flex flex-col gap-px mb-2 md:mb-0">
+          <InputBirthYear
+            value={user.yearOfBirth}
+            disabled={loading}
+            error={yearError !== null}
+            onChange={(v, e) => {
+              setUser((prev) => ({ ...prev, yearOfBirth: v }));
+              setYearError(e);
+            }}
+          />
+          {yearError !== null && <Typography className="text-xs text-red-600">{yearError}</Typography>}
         </div>
         <Typography type="p">Płeć:</Typography>
         <div className="mb-2 md:mb-0">

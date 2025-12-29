@@ -6,7 +6,7 @@ import { transformName } from '@/lib/text';
 import { UserUI } from '@/lib/types/auth';
 import { EnrollRequest } from '@/lib/types/enroll';
 import DashboardFrame from '@/modules/dashboard/components';
-import SelectBirthYear from '@/modules/inputs/components/BirthYear';
+import InputBirthYear from '@/modules/inputs/components/BirthYear';
 import SelectCategory from '@/modules/inputs/components/CategorySelector';
 import SelectCompetition from '@/modules/inputs/components/CompSelector';
 import InputEmail from '@/modules/inputs/components/Email';
@@ -16,7 +16,6 @@ import InputPassword from '@/modules/inputs/components/Password';
 import InputString from '@/modules/inputs/components/String';
 import { Category, Competition } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
-import { autoAssignCategoryByAge } from '../utils';
 
 type Props = {
   user: UserUI | null;
@@ -36,6 +35,7 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [repeatPasswordError, setRepeatPasswordError] = useState<string | null>(null);
+  const [yearError, setYearError] = useState<string | null>(null);
   const [repeatPassword, setRepeatPassword] = useState('');
 
   const saveDisabled = useMemo(
@@ -52,8 +52,9 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
           || !data.email.length
           || emailError !== null))
       || firstNameError !== null
-      || lastNameError !== null,
-    [firstNameError, lastNameError, emailError, data, repeatPassword, passwordError, repeatPasswordError]
+      || lastNameError !== null
+      || yearError !== null,
+    [firstNameError, lastNameError, emailError, data, repeatPassword, passwordError, repeatPasswordError, yearError]
   );
 
   useEffect(() => {
@@ -134,11 +135,17 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
             }}
           />
           <Typography type="p">Rok urodzenia:</Typography>
-          <div className="mb-2 md:mb-0">
-            <SelectBirthYear
+          <div className="flex flex-col gap-px mb-2 md:mb-0">
+            <InputBirthYear
               value={data.yearOfBirth}
-              onChange={(v) => setData((prev) => ({ ...prev, yearOfBirth: v, categoryId: autoAssignCategoryByAge(v, categories) }))}
+              disabled={loading}
+              error={yearError !== null}
+              onChange={(v, e) => {
+                setData((prev) => ({ ...prev, yearOfBirth: v }));
+                setYearError(e);
+              }}
             />
+            {yearError !== null && <Typography className="text-xs text-red-600">{yearError}</Typography>}
           </div>
           <Typography type="p">Kategoria:</Typography>
           <div className="flex flex-col gap-px mb-2 md:mb-0">

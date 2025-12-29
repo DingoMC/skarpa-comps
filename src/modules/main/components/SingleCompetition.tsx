@@ -78,7 +78,7 @@ const SingleCompetition = ({ data, loading }: Props) => {
         <Button size="sm" variant="gradient" color="secondary" disabled={loading}>
           Lista
         </Button>
-        {isEnrollable && (
+        {isEnrollable && (user === null || !data.alreadyEnrolled) && (
           <Button size="sm" variant="gradient" color="success" disabled={loading} onClick={() => handleClickEnroll()}>
             Zapisz się
           </Button>
