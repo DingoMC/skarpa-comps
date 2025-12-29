@@ -37,6 +37,10 @@ const SingleCompetition = ({ data, loading }: Props) => {
     router.push(`/comp_signups?id=${data.id}`);
   };
 
+  const handleClickList = () => {
+    router.push(`/comp_list?id=${data.id}`);
+  };
+
   return (
     <div className="p-2 flex flex-col gap-2 border rounded-lg border-gray-400">
       <Typography className="text-xl font-semibold">{data.name}</Typography>
@@ -80,7 +84,7 @@ const SingleCompetition = ({ data, loading }: Props) => {
         <Button size="sm" variant="gradient" color="info" disabled={loading}>
           Wyniki
         </Button>
-        <Button size="sm" variant="gradient" color="secondary" disabled={loading}>
+        <Button size="sm" variant="gradient" color="secondary" disabled={loading} onClick={() => handleClickList()}>
           Lista
         </Button>
         {isEnrollable && (user === null || !data.alreadyEnrolled) && (

@@ -1,4 +1,5 @@
 import { siteMap } from '@/lib/siteMap';
+import StartListsWrapper from '@/modules/start_lists/wrappers';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -6,6 +7,6 @@ export const metadata: Metadata = {
   description: 'Witamy na stronie - Zawody Skarpa Lublin',
 };
 
-const Page = () => <div>Lista Startowa</div>;
+const Page = () => <StartListsWrapper />;
 
 export default Page;

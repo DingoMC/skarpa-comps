@@ -10,7 +10,7 @@ type Props = {
   value: number;
   error?: boolean;
   placeholder?: string;
-  className?: string;
+  className?: `${string}`;
   disabled?: boolean;
   onChange: (_: number, _e: string | null) => void;
 };

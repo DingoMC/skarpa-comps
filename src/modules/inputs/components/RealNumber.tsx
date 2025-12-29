@@ -7,7 +7,7 @@ import { MAX_INPUT_LENGTH } from '../constants';
 interface BaseProps {
   error?: boolean;
   placeholder?: string;
-  className?: string;
+  className?: `${string}`;
   disabled?: boolean;
   min?: number;
   max?: number;

@@ -41,6 +41,11 @@ type Props<T> = {
    */
   refetching?: boolean;
   /**
+   * Should show refreshing icon
+   * @default false
+   */
+  noActionButtons?: boolean;
+  /**
    * Additional classes for Dashboard
    * @default ''
    */
@@ -123,10 +128,12 @@ const classes = {
   table: 'w-full table-auto',
   thead: 'bg-white',
   headerRow: 'uppercase',
-  th: 'py-1 px-2 text-sm font-medium border-b border-b-gray-300',
+  th: 'py-2 px-4 text-sm font-medium border-b border-b-gray-300',
+  thLittlePadding: 'py-1 px-2 text-sm font-medium border-b border-b-gray-300',
   nodata: 'p-4 md:p-8 border border-gray-100',
-  row: 'even:bg-blue-gray-50/50 border-b border-b-gray-300 hover:bg-gray-200 cursor-pointer',
-  cell: 'px-2 py-1 text-xs',
+  row: 'even:bg-blue-gray-50/50 border-b border-b-gray-200 hover:bg-gray-100 cursor-pointer',
+  cell: 'px-4 py-2 text-xs',
+  cellLittlePadding: 'px-2 py-1 text-xs',
 };
 
 /**
@@ -154,6 +161,7 @@ function DashboardTable<T>({
   cardHeaderRight,
   customFilterInputs,
   noDataMessage,
+  noActionButtons,
 }: Props<T>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -223,7 +231,12 @@ function DashboardTable<T>({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className={classes.headerRow}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className={classes.th} colSpan={header.colSpan} style={{ width: header.getSize() }}>
+                  <th
+                    key={header.id}
+                    className={noActionButtons ? classes.th : classes.thLittlePadding}
+                    colSpan={header.colSpan}
+                    style={{ width: header.getSize() }}
+                  >
                     <TableHeader<T>
                       header={header}
                       searchToggle={searchToggle}
@@ -254,7 +267,11 @@ function DashboardTable<T>({
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className={classes.cell} style={{ width: cell.column.getSize() }}>
+                    <td
+                      key={cell.id}
+                      className={noActionButtons ? classes.cell : classes.cellLittlePadding}
+                      style={{ width: cell.column.getSize() }}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

@@ -8,7 +8,7 @@ type Props = {
   value: string;
   error?: boolean;
   placeholder?: string;
-  className?: string;
+  className?: `${string}`;
   disabled?: boolean;
   allowMultiple?: boolean;
   autoComplete?: HTMLInputAutoCompleteAttribute;

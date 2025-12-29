@@ -29,7 +29,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     endDate: 'Zakończenie zawodów',
     enrollStart: 'Rozpoczęcie zapisów',
     enrollEnd: 'Zakończenie zapisów',
-    startNumber: 'Nr startowy',
+    startNumber: 'Numer',
     requestsFamilyRanking: 'Rodzinna',
     hasPaid: 'Opłacono',
     underageConsent: 'Oświadczenie -18',

@@ -6,7 +6,7 @@ type SkarpaProgressProps = {
   value: number;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'filled' | 'gradient';
-  className?: string;
+  className?: `${string}`;
   barClassName?: string;
 };
 

@@ -3,7 +3,7 @@
 import { Spinner } from '@/lib/mui';
 
 type SkarpaSpinnerProps = {
-  className?: string;
+  className?: `${string}`;
 };
 
 const SkarpaSpinner = ({ className }: SkarpaSpinnerProps) => (

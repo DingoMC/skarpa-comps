@@ -12,7 +12,7 @@ type Props = {
   placeholder?: string;
   repeatAfter?: string;
   autoComplete?: 'new-password' | 'current-password';
-  className?: string;
+  className?: `${string}`;
   onChange: (_: string, _e: string | null) => void;
 };
 
