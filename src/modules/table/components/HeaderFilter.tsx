@@ -40,7 +40,9 @@ const HeaderFilter = ({ input, value, onChange }: Props) => {
         onChange={(v) => onChange(v?.value ?? null)}
         components={animatedComponents}
         options={input.options}
-        styles={defaultStyle<{ label: string; value: string }>({ minWidth: '40px' })}
+        placeholder="Wybierz..."
+        noOptionsMessage={() => 'Brak opcji.'}
+        styles={defaultStyle<{ label: string; value: string }>({ minWidth: '40px', menuHeight: '120px' })}
       />
     </div>
   );

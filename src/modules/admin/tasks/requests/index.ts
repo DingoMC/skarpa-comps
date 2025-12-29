@@ -1,6 +1,6 @@
-import axiosRequest from "@/lib/axios";
-import { TaskCategoryIds } from "@/lib/types/task";
-import { Task } from "@prisma/client";
+import axiosRequest from '@/lib/axios';
+import { TaskCategoryIds } from '@/lib/types/task';
+import { Task, TaskScoringTemplate } from '@prisma/client';
 
 export const getAllTasksForComp = async (compId: string) => {
   const { data, error } = await axiosRequest({
@@ -65,6 +65,50 @@ export const updateTaskAdmin = async (taskData: Task, categoryIds: string[]) => 
 export const deleteTaskAdmin = async (id: string) => {
   const { data, error } = await axiosRequest({
     url: '/api/admin/tasks',
+    method: 'DELETE',
+    params: { id },
+  });
+  if (error === null) {
+    return { success: true, error };
+  }
+  if (data && data.message) {
+    return { success: false, error: data.message as string };
+  }
+  return { success: false, error: error.message };
+};
+
+export const getTaskTemplatesAdmin = async () => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/scoring_templates',
+    method: 'GET',
+  });
+  if (error === null && data && Array.isArray(data)) {
+    return { success: true, error, data: data as TaskScoringTemplate[] };
+  }
+  if (error === null && data && data.message) {
+    return { success: false, error: data.message as string, data: null };
+  }
+  return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
+};
+
+export const createTaskTemplateAdmin = async (name: string, settings: string) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/scoring_templates',
+    method: 'POST',
+    data: { name, settings },
+  });
+  if (error === null) {
+    return { success: true, error };
+  }
+  if (data && data.message) {
+    return { success: false, error: data.message as string };
+  }
+  return { success: false, error: error.message };
+};
+
+export const deleteTaskTemplateAdmin = async (id: string) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/scoring_templates',
     method: 'DELETE',
     params: { id },
   });

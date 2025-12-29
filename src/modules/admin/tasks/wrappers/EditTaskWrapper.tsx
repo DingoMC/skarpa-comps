@@ -4,13 +4,13 @@ import { TaskCategoryIds } from '@/lib/types/task';
 import DashboardFrame from '@/modules/dashboard/components';
 import DashboardSpinner from '@/modules/dashboard/components/Spinner';
 import NoData from '@/modules/lottie/NoData';
-import { Category, Task } from '@prisma/client';
+import { Category, Task, TaskScoringTemplate } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getAllCategoriesAdmin } from '../../categories/requests';
 import EditTask from '../components/EditTask';
-import { getTaskById, updateTaskAdmin } from '../requests';
+import { createTaskTemplateAdmin, getTaskById, getTaskTemplatesAdmin, updateTaskAdmin } from '../requests';
 
 type Props = {
   id: string;
@@ -21,6 +21,7 @@ const EditTaskWrapper = ({ id }: Props) => {
   const [loading, setLoading] = useState(true);
   const [refetching, setRefetching] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [templates, setTemplates] = useState<TaskScoringTemplate[]>([]);
   const router = useRouter();
 
   const handleUpdate = async (newData: Task, categoryIds: string[]) => {
@@ -35,6 +36,14 @@ const EditTaskWrapper = ({ id }: Props) => {
     setRefetching(false);
   };
 
+  const loadTemplates = async () => {
+    const resp = await getTaskTemplatesAdmin();
+    if (resp.error !== null) {
+      toast.error(resp.error);
+      setTemplates([]);
+    } else setTemplates(resp.data);
+  };
+
   const loadData = async () => {
     const resp = await getTaskById(id);
     if (resp.error !== null) {
@@ -46,7 +55,20 @@ const EditTaskWrapper = ({ id }: Props) => {
       toast.error(resp2.error);
       setCategories([]);
     } else setCategories(resp2.data);
+    await loadTemplates();
     setLoading(false);
+  };
+
+  const handleAddTemplate = async (name: string, settings: string) => {
+    setRefetching(true);
+    const resp = await createTaskTemplateAdmin(name, settings);
+    if (resp.error !== null) {
+      toast.error(resp.error);
+    } else {
+      await loadTemplates();
+      toast.success('Szablon utworzony pomyślnie.');
+    }
+    setRefetching(false);
   };
 
   const handleBack = () => {
@@ -70,7 +92,17 @@ const EditTaskWrapper = ({ id }: Props) => {
     );
   }
 
-  return <EditTask original={data} loading={refetching} categories={categories} handleUpdate={handleUpdate} handleBack={handleBack} />;
+  return (
+    <EditTask
+      original={data}
+      loading={refetching}
+      categories={categories}
+      templates={templates}
+      onAddTemplate={handleAddTemplate}
+      handleUpdate={handleUpdate}
+      handleBack={handleBack}
+    />
+  );
 };
 
 export default EditTaskWrapper;

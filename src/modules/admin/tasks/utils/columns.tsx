@@ -5,6 +5,7 @@ import { TaskCategoryIds } from '@/lib/types/task';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import ConfirmDialog from '@/modules/dialogs/ConfirmDialog';
 import { generateCategoryLabel } from '@/modules/inputs/components/CategorySelector';
+import { TASK_TYPES } from '@/modules/inputs/components/TaskTypeSelector';
 import { Category } from '@prisma/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { FaCog } from 'react-icons/fa';
@@ -12,7 +13,13 @@ import { FaTrash } from 'react-icons/fa6';
 
 const columnHelper = createColumnHelper<TaskCategoryIds>();
 
-export const columns = (loading: boolean, categories: Category[], onEdit: (_: string) => void, onDelete: (_: string) => void) => [
+export const columns = (
+  loading: boolean,
+  categories: Category[],
+  onEdit: (_: string) => void,
+  onClone: (_: string) => void,
+  onDelete: (_: string) => void
+) => [
   columnHelper.accessor((row) => row, {
     id: 'actions',
     header: () => (
@@ -24,6 +31,7 @@ export const columns = (loading: boolean, categories: Category[], onEdit: (_: st
       return (
         <div className="flex items-center gap-1">
           <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue().id)} />
+          <TemplateButton template="clone" disabled={loading} onClick={() => onClone(info.getValue().id)} />
           <ConfirmDialog
             triggerAs="icon"
             trigger={<FaTrash className="w-4 h-4 text-red-600" />}
@@ -55,7 +63,7 @@ export const columns = (loading: boolean, categories: Category[], onEdit: (_: st
   columnHelper.accessor((row) => row.type, {
     id: 'type',
     header: () => <div className="text-left">{columnNamesPL.get('type')}</div>,
-    cell: (info) => info.getValue(),
+    cell: (info) => TASK_TYPES.find((v) => v.value === info.getValue())?.label ?? 'N/A',
     enableColumnFilter: true,
     enableSorting: true,
   }),

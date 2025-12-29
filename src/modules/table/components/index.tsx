@@ -123,10 +123,10 @@ const classes = {
   table: 'w-full table-auto',
   thead: 'bg-white',
   headerRow: 'uppercase',
-  th: 'py-2 px-4 text-sm font-medium border-b border-b-gray-300',
+  th: 'py-1 px-2 text-sm font-medium border-b border-b-gray-300',
   nodata: 'p-4 md:p-8 border border-gray-100',
   row: 'even:bg-blue-gray-50/50 border-b border-b-gray-300 hover:bg-gray-200 cursor-pointer',
-  cell: 'px-4 py-2 text-xs',
+  cell: 'px-2 py-1 text-xs',
 };
 
 /**

@@ -2,7 +2,7 @@
 
 import { IconButton, Tooltip, Typography } from '@/lib/mui';
 import { FaEdit, FaPlus } from 'react-icons/fa';
-import { FaTrash } from 'react-icons/fa6';
+import { FaRegCopy, FaTrash } from 'react-icons/fa6';
 import { IoMdDownload } from 'react-icons/io';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
 import { TbRefresh } from 'react-icons/tb';
@@ -26,6 +26,11 @@ const templates = {
   edit: {
     icon: <FaEdit className="w-4 h-4 text-gray-900" />,
     tooltip: 'Edytuj',
+    color: 'primary',
+  },
+  clone: {
+    icon: <FaRegCopy className="w-4 h-4 text-gray-900" />,
+    tooltip: 'Utwórz kopię',
     color: 'primary',
   },
   delete: {

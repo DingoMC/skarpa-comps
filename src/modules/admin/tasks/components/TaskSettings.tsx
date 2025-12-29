@@ -1,26 +1,40 @@
 'use client';
 
-import { Accordion, Typography } from '@/lib/mui';
+import { Accordion, Button, Typography } from '@/lib/mui';
+import { defaultStyleOutlined } from '@/lib/themes/react-select/select';
 import { TaskSettings } from '@/lib/types/task';
 import InputNumber from '@/modules/inputs/components/Number';
 import ScoringSystemSwitch from '@/modules/inputs/components/ScoringSystemSwitch';
+import InputString from '@/modules/inputs/components/String';
+import { TaskScoringTemplate } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
+import Select, { SingleValue } from 'react-select';
+import makeAnimated from 'react-select/animated';
 import EditTaskLinearSettings from './TaskLinearSettings';
 import EditTaskMultilinearSettings from './TaskMultilinearSettings';
 import EditTaskRangeSettings from './TaskRangeSettings';
 import EditTaskTimeSettings from './TaskTimeSettings';
 import EditTaskZoneSettings from './TaskZoneSettings';
 
+const animatedComponents = makeAnimated();
+
+type TemplOptionType = {
+  label: string;
+  value: TaskScoringTemplate;
+};
+
 type Props = {
   loading: boolean;
   settings: string;
+  templates: TaskScoringTemplate[];
+  onAddTemplate: (_n: string, _s: string) => Promise<void>;
   onChange: (_: string) => void;
   onError: (_: boolean) => void;
 };
 
-const EditTaskSettings = ({ loading, settings, onChange, onError }: Props) => {
+const EditTaskSettings = ({ loading, settings, templates, onAddTemplate, onChange, onError }: Props) => {
   const data = useMemo(() => JSON.parse(settings) as TaskSettings, [settings]);
   const zonesError = useMemo(() => data.scoringSystem === 'zones' && !data.zones.length, [data]);
   const rangesError = useMemo(() => data.scoringSystem === 'ranges' && !data.ranges.data.length, [data]);
@@ -34,25 +48,62 @@ const EditTaskSettings = ({ loading, settings, onChange, onError }: Props) => {
   const [plineBoundsError, setPLineBoundsError] = useState(false);
   const [linearError, setLinearError] = useState(false);
   const [maxAttError, setMaxAttError] = useState<string | null>(null);
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [newTemplateNameError, setNewTemplateNameError] = useState<string | null>(null);
+  const [currTemplate, setCurrTemplate] = useState<TaskScoringTemplate | null>(null);
+  const templOptions = useMemo(() => templates.map((t) => ({ label: t.name, value: t })), [templates]);
+  const settingsError = useMemo(
+    () =>
+      (data.scoringSystem === 'zones' && zonesError)
+      || (data.scoringSystem === 'ranges' && (rangesError || rangesBoundsError))
+      || (data.scoringSystem === 'time' && (timeError || rangesTError))
+      || (data.scoringSystem === 'linear' && linearError)
+      || (data.scoringSystem === 'multilinear' && (plineBoundsError || pLineError))
+      || maxAttError !== null,
+    [data, linearError, zonesError, rangesError, rangesBoundsError, plineBoundsError, pLineError, timeError, rangesTError, maxAttError]
+  );
 
   useEffect(() => {
-    onError(
-      (data.scoringSystem === 'zones' && zonesError)
-        || (data.scoringSystem === 'ranges' && (rangesError || rangesBoundsError))
-        || (data.scoringSystem === 'time' && (timeError || rangesTError))
-        || (data.scoringSystem === 'linear' && linearError)
-        || (data.scoringSystem === 'multilinear' && (plineBoundsError || pLineError))
-        || maxAttError !== null
-    );
+    onError(settingsError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, linearError, zonesError, rangesError, rangesBoundsError, plineBoundsError, pLineError, timeError, rangesTError, maxAttError]);
+  }, [settingsError]);
 
   const handleChange = (newData: TaskSettings) => {
     onChange(JSON.stringify(newData));
   };
 
+  const handleChangeTemplate = (newValue: SingleValue<TemplOptionType>) => {
+    if (newValue) {
+      setCurrTemplate(newValue.value);
+      onChange(newValue.value.settings);
+    } else {
+      setCurrTemplate(null);
+    }
+  };
+
+  const handleAddTemplate = async () => {
+    await onAddTemplate(newTemplateName, settings);
+    setNewTemplateName('');
+    setNewTemplateNameError(null);
+  };
+
   return (
     <div className="flex flex-col gap-2 border border-gray-400 rounded-lg p-2">
+      <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-y-1 gap-x-2">
+        <Typography className="text-sm">Wczytaj z szablonu:</Typography>
+        <Select<TemplOptionType, false>
+          placeholder="Wybierz..."
+          noOptionsMessage={() => 'Brak opcji.'}
+          value={templOptions.filter((option) => currTemplate?.id === option.value.id)}
+          components={animatedComponents}
+          options={templOptions}
+          onChange={handleChangeTemplate}
+          styles={defaultStyleOutlined<TemplOptionType>({ minWidth: '140px' })}
+          isDisabled={loading}
+          isClearable
+          closeMenuOnSelect
+        />
+      </div>
       <div className="flex flex-col md:items-center md:grid md:grid-cols-[max-content_1fr] md:gap-2 gap-px w-full">
         <Typography className="text-sm md:mt-[14px]">Liczba podejść:</Typography>
         <div className="flex flex-col gap-px max-w-[200px]">
@@ -62,7 +113,7 @@ const EditTaskSettings = ({ loading, settings, onChange, onError }: Props) => {
             min={1}
             max={1000}
             error={maxAttError !== null}
-            value={data.maxAttempts}
+            value={data.maxAttempts ?? null}
             onChange={(maxAttempts, e) => {
               handleChange({ ...data, maxAttempts });
               setMaxAttError(e);
@@ -166,6 +217,30 @@ const EditTaskSettings = ({ loading, settings, onChange, onError }: Props) => {
       {data.scoringSystem === 'time' && (
         <EditTaskTimeSettings data={data} loading={loading} handleChange={handleChange} onError={(e) => setTimeError(e)} />
       )}
+      <div className="w-full h-px bg-gray-300 my-2" />
+      <div className="flex flex-col md:flex-row md:items-start md:flex-wrap gap-y-1 gap-x-2">
+        <Typography className="text-sm md:mt-[10px]">Nowy szablon:</Typography>
+        <div className="flex flex-col gap-px max-w-[180px]">
+          <InputString
+            disabled={loading || settingsError}
+            required
+            value={newTemplateName}
+            onChange={(v, e) => {
+              setNewTemplateName(v);
+              if (templates.some((t) => t.name.toLowerCase() === v.trim().toLowerCase())) {
+                setNewTemplateNameError('Szablon o podanej nazwie już istnieje.');
+              } else setNewTemplateNameError(e);
+            }}
+          />
+          {newTemplateNameError !== null && <Typography className="text-xs text-red-600">{newTemplateNameError}</Typography>}
+        </div>
+        <Button
+          disabled={loading || settingsError || newTemplateNameError !== null || !newTemplateName.trim().length}
+          onClick={() => handleAddTemplate()}
+        >
+          Zapisz
+        </Button>
+      </div>
     </div>
   );
 };

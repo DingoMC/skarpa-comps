@@ -7,7 +7,7 @@ import DashboardFrame from '@/modules/dashboard/components';
 import SelectCategoryMulti from '@/modules/inputs/components/CategorySelectorMulti';
 import InputString from '@/modules/inputs/components/String';
 import SelectTaskType from '@/modules/inputs/components/TaskTypeSelector';
-import { Category, Task } from '@prisma/client';
+import { Category, Task, TaskScoringTemplate } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
 import EditTaskSettings from './TaskSettings';
 
@@ -15,11 +15,13 @@ type Props = {
   loading: boolean;
   categories: Category[];
   original: TaskCategoryIds;
+  templates: TaskScoringTemplate[];
+  onAddTemplate: (_n: string, _s: string) => Promise<void>;
   handleUpdate: (_t: Task, _c: string[]) => Promise<void>;
   handleBack: () => void;
 };
 
-const EditTask = ({ original, loading, categories, handleUpdate, handleBack }: Props) => {
+const EditTask = ({ original, loading, categories, templates, onAddTemplate, handleUpdate, handleBack }: Props) => {
   const [task, setTask] = useState(original);
   const [categoryIds, setCategoryIds] = useState(original.categories.map((v) => v.categoryId));
   const [nameError, setNameError] = useState<string | null>(null);
@@ -86,6 +88,8 @@ const EditTask = ({ original, loading, categories, handleUpdate, handleBack }: P
           loading={loading}
           onChange={(settings) => setTask((prev) => ({ ...prev, settings }))}
           onError={(e) => setSettingsError(e)}
+          templates={templates}
+          onAddTemplate={onAddTemplate}
         />
       </div>
       <div className="flex justify-center mt-2">

@@ -1,6 +1,14 @@
 import { StylesConfig } from 'react-select';
 
-export function defaultStyle<T>({ width, minWidth }: { width?: string; minWidth?: string }): StylesConfig<T> {
+export function defaultStyle<T>({
+  width,
+  minWidth,
+  menuHeight,
+}: {
+  width?: string;
+  minWidth?: string;
+  menuHeight?: string;
+}): StylesConfig<T> {
   return {
     control: (styles, props) => ({
       ...styles,
@@ -48,6 +56,11 @@ export function defaultStyle<T>({ width, minWidth }: { width?: string; minWidth?
       zIndex: 30,
       width,
       minWidth,
+      height: menuHeight,
+    }),
+    menuList: (styles) => ({
+      ...styles,
+      height: menuHeight !== undefined ? '100%' : undefined,
     }),
     option: (styles, props) => ({
       ...styles,

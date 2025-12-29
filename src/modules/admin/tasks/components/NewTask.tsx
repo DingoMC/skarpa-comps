@@ -2,12 +2,13 @@
 
 import { EMPTY_TASK } from '@/lib/constants';
 import { Button, Typography } from '@/lib/mui';
+import { TaskCategoryIds } from '@/lib/types/task';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardFrame from '@/modules/dashboard/components';
 import SelectCategoryMulti from '@/modules/inputs/components/CategorySelectorMulti';
 import InputString from '@/modules/inputs/components/String';
 import SelectTaskType from '@/modules/inputs/components/TaskTypeSelector';
-import { Category, Task } from '@prisma/client';
+import { Category, Task, TaskScoringTemplate } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
 import EditTaskSettings from './TaskSettings';
 
@@ -15,11 +16,14 @@ type Props = {
   loading: boolean;
   currCompId: string;
   categories: Category[];
+  templates: TaskScoringTemplate[];
+  cloneFrom?: TaskCategoryIds;
+  onAddTemplate: (_n: string, _s: string) => Promise<void>;
   handleAdd: (_t: Task, _c: string[]) => Promise<void>;
   handleBack: () => void;
 };
 
-const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Props) => {
+const NewTask = ({ loading, categories, currCompId, templates, cloneFrom, onAddTemplate, handleAdd, handleBack }: Props) => {
   const [task, setTask] = useState({ ...EMPTY_TASK, competitionId: currCompId });
   const [categoryIds, setCategoryIds] = useState(categories.map((v) => v.id));
   const [nameError, setNameError] = useState<string | null>(null);
@@ -30,8 +34,15 @@ const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Pro
   );
 
   useEffect(() => {
-    setCategoryIds(categories.map((v) => v.id));
-  }, [categories]);
+    if (!cloneFrom) setCategoryIds(categories.map((v) => v.id));
+  }, [categories, cloneFrom]);
+
+  useEffect(() => {
+    if (cloneFrom) {
+      setTask({ ...cloneFrom, name: `${cloneFrom.name} - kopia` });
+      setCategoryIds([...cloneFrom.categories.map((v) => v.categoryId)]);
+    }
+  }, [cloneFrom]);
 
   return (
     <DashboardFrame
@@ -85,6 +96,8 @@ const NewTask = ({ loading, categories, currCompId, handleAdd, handleBack }: Pro
           loading={loading}
           onChange={(settings) => setTask((prev) => ({ ...prev, settings }))}
           onError={(e) => setSettingsError(e)}
+          templates={templates}
+          onAddTemplate={onAddTemplate}
         />
       </div>
       <div className="flex justify-center mt-2">
