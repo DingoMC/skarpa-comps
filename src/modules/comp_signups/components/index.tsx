@@ -42,14 +42,17 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
     () =>
       !data.firstName.length
       || !data.lastName.length
-      || !data.email.length
       || !data.categoryId.length
-      || (data.password !== null
-        && !data.enrollAsChild
-        && (passwordError !== null || !data.password.length || repeatPassword !== data.password || repeatPasswordError !== null))
+      || (data.withAccount
+        && (passwordError !== null
+          || data.password === null
+          || !data.password.length
+          || repeatPassword !== data.password
+          || repeatPasswordError !== null
+          || !data.email.length
+          || emailError !== null))
       || firstNameError !== null
-      || lastNameError !== null
-      || emailError !== null,
+      || lastNameError !== null,
     [firstNameError, lastNameError, emailError, data, repeatPassword, passwordError, repeatPasswordError]
   );
 
@@ -85,28 +88,6 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
       </div>
       <DashboardFrame title={`Zapisy na zawody - ${selected.name}`}>
         <div className={`w-full flex flex-col md:items-center md:grid md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_3fr] md:gap-2 gap-px`}>
-          <div className="md:col-span-2 grid grid-cols-[40px_1fr] items-center gap-2 md:gap-4">
-            <Switch
-              color="warning"
-              className="before:bg-gray-400 after:bg-gray-50 after:border-2 after:w-5 after:h-5 after:border-gray-400 w-10 h-5"
-              checked={data.enrollAsChild}
-              onChange={() => {
-                if (!data.enrollAsChild) {
-                  setRepeatPasswordError(null);
-                  setPasswordError(null);
-                }
-                setData((prev) => ({ ...prev, enrollAsChild: !prev.enrollAsChild }));
-              }}
-            />
-            <Typography className="text-sm">Zapisuję się w imieniu dziecka.</Typography>
-          </div>
-          {data.enrollAsChild && (
-            <Typography className="md:col-span-2 text-xs text-amber-950">
-              <b>Uwaga!</b> Zapisując się w imieniu dziecka możesz wielokrotnie korzystać z tego samego adresu email. Jednakże, nie będzie
-              możliwości stworzenia konta dla dziecka. Jeśli chcesz, aby wprowadzony adres email był połączony z kontem dziecka to nie
-              zaznaczaj tej opcji.
-            </Typography>
-          )}
           <Typography type="p">Imię:</Typography>
           <div className="flex flex-col gap-px mb-2 md:mb-0">
             <InputName
@@ -143,24 +124,6 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
             />
             {lastNameError !== null && <Typography className="text-xs text-red-600">{lastNameError}</Typography>}
           </div>
-          <Typography type="p">E-Mail:</Typography>
-          {user === null ? (
-            <div className="flex flex-col gap-px mb-2 md:mb-0">
-              <InputEmail
-                placeholder="jan.kowalski@gmail.com"
-                error={emailError !== null}
-                disabled={loading}
-                value={data.email}
-                onChange={(v, e) => {
-                  setData((prev) => ({ ...prev, email: v }));
-                  setEmailError(e);
-                }}
-              />
-              {emailError !== null && <Typography className="text-xs text-red-600">{emailError}</Typography>}
-            </div>
-          ) : (
-            <Typography className="text-sm">{data.email}</Typography>
-          )}
           <Typography type="p">Klub:</Typography>
           <InputString
             placeholder="Skarpa Lublin"
@@ -226,25 +189,40 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
               <Typography className="text-sm">Ubiegam się o start w klasyfikacji rodzinnej.</Typography>
             </div>
           )}
-          {!data.enrollAsChild && user === null && (
+          {user === null && (
             <>
               <div className="md:col-span-2 grid grid-cols-[40px_1fr] items-center gap-2 md:gap-4">
                 <Switch
                   color="success"
                   className="before:bg-gray-400 after:bg-gray-50 after:border-2 after:w-5 after:h-5 after:border-gray-400 w-10 h-5"
-                  checked={data.password !== null}
+                  checked={data.withAccount}
                   onChange={() => {
-                    if (data.password !== null) {
+                    if (data.withAccount) {
                       setRepeatPasswordError(null);
                       setPasswordError(null);
+                      setEmailError(null);
                     }
-                    setData((prev) => ({ ...prev, password: prev.password !== null ? null : '' }));
+                    setData((prev) => ({ ...prev, withAccount: !prev.withAccount, password: prev.password !== null ? null : '' }));
                   }}
                 />
                 <Typography className="text-sm">Chcę założyć konto.</Typography>
               </div>
               {data.password !== null && (
                 <>
+                  <Typography type="p">E-Mail:</Typography>
+                  <div className="flex flex-col gap-px mb-2 md:mb-0">
+                    <InputEmail
+                      placeholder="jan.kowalski@gmail.com"
+                      error={emailError !== null}
+                      disabled={loading}
+                      value={data.email}
+                      onChange={(v, e) => {
+                        setData((prev) => ({ ...prev, email: v }));
+                        setEmailError(e);
+                      }}
+                    />
+                    {emailError !== null && <Typography className="text-xs text-red-600">{emailError}</Typography>}
+                  </div>
                   <Typography type="p">Hasło:</Typography>
                   <div className="flex flex-col gap-px mb-2 md:mb-0">
                     <InputPassword

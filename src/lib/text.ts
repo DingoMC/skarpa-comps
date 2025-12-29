@@ -52,9 +52,8 @@ export const cleanName = (name: string) =>
     .replaceAll('ż', '')
     .replaceAll('ź', '');
 
-export const childEmail = (email: string, firstName: string, lastName: string) => {
-  const [e, d] = email.split('@');
+export const tempEmail = (firstName: string, lastName: string) => {
   const fn = cleanName(firstName);
-  const ln = cleanName(lastName).length > 3 ? cleanName(lastName).slice(0, 3) : cleanName(lastName);
-  return `${e}+${fn}${ln}@${d}`;
+  const ln = cleanName(lastName);
+  return `${fn}-${ln}@dingo-mc.net`;
 };

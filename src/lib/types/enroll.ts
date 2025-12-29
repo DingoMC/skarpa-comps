@@ -9,7 +9,7 @@ export interface EnrollRequest {
   userId: string | null;
   categoryId: string;
   clubName: string | null;
-  enrollAsChild: boolean;
+  withAccount: boolean;
   isPZAMember: boolean;
   isClubMember: boolean;
   requestsFamilyRanking: boolean;

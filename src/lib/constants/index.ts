@@ -33,7 +33,7 @@ export const EMPTY_ENROLL: EnrollRequest = {
   competitionId: '',
   userId: null,
   categoryId: '',
-  enrollAsChild: false,
+  withAccount: false,
   requestsFamilyRanking: false,
 };
 

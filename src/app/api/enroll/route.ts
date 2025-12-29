@@ -1,7 +1,7 @@
 import { decodeToken, verifyToken } from '@/lib/auth';
 import { SALT_ROUNDS } from '@/lib/constants';
 import prisma from '@/lib/prisma';
-import { childEmail } from '@/lib/text';
+import { tempEmail } from '@/lib/text';
 import bcrypt from 'bcrypt';
 import { getCookie } from 'cookies-next';
 import { NextRequest } from 'next/server';
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     userId,
     categoryId,
     clubName,
-    enrollAsChild,
+    withAccount,
     isPZAMember,
     isClubMember,
     requestsFamilyRanking,
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   const emailCorr = typeof email === 'string' ? email.trim().toLowerCase() : '';
   const passwordCorr = typeof password === 'string' ? password.trim() : null;
   const yearCorr = typeof yearOfBirth === 'number' ? yearOfBirth : 0;
-  const asChildCorr = typeof enrollAsChild === 'boolean' ? enrollAsChild : false;
+  const withAccountCorr = typeof withAccount === 'boolean' ? withAccount : false;
   const familyCorr = typeof requestsFamilyRanking === 'boolean' ? requestsFamilyRanking : false;
   const genderCorr = typeof gender === 'boolean' ? gender : false;
   const clubCorr = typeof isClubMember === 'boolean' ? isClubMember : false;
@@ -43,10 +43,10 @@ export async function POST(req: NextRequest) {
   if (
     !firstNameCorr.length
     || !lastNameCorr.length
-    || !emailCorr.length
     || !compIdCorr.length
     || !categoryIdCorr.length
     || yearCorr === 0
+    || (withAccountCorr && (!email.length || passwordCorr === null || !passwordCorr.length))
   ) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe' }, { status: 400 });
   }
@@ -79,51 +79,7 @@ export async function POST(req: NextRequest) {
     if (comp.isInternal && !userById.isClubMember) {
       return Response.json({ message: 'Nie możesz zapisać się na te zawody' }, { status: 403 });
     }
-    // Logged in user registers a child
-    if (asChildCorr) {
-      try {
-        const childRole = await prisma.role.findFirst({ where: { authLevel: 0 } });
-        const cEmail = childEmail(userById.email, firstNameCorr, lastNameCorr);
-        const cUser = await prisma.user.findUnique({ where: { email: cEmail } });
-        let cUserId = '';
-        if (!cUser) {
-          const child = await prisma.user.create({
-            data: {
-              email: cEmail,
-              firstName: firstNameCorr,
-              lastName: lastNameCorr,
-              yearOfBirth: yearCorr,
-              gender: genderCorr,
-              isPZAMember: pzaCorr,
-              isClubMember: clubCorr,
-              clubName: clubNameCorr,
-              roleId: childRole?.id ?? '',
-            },
-          });
-          cUserId = child.id;
-        } else cUserId = cUser.id;
-        const enrollRecordEx = await prisma.user_Competition.findFirst({ where: { competitionId: compIdCorr, userId: cUserId } });
-        if (enrollRecordEx) {
-          return Response.json({ message: 'Podana osoba jest już zapisana na wybrane zawody' }, { status: 400 });
-        }
-        await prisma.user_Competition.create({
-          data: {
-            competitionId: compIdCorr,
-            userId: cUserId,
-            categoryId: categoryIdCorr,
-            isPZAMember: pzaCorr,
-            isClubMember: clubCorr,
-            clubName: clubNameCorr,
-            requestsFamilyRanking: familyCorr,
-          },
-        });
-        return Response.json({ message: 'Zapisano pomyślnie.' }, { status: 200 });
-      } catch (error) {
-        console.error(error);
-        return Response.json({ message: 'Wystąpił nieoczekiwany błąd.' }, { status: 500 });
-      }
-    }
-    // Not as a child, as himself
+    // Sign up logged in
     try {
       const enrollRecordEx = await prisma.user_Competition.findFirst({ where: { competitionId: compIdCorr, userId: userById.id } });
       if (enrollRecordEx) {
@@ -149,11 +105,11 @@ export async function POST(req: NextRequest) {
   if (userByEmail !== null && userByEmail.hasAccount) {
     return Response.json({ message: 'Pod podanym adresem email istnieje już konto. Zaloguj się aby się zapisać.' }, { status: 403 });
   }
-  // Unregistered user registers a child
-  if (asChildCorr) {
+  // Unregistered user sign-up no account
+  if (!withAccountCorr) {
     try {
-      const childRole = await prisma.role.findFirst({ where: { authLevel: 0 } });
-      const cEmail = childEmail(emailCorr, firstNameCorr, lastNameCorr);
+      const guestRole = await prisma.role.findFirst({ where: { authLevel: 0 } });
+      const cEmail = tempEmail(firstNameCorr, lastNameCorr);
       const cUser = await prisma.user.findUnique({ where: { email: cEmail } });
       let cUserId = '';
       if (!cUser) {
@@ -167,7 +123,7 @@ export async function POST(req: NextRequest) {
             isPZAMember: pzaCorr,
             isClubMember: clubCorr,
             clubName: clubNameCorr,
-            roleId: childRole?.id ?? '',
+            roleId: guestRole?.id ?? '',
           },
         });
         cUserId = child.id;
