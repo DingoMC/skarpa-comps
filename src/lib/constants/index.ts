@@ -1,6 +1,6 @@
 import { Category, Competition, Task, User } from '@prisma/client';
 import { FamilySettings } from '../types/competition';
-import { EnrollRequest } from '../types/enroll';
+import { EnrollCreateAdmin, EnrollRequest } from '../types/enroll';
 import { TaskSettings } from '../types/task';
 
 export const EMPTY_USER: User = {
@@ -87,6 +87,24 @@ export const EMPTY_FAMILY_SETTINGS: FamilySettings = {
   includePZAMembers: false,
   pzaFilterCategories: [],
   aggregation: 'sum',
+};
+
+export const EMPTY_ENROLL_CREATE: EnrollCreateAdmin = {
+  competitionId: '',
+  firstName: '',
+  lastName: '',
+  yearOfBirth: 2000,
+  gender: false,
+  userId: null,
+  categoryId: '',
+  clubName: null,
+  startNumber: null,
+  isPZAMember: false,
+  isClubMember: false,
+  requestsFamilyRanking: false,
+  verified: false,
+  underageConsent: false,
+  hasPaid: false,
 };
 
 export const SALT_ROUNDS = 10;

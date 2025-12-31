@@ -66,13 +66,6 @@ export const columns = (categories: Category[], roles: Role[]) => [
     enableColumnFilter: true,
     enableSorting: true,
   }),
-  columnHelper.accessor((row) => row.user.yearOfBirth, {
-    id: 'yearOfBirth',
-    header: () => <div className="text-left">{columnNamesPL.get('yearOfBirth')}</div>,
-    cell: (info) => info.getValue().toFixed(0),
-    enableColumnFilter: true,
-    enableSorting: true,
-  }),
   columnHelper.accessor((row) => row.categoryId, {
     id: 'category',
     header: () => <div className="text-left">{columnNamesPL.get('category')}</div>,

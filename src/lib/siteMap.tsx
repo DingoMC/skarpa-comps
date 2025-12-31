@@ -112,8 +112,16 @@ export const siteMap = {
         competitionSelector: true,
         icon: <FaTasks className={icon} />,
       },
-      categories: {
+      enrolls: {
         id: 3,
+        name: 'Listy Startowe',
+        tabName: tabName('Listy Startowe'),
+        href: '/admin/enrolls',
+        competitionSelector: true,
+        icon: <PiUserList className={icon} />,
+      },
+      categories: {
+        id: 4,
         name: 'Kategorie',
         tabName: tabName('Kategorie'),
         href: '/admin/categories',
@@ -165,6 +173,8 @@ export const siteMapByPath = new ObjectWithFallback<SiteMapPage>(
     '/admin/users/[id]': siteMap.admin.pages.users,
     '/admin/competitions/new': siteMap.admin.pages.competitions,
     '/admin/competitions/[id]': siteMap.admin.pages.competitions,
+    '/admin/enrolls/new': siteMap.admin.pages.enrolls,
+    '/admin/enrolls/[id]': siteMap.admin.pages.enrolls,
   },
   siteMap.home.pages.home
 );
@@ -181,6 +191,8 @@ export const sectionByPath = new ObjectWithFallback<Section>(
     '/admin/users/[id]': siteMap.admin,
     '/admin/competitions/new': siteMap.admin,
     '/admin/competitions/[id]': siteMap.admin,
+    '/admin/enrolls/new': siteMap.admin,
+    '/admin/enrolls/[id]': siteMap.admin,
   },
   siteMap.home
 );

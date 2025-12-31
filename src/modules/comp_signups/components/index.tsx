@@ -16,6 +16,7 @@ import InputPassword from '@/modules/inputs/components/Password';
 import InputString from '@/modules/inputs/components/String';
 import { Category, Competition } from '@prisma/client';
 import { useEffect, useMemo, useState } from 'react';
+import { autoAssignCategoryByAge } from '../utils';
 
 type Props = {
   user: UserUI | null;
@@ -125,6 +126,21 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
             />
             {lastNameError !== null && <Typography className="text-xs text-red-600">{lastNameError}</Typography>}
           </div>
+          <div className="flex flex-col gap-px mb-2 md:mb-0">
+            <InputName
+              placeholder="Kowalski"
+              allowMultiple
+              disabled={loading}
+              autoComplete="cc-family-name"
+              error={lastNameError !== null}
+              value={data.lastName}
+              onChange={(v, e) => {
+                setData((prev) => ({ ...prev, lastName: v }));
+                setLastNameError(e);
+              }}
+            />
+            {lastNameError !== null && <Typography className="text-xs text-red-600">{lastNameError}</Typography>}
+          </div>
           <Typography type="p">Klub:</Typography>
           <InputString
             placeholder="Skarpa Lublin"
@@ -141,7 +157,7 @@ const CompSignup = ({ user, catIdAuto, categories, available, selected, loading,
               disabled={loading}
               error={yearError !== null}
               onChange={(v, e) => {
-                setData((prev) => ({ ...prev, yearOfBirth: v }));
+                setData((prev) => ({ ...prev, yearOfBirth: v, categoryId: autoAssignCategoryByAge(v, categories) }));
                 setYearError(e);
               }}
             />
