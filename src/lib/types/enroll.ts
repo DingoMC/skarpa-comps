@@ -45,3 +45,11 @@ export interface EnrollUpdateAdmin {
   underageConsent: boolean;
   hasPaid: boolean;
 }
+
+export interface EnrollReNumberReq {
+  startNumber: number;
+  orderBy: string;
+  group: boolean;
+  safetyGap: number;
+  nextFromMultipleOf: number | null;
+}

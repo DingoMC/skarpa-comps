@@ -1,5 +1,5 @@
 import axiosRequest from '@/lib/axios';
-import { EnrollCreateAdmin, EnrollUpdateAdmin } from '@/lib/types/enroll';
+import { EnrollCreateAdmin, EnrollReNumberReq, EnrollUpdateAdmin } from '@/lib/types/enroll';
 import { StartListAdmin } from '@/lib/types/startList';
 
 export const getStartListAdmin = async (compId: string) => {
@@ -70,6 +70,22 @@ export const deleteEnrollAdmin = async (id: string) => {
   });
   if (error === null) {
     return { success: true, error };
+  }
+  if (data && data.message) {
+    return { success: false, error: data.message as string };
+  }
+  return { success: false, error: error.message };
+};
+
+export const renumberEnrolls = async (compId: string, reqData: EnrollReNumberReq) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/enrolls/renumber',
+    method: 'POST',
+    params: { competition_id: compId },
+    data: { ...reqData },
+  });
+  if (error === null) {
+    return { success: true, error, data: data.message as string };
   }
   if (data && data.message) {
     return { success: false, error: data.message as string };

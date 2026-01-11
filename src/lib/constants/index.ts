@@ -1,6 +1,6 @@
 import { Category, Competition, Task, User } from '@prisma/client';
 import { FamilySettings } from '../types/competition';
-import { EnrollCreateAdmin, EnrollRequest } from '../types/enroll';
+import { EnrollCreateAdmin, EnrollReNumberReq, EnrollRequest } from '../types/enroll';
 import { TaskSettings } from '../types/task';
 
 export const EMPTY_USER: User = {
@@ -105,6 +105,14 @@ export const EMPTY_ENROLL_CREATE: EnrollCreateAdmin = {
   verified: false,
   underageConsent: false,
   hasPaid: false,
+};
+
+export const EMPTY_ENROLL_RENUMBER: EnrollReNumberReq = {
+  startNumber: 1,
+  orderBy: 'random',
+  group: true,
+  safetyGap: 5,
+  nextFromMultipleOf: 10,
 };
 
 export const SALT_ROUNDS = 10;

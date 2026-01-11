@@ -1,4 +1,5 @@
 import { Typography } from '@/lib/mui';
+import { EnrollReNumberReq } from '@/lib/types/enroll';
 import { StartListAdmin } from '@/lib/types/startList';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import SelectCategoryOptional from '@/modules/inputs/components/CategorySelectorOptional';
@@ -7,6 +8,7 @@ import { Category, Competition, Role } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { columns } from '../utils/columns';
+import RenumberDialog from './RenumberDialog';
 
 type Props = {
   data: StartListAdmin[];
@@ -14,11 +16,13 @@ type Props = {
   roles: Role[];
   categories: Category[];
   loading: boolean;
+  renumbering: boolean;
   onDelete: (_: string) => Promise<void>;
+  onRenumber: (_: EnrollReNumberReq) => Promise<void>;
   onRefresh: () => Promise<void>;
 };
 
-const AdminEnrolls = ({ data, competition, roles, categories, loading, onRefresh, onDelete }: Props) => {
+const AdminEnrolls = ({ data, competition, roles, categories, loading, renumbering, onRefresh, onDelete, onRenumber }: Props) => {
   const [filterCatgoryId, setFilterCategoryId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -50,7 +54,12 @@ const AdminEnrolls = ({ data, competition, roles, categories, loading, onRefresh
           columns={columns(loading, categories, roles, competition, handleEditClick, onDelete)}
           onRefresh={onRefresh}
           cardBodyClassName="overflow-x-visible"
-          cardHeaderRight={<TemplateButton template="add" disabled={loading} onClick={handleAddClick} message="Nowy wpis na zawody" />}
+          cardHeaderRight={
+            <>
+              <RenumberDialog data={data} loading={loading} renumbering={renumbering} onConfirmRenumber={onRenumber} />
+              <TemplateButton template="add" disabled={loading} onClick={handleAddClick} message="Nowy wpis na zawody" />
+            </>
+          }
         />
       </div>
     </div>

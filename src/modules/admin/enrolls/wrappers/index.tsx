@@ -13,7 +13,8 @@ import { getAllCategoriesAdmin } from '../../categories/requests';
 import { getCompetitionByIdAdmin } from '../../competitions/requests';
 import { getAllRolesAdmin } from '../../users/requests';
 import AdminEnrolls from '../components';
-import { deleteEnrollAdmin, getStartListAdmin } from '../requests';
+import { deleteEnrollAdmin, getStartListAdmin, renumberEnrolls } from '../requests';
+import { EnrollReNumberReq } from '@/lib/types/enroll';
 
 const AdminEnrollsWrapper = () => {
   const currCompId = useSelector((state: RootState) => state.competition.id);
@@ -23,6 +24,7 @@ const AdminEnrollsWrapper = () => {
   const [data, setData] = useState<StartListAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [refetching, setRefetching] = useState(false);
+  const [renumbering, setRenumbering] = useState(false);
 
   const loadData = async () => {
     if (!currCompId) {
@@ -79,6 +81,21 @@ const AdminEnrollsWrapper = () => {
     setRefetching(false);
   };
 
+  const handleRenumber = async (reqData: EnrollReNumberReq) => {
+    if (!currCompId) return;
+    setRefetching(true);
+    setRenumbering(true);
+    const resp = await renumberEnrolls(currCompId, reqData);
+    if (resp.error !== null) {
+      toast.error(resp.error);
+    } else {
+      toast.success(resp.data);
+      await loadData();
+    }
+    setRefetching(false);
+    setRenumbering(false);
+  };
+
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,6 +122,8 @@ const AdminEnrollsWrapper = () => {
       loading={refetching}
       onRefresh={handleRefresh}
       onDelete={handleDelete}
+      onRenumber={handleRenumber}
+      renumbering={renumbering}
     />
   );
 };
