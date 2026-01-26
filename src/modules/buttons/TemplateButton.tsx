@@ -5,6 +5,7 @@ import { FaEdit, FaPlus } from 'react-icons/fa';
 import { FaRegCopy, FaTrash } from 'react-icons/fa6';
 import { IoMdDownload } from 'react-icons/io';
 import { IoReturnUpBackOutline } from 'react-icons/io5';
+import { LuClipboardPen } from 'react-icons/lu';
 import { TbRefresh } from 'react-icons/tb';
 
 const templates = {
@@ -42,6 +43,11 @@ const templates = {
     icon: <IoReturnUpBackOutline className="w-5 h-5 text-white" />,
     tooltip: 'Powrót',
     color: 'secondary',
+  },
+  edit_results: {
+    icon: <LuClipboardPen className="w-[18px] h-[18px] text-blue-900" />,
+    tooltip: 'Edytuj wyniki',
+    color: 'info',
   },
 };
 

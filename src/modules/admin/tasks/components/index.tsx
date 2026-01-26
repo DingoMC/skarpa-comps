@@ -34,6 +34,10 @@ const AdminTasks = ({ data, categories, loading, templates, onRefresh, onDelete,
     router.push(`/admin/tasks/${id}`);
   };
 
+  const handleEditResultsClick = (id: string) => {
+    router.push(`/admin/tasks/${id}/results`);
+  };
+
   return (
     <div className="max-w-screen md:max-w-[calc(100vw-232px)] overflow-y-visible">
       <DashboardTable
@@ -41,7 +45,7 @@ const AdminTasks = ({ data, categories, loading, templates, onRefresh, onDelete,
         noDataMessage="Nie znaleziono zadań dla wybranych zawodów."
         data={data}
         refetching={loading}
-        columns={columns(loading, categories, handleEditClick, handleCloneClick, onDelete)}
+        columns={columns(loading, categories, handleEditClick, handleEditResultsClick, handleCloneClick, onDelete)}
         onRefresh={onRefresh}
         cardBodyClassName="overflow-x-visible"
         customFilterInputs={[{ columnId: 'type', type: 'select', options: TASK_TYPES }]}

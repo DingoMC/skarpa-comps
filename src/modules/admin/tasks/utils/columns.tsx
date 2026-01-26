@@ -17,6 +17,7 @@ export const columns = (
   loading: boolean,
   categories: Category[],
   onEdit: (_: string) => void,
+  onEditResults: (_: string) => void,
   onClone: (_: string) => void,
   onDelete: (_: string) => void
 ) => [
@@ -30,6 +31,7 @@ export const columns = (
     cell: (info) => {
       return (
         <div className="flex items-center gap-1">
+          <TemplateButton template="edit_results" disabled={loading} onClick={() => onEditResults(info.getValue().id)} />
           <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue().id)} />
           <TemplateButton template="clone" disabled={loading} onClick={() => onClone(info.getValue().id)} />
           <ConfirmDialog

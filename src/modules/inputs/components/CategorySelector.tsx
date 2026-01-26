@@ -21,7 +21,8 @@ type Props = {
   onChange: (_: string | null) => void;
 };
 
-export const generateCategoryLabel = (category: Category, labelYears?: boolean) => {
+export const generateCategoryLabel = (category?: Category, labelYears?: boolean) => {
+  if (!category) return '-';
   if (!labelYears) return category.name;
   const year = new Date().getFullYear();
   if (category.minAge !== null && category.maxAge !== null) {

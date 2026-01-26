@@ -1,6 +1,7 @@
 import axiosRequest from '@/lib/axios';
+import { StartListEntry } from '@/lib/types/startList';
 import { TaskCategoryIds } from '@/lib/types/task';
-import { Task, TaskScoringTemplate } from '@prisma/client';
+import { Task, Task_User, TaskScoringTemplate } from '@prisma/client';
 
 export const getAllTasksForComp = async (compId: string) => {
   const { data, error } = await axiosRequest({
@@ -114,6 +115,41 @@ export const deleteTaskTemplateAdmin = async (id: string) => {
   });
   if (error === null) {
     return { success: true, error };
+  }
+  if (data && data.message) {
+    return { success: false, error: data.message as string };
+  }
+  return { success: false, error: error.message };
+};
+
+export const getTaskResultsAdmin = async (id: string) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/tasks/results',
+    method: 'GET',
+    params: { task_id: id },
+  });
+  if (error === null && data && data.results && data.users) {
+    return {
+      success: true,
+      error,
+      data: { results: data.results as Task_User[], users: data.users as StartListEntry[] },
+    };
+  }
+  if (error === null && data && data.message) {
+    return { success: false, error: data.message as string, data: null };
+  }
+  return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
+};
+
+export const updateTaskResultsAdmin = async (id: string, results: Task_User[]) => {
+  const { data, error } = await axiosRequest({
+    url: '/api/admin/tasks/results',
+    method: 'PUT',
+    data: { results },
+    params: { task_id: id },
+  });
+  if (error === null) {
+    return { success: true, error, data: data.message as string };
   }
   if (data && data.message) {
     return { success: false, error: data.message as string };
