@@ -31,7 +31,7 @@ export interface TaskRange {
 }
 
 export type TaskTimeAggType = 'best' | 'sum' | 'avg';
-export type TaskTimeTransformType = 'linear' | 'hyperbolic' | 'ranges';
+export type TaskTimeTransformType = 'linear' | 'multilinear' | 'hyperbolic' | 'ranges';
 
 export interface TaskSettingsBase {
   maxAttempts: number | null;
@@ -86,6 +86,16 @@ export interface TaskSettingsTimeLinear {
   coeffs: TaskLinearCoeff;
 }
 
+export interface TaskSettingsTimeMultilinear {
+  method: TaskTimeAggType;
+  transform: 'multilinear';
+  multilinear: {
+    data: TaskMultilinearCoeff[];
+    outOfMin: number;
+    outOfMax: number;
+  };
+}
+
 export interface TaskSettingsTimeHyperbolic {
   method: TaskTimeAggType;
   transform: 'hyperbolic';
@@ -94,7 +104,7 @@ export interface TaskSettingsTimeHyperbolic {
 
 export interface TaskSettingsTime extends TaskSettingsBase {
   scoringSystem: 'time';
-  time: TaskSettingsTimeRanges | TaskSettingsTimeLinear | TaskSettingsTimeHyperbolic;
+  time: TaskSettingsTimeRanges | TaskSettingsTimeLinear | TaskSettingsTimeMultilinear | TaskSettingsTimeHyperbolic;
 }
 
 export type TaskSettings =

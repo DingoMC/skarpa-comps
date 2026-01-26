@@ -1,13 +1,14 @@
 'use client';
 
 import { Typography } from '@/lib/mui';
-import { TaskRange, TaskSettings, TaskSettingsTime } from '@/lib/types/task';
+import { TaskMultilinearCoeff, TaskRange, TaskSettings, TaskSettingsTime } from '@/lib/types/task';
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import AggSumAvgBest from '@/modules/inputs/components/AggSumAvgBest';
 import InputRealNumber from '@/modules/inputs/components/RealNumber';
 import TimeSystemSwitch from '@/modules/inputs/components/TimeSystemSwitch';
 import { useEffect, useMemo, useState } from 'react';
 import { FaArrowRightLong, FaArrowsLeftRightToLine } from 'react-icons/fa6';
+import NewLineDialog from './NewLineDialog';
 import NewTimeRangeDialog from './NewTimeRangeDialog';
 
 type Props = {
@@ -17,7 +18,19 @@ type Props = {
   onError: (_: boolean) => void;
 };
 
-const rangeKey = (r: TaskRange) => `${r.minInclusive ? '[' : '('}${r.min}to${r.max}${r.maxInclusive ? ']' : ')'}`;
+const rangeKey = (r: TaskRange | TaskMultilinearCoeff) => `${r.minInclusive ? '[' : '('}${r.min}to${r.max}${r.maxInclusive ? ']' : ')'}`;
+
+const showLinearEq = (r: TaskMultilinearCoeff) => {
+  if (r.a === 0) return `y = ${r.b}`;
+  let bPart = '';
+  if (r.b > 0) bPart = ` + ${r.b}`;
+  if (r.b < 0) bPart = ` - ${Math.abs(r.b)}`;
+  if (r.a === 1) return `x${bPart}`;
+  if (r.a === -1) return `-x${bPart}`;
+  return `${r.a}x${bPart}`;
+};
+
+const isRangesOrMulti = (data: TaskSettingsTime) => data.time.transform === 'ranges' || data.time.transform === 'multilinear';
 
 const EditTaskTimeSettings = ({ data, loading, handleChange, onError }: Props) => {
   const [errorOMin, setErrorOMin] = useState<string | null>(null);
@@ -25,13 +38,19 @@ const EditTaskTimeSettings = ({ data, loading, handleChange, onError }: Props) =
   const [errorA, setErrorA] = useState<string | null>(null);
   const [errorB, setErrorB] = useState<string | null>(null);
   const dataRanges = useMemo(() => (data.time.transform === 'ranges' ? data.time : undefined), [data]);
-  const dataCoeffs = useMemo(() => (data.time.transform !== 'ranges' ? data.time : undefined), [data]);
+  const dataMultiL = useMemo(() => (data.time.transform === 'multilinear' ? data.time : undefined), [data]);
+  const dataCoeffs = useMemo(
+    () => (!(data.time.transform === 'ranges' || data.time.transform === 'multilinear') ? data.time : undefined),
+    [data]
+  );
   const [testValue, setTestValue] = useState(1);
 
   useEffect(() => {
     onError(
-      (data.time.transform === 'ranges' && (errorOMin !== null || errorOMax !== null))
-        || (data.time.transform !== 'ranges' && (errorA !== null || errorB !== null))
+      (isRangesOrMulti(data) && (errorOMin !== null || errorOMax !== null))
+        || (!isRangesOrMulti(data) && (errorA !== null || errorB !== null))
+        || (data.time.transform === 'ranges' && !data.time.ranges.data.length)
+        || (data.time.transform === 'multilinear' && !data.time.multilinear.data.length)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, errorOMin, errorOMax, errorA, errorB]);
@@ -62,6 +81,11 @@ const EditTaskTimeSettings = ({ data, loading, handleChange, onError }: Props) =
               handleChange({ ...data, time: { ...data.time, transform: 'ranges', ranges: { data: [], outOfMax: 0, outOfMin: 0 } } });
             } else if (timeSystem === 'linear') {
               handleChange({ ...data, time: { ...data.time, transform: 'linear', coeffs: { a: 1, b: 0 } } });
+            } else if (timeSystem === 'multilinear') {
+              handleChange({
+                ...data,
+                time: { ...data.time, transform: 'multilinear', multilinear: { data: [], outOfMax: 0, outOfMin: 0 } },
+              });
             } else {
               handleChange({ ...data, time: { ...data.time, transform: 'hyperbolic', coeffs: { a: 5, b: 1 } } });
             }
@@ -141,6 +165,88 @@ const EditTaskTimeSettings = ({ data, loading, handleChange, onError }: Props) =
                 error={errorOMax !== null}
                 onChange={(v) => {
                   handleChange({ ...data, time: { ...dataRanges, ranges: { ...dataRanges.ranges, outOfMax: v } } });
+                }}
+                onError={(e) => setErrorOMax(e)}
+              />
+              {errorOMax !== null && <Typography className="text-xs text-red-600">{errorOMax}</Typography>}
+            </div>
+          </div>
+        </>
+      )}
+      {dataMultiL && (
+        <>
+          <div className="flex items-center justify-between w-full">
+            <Typography>Wielolinia</Typography>
+            <NewLineDialog
+              loading={loading}
+              otherRanges={dataMultiL.multilinear.data.toSorted((a, b) => b.min - a.min)}
+              onConfirm={(r) =>
+                handleChange({
+                  ...data,
+                  time: { ...dataMultiL, multilinear: { ...dataMultiL.multilinear, data: [...dataMultiL.multilinear.data, r] } },
+                })
+              }
+            />
+          </div>
+          <div className="w-full h-px bg-gray-300 my-2" />
+          {!dataMultiL.multilinear.data.length && (
+            <Typography className="text-xs text-red-600">Nie zdefiniowano żadnych przedziałów.</Typography>
+          )}
+          <div className="flex flex-col gap-1">
+            {dataMultiL.multilinear.data
+              .toSorted((a, b) => a.min - b.min)
+              .map((r) => (
+                <div key={rangeKey(r)} className="flex items-center justify-between gap-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <FaArrowsLeftRightToLine className="w-4 h-4 text-purple-600" />
+                    <Typography className="text-sm">
+                      {`${r.minInclusive ? '[' : '('}${r.min}, ${r.max}${r.maxInclusive ? ']' : ')'}: ${showLinearEq(r)}`}
+                    </Typography>
+                  </div>
+                  <TemplateButton
+                    disabled={loading}
+                    template="delete"
+                    onClick={() => {
+                      handleChange({
+                        ...data,
+                        time: {
+                          ...dataMultiL,
+                          multilinear: {
+                            ...dataMultiL.multilinear,
+                            data: dataMultiL.multilinear.data.filter((v) => rangeKey(v) !== rangeKey(r)),
+                          },
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              ))}
+          </div>
+          <div className="w-full h-px bg-gray-300 my-2" />
+          <div className="flex flex-col md:grid md:grid-cols-[max-content_1fr] gap-2 mt-2 md:items-center">
+            <Typography className="text-foreground text-sm">{`< Min.:`}</Typography>
+            <div className="flex flex-col gap-px mb-2 md:mb-0 w-max">
+              <InputRealNumber
+                optional={false}
+                disabled={loading}
+                error={errorOMin !== null}
+                value={dataMultiL.multilinear.outOfMin}
+                onChange={(v) => {
+                  handleChange({ ...data, time: { ...dataMultiL, multilinear: { ...dataMultiL.multilinear, outOfMin: v } } });
+                }}
+                onError={(e) => setErrorOMin(e)}
+              />
+              {errorOMin !== null && <Typography className="text-xs text-red-600">{errorOMin}</Typography>}
+            </div>
+            <Typography className="text-foreground text-sm">{`> Max.:`}</Typography>
+            <div className="flex flex-col gap-px mb-2 md:mb-0 w-max">
+              <InputRealNumber
+                optional={false}
+                disabled={loading}
+                value={dataMultiL.multilinear.outOfMax}
+                error={errorOMax !== null}
+                onChange={(v) => {
+                  handleChange({ ...data, time: { ...dataMultiL, multilinear: { ...dataMultiL.multilinear, outOfMax: v } } });
                 }}
                 onError={(e) => setErrorOMax(e)}
               />

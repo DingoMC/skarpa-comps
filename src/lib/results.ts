@@ -64,19 +64,35 @@ export const calculateScoreSingle = (result: TaskResult, taskSettings: TaskSetti
   if (taskSettings.time.transform === 'linear') {
     return taskSettings.time.coeffs.a * aggTime + taskSettings.time.coeffs.b;
   }
+  if (taskSettings.time.transform === 'multilinear') {
+    const sortedRanges = taskSettings.time.multilinear.data.toSorted((a, b) => a.min - b.min);
+    for (let i = 0; i < sortedRanges.length; i++) {
+      const curr = sortedRanges[i];
+      if (i === 0 && (curr.minInclusive ? aggTime < curr.min : aggTime <= curr.min)) {
+        return taskSettings.time.multilinear.outOfMin;
+      }
+      if (i === sortedRanges.length - 1 && (curr.maxInclusive ? aggTime > curr.max : aggTime >= curr.max)) {
+        return taskSettings.time.multilinear.outOfMax;
+      }
+      if (
+        (curr.minInclusive ? aggTime >= curr.min : aggTime > curr.min)
+        && (curr.maxInclusive ? aggTime <= curr.max : aggTime < curr.max)
+      ) {
+        return curr.a * aggTime + curr.b;
+      }
+    }
+    return 0;
+  }
   const sortedRanges = taskSettings.time.ranges.data.toSorted((a, b) => a.min - b.min);
   for (let i = 0; i < sortedRanges.length; i++) {
     const curr = sortedRanges[i];
-    if (i === 0 && (curr.minInclusive ? bestValue < curr.min : bestValue <= curr.min)) {
+    if (i === 0 && (curr.minInclusive ? aggTime < curr.min : aggTime <= curr.min)) {
       return taskSettings.time.ranges.outOfMin;
     }
-    if (i === sortedRanges.length - 1 && (curr.maxInclusive ? bestValue > curr.max : bestValue >= curr.max)) {
+    if (i === sortedRanges.length - 1 && (curr.maxInclusive ? aggTime > curr.max : aggTime >= curr.max)) {
       return taskSettings.time.ranges.outOfMax;
     }
-    if (
-      (curr.minInclusive ? bestValue >= curr.min : bestValue > curr.min)
-      && (curr.maxInclusive ? bestValue <= curr.max : bestValue < curr.max)
-    ) {
+    if ((curr.minInclusive ? aggTime >= curr.min : aggTime > curr.min) && (curr.maxInclusive ? aggTime <= curr.max : aggTime < curr.max)) {
       return curr.score;
     }
   }

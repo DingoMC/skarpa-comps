@@ -11,7 +11,8 @@ type Props = {
 
 const indicatorClassName = (value: TaskTimeTransformType) => {
   if (value === 'linear') return 'bg-blue-500';
-  if (value === 'hyperbolic') return 'bg-indigo-500';
+  if (value === 'multilinear') return 'bg-indigo-500';
+  if (value === 'hyperbolic') return 'bg-indigo-800';
   return 'bg-purple-600';
 };
 
@@ -33,6 +34,14 @@ const TimeSystemSwitch = ({ value, disabled, onChange }: Props) => (
         onClick={() => onChange('linear')}
       >
         Liniowa
+      </Tabs.Trigger>
+      <Tabs.Trigger
+        disabled={disabled}
+        className={`w-full cursor-pointer transition-colors ${value === 'multilinear' ? 'text-white' : 'text-gray-500'}`}
+        value="multilinear"
+        onClick={() => onChange('multilinear')}
+      >
+        Wieloliniowa
       </Tabs.Trigger>
       <Tabs.Trigger
         disabled={disabled}

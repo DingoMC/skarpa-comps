@@ -2,7 +2,6 @@
 
 import { Button, Dialog, IconButton, Switch, Typography } from '@/lib/mui';
 import { TaskMultilinearCoeff } from '@/lib/types/task';
-import InputNumber from '@/modules/inputs/components/Number';
 import InputRealNumber from '@/modules/inputs/components/RealNumber';
 import { useEffect, useMemo, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
@@ -67,7 +66,7 @@ const NewLineDialog = ({ loading, otherRanges, onConfirm }: Props) => {
           <div className="flex flex-col md:grid md:grid-cols-[100px_1fr] gap-2 mb-6 mt-2 md:items-center">
             <Typography className="text-foreground text-sm">Min.:</Typography>
             <div className="flex flex-col">
-              <InputNumber
+              <InputRealNumber
                 optional={false}
                 disabled={loading || otherRanges.length > 0}
                 value={newData.min}
@@ -89,7 +88,7 @@ const NewLineDialog = ({ loading, otherRanges, onConfirm }: Props) => {
             />
             <Typography className="text-foreground text-sm">Max.:</Typography>
             <div className="flex flex-col">
-              <InputNumber
+              <InputRealNumber
                 optional={false}
                 disabled={loading}
                 value={newData.max}
