@@ -42,15 +42,15 @@ export const cleanName = (name: string) =>
     .toLowerCase()
     .replaceAll(' ', '')
     .replaceAll('-', '')
-    .replaceAll('ą', '')
-    .replaceAll('ć', '')
-    .replaceAll('ę', '')
-    .replaceAll('ł', '')
-    .replaceAll('ń', '')
-    .replaceAll('ó', '')
-    .replaceAll('ś', '')
-    .replaceAll('ż', '')
-    .replaceAll('ź', '');
+    .replaceAll('ą', 'a')
+    .replaceAll('ć', 'c')
+    .replaceAll('ę', 'e')
+    .replaceAll('ł', 'l')
+    .replaceAll('ń', 'n')
+    .replaceAll('ó', 'o')
+    .replaceAll('ś', 's')
+    .replaceAll('ż', 'z')
+    .replaceAll('ź', 'z');
 
 export const tempEmail = (firstName: string, lastName: string) => {
   const fn = cleanName(firstName);

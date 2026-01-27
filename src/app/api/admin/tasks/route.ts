@@ -1,6 +1,8 @@
 import { verifyToken } from '@/lib/auth';
 import { ADMIN_AUTH_LEVEL } from '@/lib/constants';
 import prisma from '@/lib/prisma';
+import { calculateScoreSingle, updateResultOnTaskChange } from '@/lib/results';
+import { TaskResult, TaskSettings } from '@/lib/types/task';
 import { getCookie } from 'cookies-next';
 import { NextRequest } from 'next/server';
 
@@ -103,8 +105,9 @@ export async function PUT(req: NextRequest) {
   if (found === null) {
     return Response.json({ message: 'Zadanie o podanym identyfikatorze nie istnieje.' }, { status: 400 });
   }
+  const results = await prisma.task_User.findMany({ where: { taskId: idCorr } });
   try {
-    await prisma.task.update({
+    const newTask = await prisma.task.update({
       where: { id: idCorr },
       data: {
         type: typeCorr,
@@ -129,6 +132,16 @@ export async function PUT(req: NextRequest) {
       await prisma.task_Category.delete({
         where: {
           taskId_categoryId: { taskId: idCorr, categoryId: catId },
+        },
+      });
+    }
+    for (const res of results) {
+      const updatedResults = updateResultOnTaskChange(JSON.parse(res.data) as TaskResult, JSON.parse(newTask.settings) as TaskSettings);
+      await prisma.task_User.update({
+        where: { id: res.id },
+        data: {
+          score: calculateScoreSingle(JSON.parse(updatedResults ?? res.data) as TaskResult, JSON.parse(newTask.settings) as TaskSettings),
+          data: updatedResults,
         },
       });
     }

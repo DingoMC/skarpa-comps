@@ -98,3 +98,18 @@ export const calculateScoreSingle = (result: TaskResult, taskSettings: TaskSetti
   }
   return 0;
 };
+
+export const updateResultOnTaskChange = (result: TaskResult, taskSettings: TaskSettings) => {
+  if (taskSettings.scoringSystem === 'zones' && result.attempts && result.attempts.length > 0) {
+    return JSON.stringify({
+      ...result,
+      attempts: result.attempts.map((att) => {
+        if (!att.zone) return att;
+        const f = taskSettings.zones.find((z) => z.shortName === att.zone?.shortName);
+        if (!f) return { ...att, zone: undefined };
+        return { ...att, zone: { ...f } };
+      }),
+    });
+  }
+  return undefined;
+};
