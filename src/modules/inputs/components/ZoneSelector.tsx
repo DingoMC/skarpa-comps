@@ -37,6 +37,7 @@ const SelectZone = ({ zones, value, disabled, onChange }: Props) => {
     <Select<OptionType, false>
       placeholder="Wybierz..."
       noOptionsMessage={() => 'Brak opcji.'}
+      menuPortalTarget={document.body}
       value={options.filter((option) => (value !== null ? value.includes(option.value) : null))}
       components={animatedComponents}
       options={options}
