@@ -9,6 +9,7 @@ import { FaCog, FaDollarSign } from 'react-icons/fa';
 import { FaTrash, FaUserLock } from 'react-icons/fa6';
 import { MdFamilyRestroom, MdOutlineMailLock } from 'react-icons/md';
 import { TbSquareLetterS } from 'react-icons/tb';
+import QRCodesDialog from '../components/QRCodesDialog';
 
 const columnHelper = createColumnHelper<Competition>();
 
@@ -24,6 +25,7 @@ export const columns = (loading: boolean, onEdit: (_: string) => void, onDelete:
       return (
         <div className="flex items-center gap-1">
           <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue().id)} />
+          <QRCodesDialog loading={loading} compId={info.getValue().id} />
           <ConfirmDialog
             triggerAs="icon"
             trigger={<FaTrash className="w-4 h-4 text-red-600" />}

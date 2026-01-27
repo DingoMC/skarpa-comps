@@ -1,6 +1,7 @@
 'use client';
 
 import { IconButton, Tooltip, Typography } from '@/lib/mui';
+import { BsQrCode } from 'react-icons/bs';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 import { FaRegCopy, FaTrash } from 'react-icons/fa6';
 import { IoMdDownload } from 'react-icons/io';
@@ -48,6 +49,11 @@ const templates = {
     icon: <LuClipboardPen className="w-[18px] h-[18px] text-blue-900" />,
     tooltip: 'Edytuj wyniki',
     color: 'info',
+  },
+  qr: {
+    icon: <BsQrCode className="w-4 h-4 text-black" />,
+    tooltip: 'Kody QR',
+    color: 'primary',
   },
 };
 
