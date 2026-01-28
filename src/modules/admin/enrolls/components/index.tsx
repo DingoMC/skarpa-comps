@@ -34,6 +34,10 @@ const AdminEnrolls = ({ data, competition, roles, categories, loading, renumberi
     router.push(`/admin/enrolls/${id}`);
   };
 
+  const handleEditResultsClick = (id: string) => {
+    router.push(`/admin/enrolls/${id}/results`);
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-0.5 max-w-[200px] mt-2">
@@ -51,7 +55,7 @@ const AdminEnrolls = ({ data, competition, roles, categories, loading, renumberi
           noDataMessage="Nie znaleziono zawodników. Zmień filtry lub wybierz inne zawody."
           data={data.filter((d) => d.categoryId === filterCatgoryId || filterCatgoryId === null)}
           refetching={loading}
-          columns={columns(loading, categories, roles, competition, handleEditClick, onDelete)}
+          columns={columns(loading, categories, roles, competition, handleEditClick, handleEditResultsClick, onDelete)}
           onRefresh={onRefresh}
           cardBodyClassName="overflow-x-visible"
           cardHeaderRight={

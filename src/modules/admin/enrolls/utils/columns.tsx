@@ -20,6 +20,7 @@ export const columns = (
   roles: Role[],
   competition: Competition,
   onEdit: (_: string) => void,
+  onEditResults: (_: string) => void,
   onDelete: (_: string) => void
 ) => [
   columnHelper.accessor((row) => row, {
@@ -31,6 +32,7 @@ export const columns = (
     ),
     cell: (info) => (
       <div className="flex items-center gap-1">
+        <TemplateButton template="edit_results" disabled={loading} onClick={() => onEditResults(info.getValue().id)} />
         <TemplateButton template="edit" disabled={loading} onClick={() => onEdit(info.getValue().id)} />
         <ConfirmDialog
           triggerAs="icon"

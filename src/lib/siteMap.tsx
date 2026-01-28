@@ -175,6 +175,9 @@ export const siteMapByPath = new ObjectWithFallback<SiteMapPage>(
     '/admin/competitions/[id]': siteMap.admin.pages.competitions,
     '/admin/enrolls/new': siteMap.admin.pages.enrolls,
     '/admin/enrolls/[id]': siteMap.admin.pages.enrolls,
+    '/admin/enrolls/[id]/results': siteMap.admin.pages.enrolls,
+    '/admin/tasks/new': siteMap.admin.pages.tasks,
+    '/admin/tasks/[id]': siteMap.admin.pages.tasks,
   },
   siteMap.home.pages.home
 );
@@ -193,6 +196,10 @@ export const sectionByPath = new ObjectWithFallback<Section>(
     '/admin/competitions/[id]': siteMap.admin,
     '/admin/enrolls/new': siteMap.admin,
     '/admin/enrolls/[id]': siteMap.admin,
+    '/admin/enrolls/[id]/results': siteMap.admin,
+    '/admin/tasks/new': siteMap.admin,
+    '/admin/tasks/[id]': siteMap.admin,
+    '/admin/tasks/[id]/results': siteMap.admin,
   },
   siteMap.home
 );
