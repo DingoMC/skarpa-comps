@@ -2,10 +2,8 @@
 
 import TemplateButton from '@/modules/buttons/TemplateButton';
 import DashboardTable from '@/modules/table/components';
-import { RootState } from '@/store/store';
 import { Competition } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
 import { columns } from '../utils/columns';
 
 type Props = {

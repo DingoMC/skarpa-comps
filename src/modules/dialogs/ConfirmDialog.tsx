@@ -9,15 +9,41 @@ type Props = {
   content?: string;
   triggerAs: 'text' | 'icon';
   trigger: ReactNode;
+  triggerVariant?: 'solid' | 'outline' | 'gradient' | 'ghost';
+  triggerSize?: 'sm' | 'md' | 'lg';
+  triggerColor?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+  triggerClassName?: string;
+  triggerDisabled?: boolean;
   loading?: boolean;
   cancelButtonText?: string;
   confirmButtonText?: string;
   onConfirm: () => void;
 };
 
-const ConfirmDialog = ({ header, trigger, triggerAs, content, loading, cancelButtonText, confirmButtonText, onConfirm }: Props) => (
+const ConfirmDialog = ({
+  header,
+  trigger,
+  triggerAs,
+  content,
+  loading,
+  cancelButtonText,
+  confirmButtonText,
+  triggerColor,
+  triggerSize,
+  triggerVariant,
+  triggerClassName,
+  triggerDisabled,
+  onConfirm,
+}: Props) => (
   <Dialog>
-    <Dialog.Trigger as={triggerAs === 'icon' ? IconButton : Button} variant="ghost" size="sm" disabled={loading}>
+    <Dialog.Trigger
+      as={triggerAs === 'icon' ? IconButton : Button}
+      color={triggerColor}
+      variant={triggerVariant ?? 'ghost'}
+      size={triggerSize ?? 'sm'}
+      disabled={loading || triggerDisabled}
+      className={triggerClassName}
+    >
       {trigger}
     </Dialog.Trigger>
     <Dialog.Overlay>

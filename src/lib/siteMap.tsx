@@ -1,5 +1,5 @@
 import { FaHome, FaTasks, FaUsers } from 'react-icons/fa';
-import { FaRankingStar, FaRegAddressBook, FaTableList } from 'react-icons/fa6';
+import { FaRankingStar, FaRegAddressBook, FaTableList, FaUser } from 'react-icons/fa6';
 import { IoLogoAndroid } from 'react-icons/io';
 import { LuNotebookPen } from 'react-icons/lu';
 import { MdLogin } from 'react-icons/md';
@@ -46,6 +46,14 @@ export const siteMap = {
         tabName: tabName('Wyniki'),
         href: '/results',
         icon: <FaRankingStar className={icon} />,
+      },
+      profile: {
+        id: 4,
+        name: 'Mój Profil',
+        authLevel: (ual: number | null) => ual !== null && ual >= USER_AUTH_LEVEL,
+        tabName: tabName('Mój Profil'),
+        href: '/profile',
+        icon: <FaUser className={icon} />,
       },
     },
   },
