@@ -18,6 +18,7 @@ const QRCodesDialog = ({ loading, compId }: Props) => {
   const [open, setOpen] = useState(false);
   const [enrollUrl, setEnrollUrl] = useState<string | null>(null);
   const [listUrl, setListUrl] = useState<string | null>(null);
+  const [resultsUrl, setResultsUrl] = useState<string | null>(null);
 
   const handleEnrollQR = () => {
     const data = `${APP_URL}/comp_signups?id=${compId}`;
@@ -39,7 +40,7 @@ const QRCodesDialog = ({ loading, compId }: Props) => {
     const data = `${APP_URL}/results?id=${compId}`;
     QRCode.toDataURL(data, { width: 480 }, (err, url) => {
       if (err) return;
-      setListUrl(url);
+      setResultsUrl(url);
     });
   };
 
@@ -90,8 +91,8 @@ const QRCodesDialog = ({ loading, compId }: Props) => {
               <Button variant="gradient" size="xs" color="primary" onClick={() => handleResultsQR()}>
                 Wygeneruj
               </Button>
-              {listUrl !== null && (
-                <Link href={listUrl} target="_blank" className="text-sm underline text-blue-800">
+              {resultsUrl !== null && (
+                <Link href={resultsUrl} target="_blank" className="text-sm underline text-blue-800">
                   Pokaż kod
                 </Link>
               )}
