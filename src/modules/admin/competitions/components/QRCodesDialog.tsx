@@ -35,6 +35,14 @@ const QRCodesDialog = ({ loading, compId }: Props) => {
     });
   };
 
+  const handleResultsQR = () => {
+    const data = `${APP_URL}/results?id=${compId}`;
+    QRCode.toDataURL(data, { width: 480 }, (err, url) => {
+      if (err) return;
+      setListUrl(url);
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <TemplateButton template="qr" disabled={loading} onClick={() => setOpen(true)} />
@@ -69,6 +77,17 @@ const QRCodesDialog = ({ loading, compId }: Props) => {
             <div className="flex gap-2 items-center">
               <Typography type="p">Do list startowych:</Typography>
               <Button variant="gradient" size="xs" color="primary" onClick={() => handleListQR()}>
+                Wygeneruj
+              </Button>
+              {listUrl !== null && (
+                <Link href={listUrl} target="_blank" className="text-sm underline text-blue-800">
+                  Pokaż kod
+                </Link>
+              )}
+            </div>
+            <div className="flex gap-2 items-center">
+              <Typography type="p">Do wyników:</Typography>
+              <Button variant="gradient" size="xs" color="primary" onClick={() => handleResultsQR()}>
                 Wygeneruj
               </Button>
               {listUrl !== null && (

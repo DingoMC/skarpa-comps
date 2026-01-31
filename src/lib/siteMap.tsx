@@ -40,6 +40,13 @@ export const siteMap = {
         href: '/comp_list',
         icon: <PiUserList className={icon} />,
       },
+      results: {
+        id: 3,
+        name: 'Wyniki',
+        tabName: tabName('Wyniki'),
+        href: '/results',
+        icon: <FaRankingStar className={icon} />,
+      },
     },
   },
   login: {

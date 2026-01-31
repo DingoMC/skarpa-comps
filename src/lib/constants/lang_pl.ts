@@ -49,6 +49,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     flags: 'Flagi',
     categories: 'Kategorie',
     type: 'Typ',
+    place: 'Miejsce',
   },
   'N/A'
 );
