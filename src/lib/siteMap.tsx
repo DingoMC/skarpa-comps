@@ -2,7 +2,7 @@ import { FaHome, FaTasks, FaUsers } from 'react-icons/fa';
 import { FaRankingStar, FaRegAddressBook, FaTableList, FaUser } from 'react-icons/fa6';
 import { IoLogoAndroid } from 'react-icons/io';
 import { LuNotebookPen } from 'react-icons/lu';
-import { MdLogin } from 'react-icons/md';
+import { MdFamilyRestroom, MdLogin } from 'react-icons/md';
 import { PiUserList } from 'react-icons/pi';
 import { ADMIN_AUTH_LEVEL, GUEST_AUTH_LEVEL, USER_AUTH_LEVEL } from './constants';
 import { objectValues } from './object';
@@ -135,8 +135,16 @@ export const siteMap = {
         competitionSelector: true,
         icon: <PiUserList className={icon} />,
       },
-      categories: {
+      families: {
         id: 4,
+        name: 'Rodziny',
+        tabName: tabName('Rodzinna'),
+        href: '/admin/families',
+        competitionSelector: true,
+        icon: <MdFamilyRestroom className={icon} />,
+      },
+      categories: {
+        id: 5,
         name: 'Kategorie',
         tabName: tabName('Kategorie'),
         href: '/admin/categories',

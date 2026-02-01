@@ -50,6 +50,7 @@ export const columnNamesPL = new ObjectWithFallback<string>(
     categories: 'Kategorie',
     type: 'Typ',
     place: 'Miejsce',
+    userFamilies: 'Członkowie',
   },
   'N/A'
 );
