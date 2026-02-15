@@ -1,6 +1,6 @@
 'use client';
 
-import { ResultsSummary } from '@/lib/types/results';
+import { FamilyResultsSummary, ResultsSummary } from '@/lib/types/results';
 import { getAllCategories } from '@/modules/comp_signups/requests';
 import DashboardFrame from '@/modules/dashboard/components';
 import DashboardSpinner from '@/modules/dashboard/components/Spinner';
@@ -12,13 +12,14 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Results from '../components';
-import { getResults } from '../results';
+import { getFamilyResults, getResults } from '../results';
 
 const ResultsWrapper = () => {
   const [available, setAvailable] = useState<Competition[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [data, setData] = useState<{ men: ResultsSummary[]; women: ResultsSummary[]; tasks: Task[] }>();
+  const [familyResults, setFamilyResults] = useState<FamilyResultsSummary[]>([]);
   const [selectedComp, setSelectedComp] = useState<Competition>();
   const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,13 @@ const ResultsWrapper = () => {
       toast.error(resp.error);
       setData(undefined);
     } else setData({ ...resp.data });
+    if (selectedComp.allowFamilyRanking) {
+      const resp2 = await getFamilyResults(selectedComp.id);
+      if (resp2.error !== null) {
+        toast.error(resp2.error);
+        setFamilyResults([]);
+      } else setFamilyResults([...resp2.data]);
+    }
     setLoading(false);
     setRefetching(false);
   };
@@ -130,6 +138,7 @@ const ResultsWrapper = () => {
   return (
     <Results
       data={data}
+      familyResults={familyResults}
       roles={roles}
       categories={categories}
       competitions={available}

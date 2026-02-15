@@ -1,12 +1,13 @@
 'use client';
 
 import { Typography } from '@/lib/mui';
-import { ResultsSummary } from '@/lib/types/results';
+import { FamilyResultsSummary, ResultsSummary } from '@/lib/types/results';
 import SelectCategory from '@/modules/inputs/components/CategorySelector';
 import SelectCompetition from '@/modules/inputs/components/CompSelector';
 import DashboardTable from '@/modules/table/components';
 import { Category, Competition, Role, Task } from '@prisma/client';
 import { columns } from '../utils/columns';
+import FamilyRankingTable from './FamilyRanking';
 
 type Props = {
   data: { men: ResultsSummary[]; women: ResultsSummary[]; tasks: Task[] };
@@ -14,6 +15,7 @@ type Props = {
   roles: Role[];
   categories: Category[];
   competitions: Competition[];
+  familyResults: FamilyResultsSummary[];
   onRefresh: () => Promise<void>;
   selectedComp: Competition;
   selectedCategory: Category;
@@ -23,6 +25,7 @@ type Props = {
 
 const Results = ({
   data,
+  familyResults,
   loading,
   competitions,
   categories,
@@ -80,6 +83,11 @@ const Results = ({
         cardBodyClassName="overflow-x-visible"
       />
     </div>
+    {selectedComp.allowFamilyRanking && (
+      <div className="max-w-screen md:max-w-[calc(100vw-232px)] overflow-y-visible">
+        <FamilyRankingTable data={familyResults} loading={loading} roles={roles} />
+      </div>
+    )}
   </div>
 );
 

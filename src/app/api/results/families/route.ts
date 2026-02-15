@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
     resultsWithScores.push({ ...rs, members: [...updatedMembers], score: calculateFamilyScore(settings, updatedMembers) });
   }
   // Set places for each family
-  const resultsSorted = resultsWithScores.toSorted((b, a) => b.score - a.score);
+  const resultsSorted = resultsWithScores.toSorted((a, b) => b.score - a.score);
   const resutlsWithPlaces: FamilyResultsSummary[] = [];
   let place = 0;
   for (let i = 0; i < resultsSorted.length; i++) {
