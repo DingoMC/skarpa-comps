@@ -50,7 +50,7 @@ const EditCompetitionWrapper = ({ id }: Props) => {
       setLoading(false);
       return;
     }
-    const resp2 = await getAllCategoriesAdmin();
+    const resp2 = await getAllCategoriesAdmin(resp.data?.id ?? '');
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);

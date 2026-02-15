@@ -4,9 +4,11 @@ import { TaskCategoryIds } from '@/lib/types/task';
 import DashboardFrame from '@/modules/dashboard/components';
 import DashboardSpinner from '@/modules/dashboard/components/Spinner';
 import NoData from '@/modules/lottie/NoData';
+import { RootState } from '@/store/store';
 import { Category, Task, TaskScoringTemplate } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getAllCategoriesAdmin } from '../../categories/requests';
 import EditTask from '../components/EditTask';
@@ -17,6 +19,7 @@ type Props = {
 };
 
 const EditTaskWrapper = ({ id }: Props) => {
+  const currCompId = useSelector((state: RootState) => state.competition.id);
   const [data, setData] = useState<TaskCategoryIds | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [refetching, setRefetching] = useState(false);
@@ -45,12 +48,16 @@ const EditTaskWrapper = ({ id }: Props) => {
   };
 
   const loadData = async () => {
+    if (!currCompId) {
+      setLoading(false);
+      return;
+    }
     const resp = await getTaskById(id);
     if (resp.error !== null) {
       toast.error(resp.error);
       setData(undefined);
     } else setData({ ...resp.data });
-    const resp2 = await getAllCategoriesAdmin();
+    const resp2 = await getAllCategoriesAdmin(currCompId);
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);

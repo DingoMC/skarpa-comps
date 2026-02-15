@@ -48,7 +48,7 @@ const NewEnrollWrapper = () => {
       toast.error(resp.error);
       setCurrComp(undefined);
     } else setCurrComp(resp.data);
-    const resp2 = await getAllCategoriesAdmin();
+    const resp2 = await getAllCategoriesAdmin(currCompId);
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);

@@ -6,14 +6,21 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import AdminCategories from '../components';
 import { createCategoryAdmin, deleteCategoryAdmin, getAllCategoriesAdmin, updateCategoryAdmin } from '../requests';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const AdminCategoriesWrapper = () => {
+  const currCompId = useSelector((state: RootState) => state.competition.id);
   const [data, setData] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [refetching, setRefetching] = useState(false);
 
   const loadData = async () => {
-    const resp = await getAllCategoriesAdmin();
+    if (!currCompId) {
+      setLoading(false);
+      return;
+    }
+    const resp = await getAllCategoriesAdmin(currCompId);
     if (resp.error !== null) {
       toast.error(resp.error);
       setData([]);
@@ -29,7 +36,7 @@ const AdminCategoriesWrapper = () => {
 
   const handleCreate = async (data: Category) => {
     setRefetching(true);
-    const resp = await createCategoryAdmin(data);
+    const resp = await createCategoryAdmin({ ...data, competitionId: currCompId ?? null });
     if (resp.error !== null) {
       toast.error(resp.error);
     } else {
@@ -65,6 +72,7 @@ const AdminCategoriesWrapper = () => {
 
   useEffect(() => {
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {

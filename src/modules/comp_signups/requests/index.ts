@@ -31,10 +31,11 @@ export const getAllEnrollableCompetitions = async () => {
   return { success: false, error: error?.message ?? 'Nieznany błąd', data: null };
 };
 
-export const getAllCategories = async () => {
+export const getAllCategories = async (compId: string) => {
   const { data, error } = await axiosRequest({
     url: '/api/categories',
     method: 'GET',
+    params: { competition_id: compId },
   });
   if (error === null && data && Array.isArray(data)) {
     return { success: true, error, data: data as Category[] };

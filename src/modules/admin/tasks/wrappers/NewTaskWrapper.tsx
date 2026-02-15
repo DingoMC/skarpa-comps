@@ -45,7 +45,11 @@ const NewTaskWrapper = () => {
   };
 
   const loadData = async () => {
-    const resp2 = await getAllCategoriesAdmin();
+    if (!currCompId) {
+      setLoading(false);
+      return;
+    }
+    const resp2 = await getAllCategoriesAdmin(currCompId);
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);

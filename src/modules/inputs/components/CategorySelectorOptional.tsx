@@ -23,15 +23,15 @@ type Props = {
 
 export const generateCategoryLabel = (category: Category, labelYears?: boolean) => {
   if (!labelYears) return category.name;
-  const year = new Date().getFullYear();
+  if (!labelYears) return category.name;
   if (category.minAge !== null && category.maxAge !== null) {
-    return `${category.name} (${year - category.maxAge} - ${year - category.minAge})`;
+    return `${category.name} (${category.minAge} - ${category.maxAge})`;
   }
   if (category.minAge !== null) {
-    return `${category.name} (${year - category.minAge} i starsi)`;
+    return `${category.name} (${category.minAge} i młodsi)`;
   }
   if (category.maxAge !== null) {
-    return `${category.name} (${year - category.maxAge} i młodsi)`;
+    return `${category.name} (${category.maxAge} i starsi)`;
   }
   return category.name;
 };

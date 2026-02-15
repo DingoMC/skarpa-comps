@@ -43,6 +43,7 @@ export const EMPTY_CATGEORY: Category = {
   seq: 0,
   minAge: null,
   maxAge: null,
+  competitionId: null,
 };
 
 export const EMPTY_COMPETITION: Competition = {

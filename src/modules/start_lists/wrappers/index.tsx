@@ -26,16 +26,11 @@ const StartListsWrapper = () => {
 
   const loadData = async () => {
     const resp = await getAllCompetitions();
-    const resp2 = await getAllCategories();
     const resp3 = await getAllRoles();
     if (resp3.error !== null) {
       toast.error(resp3.error);
       setRoles([]);
     } else setRoles(resp3.data);
-    if (resp2.error !== null) {
-      toast.error(resp2.error);
-      setCategories([]);
-    } else setCategories(resp2.data);
     if (resp.error !== null) {
       toast.error(resp.error);
       setAvailable([]);
@@ -53,6 +48,11 @@ const StartListsWrapper = () => {
       toast.error(resp.error);
       setData([]);
     } else setData(resp.data);
+    const resp2 = await getAllCategories(selected.id);
+    if (resp2.error !== null) {
+      toast.error(resp2.error);
+      setCategories([]);
+    } else setCategories(resp2.data);
     setLoading(false);
     setRefetching(false);
   };

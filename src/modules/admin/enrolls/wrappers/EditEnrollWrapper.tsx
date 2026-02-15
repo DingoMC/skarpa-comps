@@ -1,7 +1,7 @@
 'use client';
 
-import { UserUI } from '@/lib/types/auth';
-import { EnrollCreateAdmin, EnrollUpdateAdmin } from '@/lib/types/enroll';
+import { EnrollUpdateAdmin } from '@/lib/types/enroll';
+import { StartListAdmin } from '@/lib/types/startList';
 import DashboardFrame from '@/modules/dashboard/components';
 import DashboardSpinner from '@/modules/dashboard/components/Spinner';
 import NoData from '@/modules/lottie/NoData';
@@ -13,11 +13,8 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getAllCategoriesAdmin } from '../../categories/requests';
 import { getCompetitionByIdAdmin } from '../../competitions/requests';
-import { getAllUsersAdmin } from '../../users/requests';
-import AdminNewEnroll from '../components/NewEnroll';
-import { createEnrollAdmin, getEnrollByIdAdmin, updateEnrollAdmin } from '../requests';
 import AdminEditEnroll from '../components/EditEnroll';
-import { StartListAdmin } from '@/lib/types/startList';
+import { getEnrollByIdAdmin, updateEnrollAdmin } from '../requests';
 
 type Props = {
   id: string;
@@ -59,7 +56,7 @@ const EditEnrollWrapper = ({ id }: Props) => {
       toast.error(resp.error);
       setCurrComp(undefined);
     } else setCurrComp(resp.data);
-    const resp2 = await getAllCategoriesAdmin();
+    const resp2 = await getAllCategoriesAdmin(currCompId);
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);

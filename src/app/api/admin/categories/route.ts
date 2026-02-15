@@ -10,8 +10,12 @@ export async function GET(req: NextRequest) {
   if (!ok) {
     return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
   }
-  const roles = await prisma.category.findMany({ orderBy: { seq: 'asc' } });
-  return Response.json(roles, { status: 200 });
+  const compId = req.nextUrl.searchParams.get('competition_id');
+  if (!compId || !compId.length) {
+    return Response.json({ message: 'Brak identyfikatora zawodów.' }, { status: 400 });
+  }
+  const categories = await prisma.category.findMany({ where: { competitionId: compId.trim() }, orderBy: { seq: 'asc' } });
+  return Response.json(categories, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
@@ -20,16 +24,18 @@ export async function POST(req: NextRequest) {
   if (!ok) {
     return Response.json({ message: 'Odmowa dostępu.' }, { status: 401 });
   }
-  const { name, seq, minAge, maxAge } = await req.json();
+  const { name, seq, minAge, maxAge, competitionId } = await req.json();
+  const compIdCorr = typeof competitionId === 'string' ? competitionId.trim() : '';
   const nameCorr = typeof name === 'string' ? name.trim() : '';
   const seqCorr = typeof seq === 'number' ? seq : 0;
   const minAgeCorr = typeof minAge === 'number' ? minAge : null;
   const maxAgeCorr = typeof maxAge === 'number' ? maxAge : null;
-  if (!nameCorr.length) {
+  if (!nameCorr.length || !compIdCorr.length) {
     return Response.json({ message: 'Nieprawidłowe dane wejściowe.' }, { status: 400 });
   }
   const sameNameCategory = await prisma.category.findFirst({
     where: {
+      competitionId: compIdCorr,
       name: nameCorr,
     },
   });
@@ -43,6 +49,7 @@ export async function POST(req: NextRequest) {
         seq: seqCorr,
         minAge: minAgeCorr,
         maxAge: maxAgeCorr,
+        competitionId: compIdCorr,
       },
     });
     return Response.json({ message: 'Kategoria utworzona pomyślnie.' }, { status: 200 });
@@ -79,6 +86,7 @@ export async function PUT(req: NextRequest) {
   const sameNameCategory = await prisma.category.findFirst({
     where: {
       name: nameCorr,
+      competitionId: found.competitionId,
       id: { not: idCorr },
     },
   });

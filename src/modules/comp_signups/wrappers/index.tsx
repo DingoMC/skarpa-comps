@@ -26,16 +26,20 @@ const CompSignupsWrapper = () => {
 
   const loadData = async () => {
     const resp = await getAllEnrollableCompetitions();
-    const resp2 = await getAllCategories();
-    if (resp2.error !== null) {
-      toast.error(resp.error);
-      setCategories([]);
-    } else setCategories(resp2.data);
     if (resp.error !== null) {
       toast.error(resp.error);
       setAvailable([]);
     } else setAvailable(resp.data);
     setLoading(false);
+  };
+
+  const loadCategories = async () => {
+    if (!selected) return;
+    const resp2 = await getAllCategories(selected.id);
+    if (resp2.error !== null) {
+      toast.error(resp2.error);
+      setCategories([]);
+    } else setCategories(resp2.data);
   };
 
   const handleEnroll = async (eData: EnrollRequest) => {
@@ -60,6 +64,11 @@ const CompSignupsWrapper = () => {
   }, []);
 
   useEffect(() => {
+    if (selected) loadCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
+  useEffect(() => {
     const id = params.get('id');
     if (available.length) {
       const found = id !== null ? available.find((c) => c.id === id) : undefined;
@@ -75,7 +84,7 @@ const CompSignupsWrapper = () => {
     return <DashboardSpinner title="Zapisy na zawody" refreshing={loading} />;
   }
 
-  if (!available.length || !selected) {
+  if (!available.length || !selected || !categories) {
     return (
       <DashboardFrame title="Zapisy na zawody">
         <NoData message="Brak zawodów." />

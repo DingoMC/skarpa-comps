@@ -14,6 +14,10 @@ type Props = {
   onConfirm: (_: Category) => Promise<void>;
 };
 
+const getMaxYear = () => new Date().getFullYear();
+
+const getMinYear = () => getMaxYear() - 100;
+
 const AddModal = ({ loading, onConfirm }: Props) => {
   const [open, setOpen] = useState(false);
   const [newData, setNewData] = useState(EMPTY_CATGEORY);
@@ -82,15 +86,15 @@ const AddModal = ({ loading, onConfirm }: Props) => {
               />
               <Typography className="text-xs text-red-600">{nameError}</Typography>
             </div>
-            <Typography className="text-foreground text-sm">Min. Wiek (opcjonalnie):</Typography>
+            <Typography className="text-foreground text-sm">Min. Rocznik (opcjonalnie):</Typography>
             <div className="flex flex-col">
               <InputNumber
                 optional
                 disabled={loading}
                 value={newData.minAge}
                 error={minError !== null}
-                min={0}
-                max={newData.maxAge !== null ? Math.min(120, newData.maxAge) : 120}
+                min={getMinYear()}
+                max={newData.maxAge !== null ? Math.min(getMaxYear(), newData.maxAge) : getMaxYear()}
                 onChange={(v, e) => {
                   setNewData((prevState) => ({ ...prevState, minAge: v }));
                   setMinError(e);
@@ -98,15 +102,15 @@ const AddModal = ({ loading, onConfirm }: Props) => {
               />
               <Typography className="text-xs text-red-600">{minError}</Typography>
             </div>
-            <Typography className="text-foreground text-sm">Max. Wiek (opcjonalnie):</Typography>
+            <Typography className="text-foreground text-sm">Max. Rocznik (opcjonalnie):</Typography>
             <div className="flex flex-col">
               <InputNumber
                 optional
                 disabled={loading}
                 value={newData.maxAge}
                 error={maxError !== null}
-                min={newData.minAge !== null ? newData.minAge : 0}
-                max={120}
+                min={newData.minAge !== null ? Math.max(getMinYear(), newData.minAge) : getMinYear()}
+                max={getMaxYear()}
                 onChange={(v, e) => {
                   setNewData((prevState) => ({ ...prevState, maxAge: v }));
                   setMaxError(e);

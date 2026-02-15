@@ -28,20 +28,27 @@ const ResultsWrapper = () => {
 
   const loadData = async () => {
     const resp = await getAllCompetitions();
-    const resp2 = await getAllCategories();
     const resp3 = await getAllRoles();
     if (resp3.error !== null) {
       toast.error(resp3.error);
       setRoles([]);
     } else setRoles(resp3.data);
-    if (resp2.error !== null) {
-      toast.error(resp2.error);
-      setCategories([]);
-    } else setCategories(resp2.data);
     if (resp.error !== null) {
       toast.error(resp.error);
       setAvailable([]);
     } else setAvailable(resp.data);
+  };
+
+  const loadCategories = async () => {
+    if (!selectedComp) {
+      setLoading(false);
+      return;
+    }
+    const resp3 = await getAllCategories(selectedComp.id);
+    if (resp3.error !== null) {
+      toast.error(resp3.error);
+      setCategories([]);
+    } else setCategories(resp3.data);
   };
 
   const loadResults = async () => {
@@ -88,6 +95,11 @@ const ResultsWrapper = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (selectedComp) loadCategories();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedComp]);
 
   useEffect(() => {
     const id = params.get('id');

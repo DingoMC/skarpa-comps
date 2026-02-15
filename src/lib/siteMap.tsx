@@ -148,6 +148,7 @@ export const siteMap = {
         name: 'Kategorie',
         tabName: tabName('Kategorie'),
         href: '/admin/categories',
+        competitionSelector: true,
         icon: <FaTableList className={icon} />,
       },
     },

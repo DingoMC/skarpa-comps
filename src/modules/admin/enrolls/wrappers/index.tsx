@@ -1,5 +1,6 @@
 'use client';
 
+import { EnrollReNumberReq } from '@/lib/types/enroll';
 import { StartListAdmin } from '@/lib/types/startList';
 import DashboardFrame from '@/modules/dashboard/components';
 import DashboardSpinner from '@/modules/dashboard/components/Spinner';
@@ -14,7 +15,6 @@ import { getCompetitionByIdAdmin } from '../../competitions/requests';
 import { getAllRolesAdmin } from '../../users/requests';
 import AdminEnrolls from '../components';
 import { deleteEnrollAdmin, getStartListAdmin, renumberEnrolls } from '../requests';
-import { EnrollReNumberReq } from '@/lib/types/enroll';
 
 const AdminEnrollsWrapper = () => {
   const currCompId = useSelector((state: RootState) => state.competition.id);
@@ -39,7 +39,7 @@ const AdminEnrollsWrapper = () => {
     } else {
       setData(resp.data);
     }
-    const resp2 = await getAllCategoriesAdmin();
+    const resp2 = await getAllCategoriesAdmin(currCompId);
     if (resp2.error !== null) {
       toast.error(resp2.error);
       setCategories([]);
